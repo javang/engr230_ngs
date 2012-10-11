@@ -1,0 +1,2000 @@
+gene_oid	Locus Tag	Source	Cluster Information	Gene Information	E-value
+2061973753	sg4i_00000010	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973753	sg4i_00000010	COG0336	tRNA-(guanine-N1)-methyltransferase		7.0e-55
+2061973753	sg4i_00000010	pfam01746	tRNA_m1G_MT		6.8e-34
+2061973753	sg4i_00000010	EC:2.1.1.31	tRNA (guanine-N(1)-)-methyltransferase.		
+2061973753	sg4i_00000010	TIGR00088	tRNA (guanine-N1)-methyltransferase		2.1e-51
+2061973753	sg4i_00000010	KO:K00554	tRNA (guanine-N1-)-methyltransferase [EC:2.1.1.31]		1.2e-96
+2061973753	sg4i_00000010	Locus_type		CDS	
+2061973753	sg4i_00000010	Product_name		tRNA (Guanine37-N(1)-) methyltransferase (EC 2.1.1.31)	
+2061973753	sg4i_00000010	Scaffold		sg4i_contig00001	
+2061973753	sg4i_00000010	Coordinates		3..530(+)	
+2061973753	sg4i_00000010	DNA_length		528bp	
+2061973753	sg4i_00000010	Protein_length		175aa	
+2061973753	sg4i_00000010	GC		.66	
+					
+2061973754	sg4i_00000020	COG_category	[S] Function unknown		
+2061973754	sg4i_00000020	COG2261	Predicted membrane protein		1.0e-05
+2061973754	sg4i_00000020	pfam04226	Transgly_assoc		1.0e-10
+2061973754	sg4i_00000020	Locus_type		CDS	
+2061973754	sg4i_00000020	Product_name		Predicted membrane protein	
+2061973754	sg4i_00000020	Scaffold		sg4i_contig00001	
+2061973754	sg4i_00000020	Coordinates		541..777(+)	
+2061973754	sg4i_00000020	DNA_length		237bp	
+2061973754	sg4i_00000020	Protein_length		78aa	
+2061973754	sg4i_00000020	GC		.64	
+2061973754	sg4i_00000020	Signal_peptide		Yes	
+2061973754	sg4i_00000020	Transmembrane		Yes	
+					
+2061973755	sg4i_00000030	KEGG_module	M00258: Uncharacterized ABC transport system		
+2061973755	sg4i_00000030	COG_category	[V] Defense mechanisms		
+2061973755	sg4i_00000030	COG1136	ABC-type antimicrobial peptide transport system, ATPase component		1.0e-77
+2061973755	sg4i_00000030	pfam00005	ABC_tran		8.2e-26
+2061973755	sg4i_00000030	Locus_type		CDS	
+2061973755	sg4i_00000030	Product_name		ABC-type antimicrobial peptide transport system, ATPase component	
+2061973755	sg4i_00000030	Scaffold		sg4i_contig00001	
+2061973755	sg4i_00000030	Coordinates		774..1496(+)	
+2061973755	sg4i_00000030	DNA_length		723bp	
+2061973755	sg4i_00000030	Protein_length		240aa	
+2061973755	sg4i_00000030	GC		.66	
+					
+2061973756	sg4i_00000040	KEGG_module	M00239: Peptides/nickel transport system		
+2061973756	sg4i_00000040	COG_category	[E] Amino acid transport and metabolism		
+2061973756	sg4i_00000040	COG0747	ABC-type dipeptide transport system, periplasmic component		5.0e-07
+2061973756	sg4i_00000040	KO:K02035	peptide/nickel transport system substrate-binding protein		1.0e-63
+2061973756	sg4i_00000040	Locus_type		CDS	
+2061973756	sg4i_00000040	Product_name		ABC-type dipeptide transport system, periplasmic component	
+2061973756	sg4i_00000040	Scaffold		sg4i_contig00001	
+2061973756	sg4i_00000040	Coordinates		1561..1902(-)	
+2061973756	sg4i_00000040	DNA_length		342bp	
+2061973756	sg4i_00000040	Protein_length		113aa	
+2061973756	sg4i_00000040	GC		.6	
+					
+2061973757	sg4i_00000050	KEGG_module	M00239: Peptides/nickel transport system		
+2061973757	sg4i_00000050	COG_category	[E] Amino acid transport and metabolism		
+2061973757	sg4i_00000050	COG0747	ABC-type dipeptide transport system, periplasmic component		3.0e-56
+2061973757	sg4i_00000050	pfam00496	SBP_bac_5		1.2e-71
+2061973757	sg4i_00000050	KO:K02035	peptide/nickel transport system substrate-binding protein		3.2e-22
+2061973757	sg4i_00000050	Locus_type		CDS	
+2061973757	sg4i_00000050	Product_name		ABC-type dipeptide transport system, periplasmic component	
+2061973757	sg4i_00000050	Scaffold		sg4i_contig00001	
+2061973757	sg4i_00000050	Coordinates		2032..3426(-)	
+2061973757	sg4i_00000050	DNA_length		1395bp	
+2061973757	sg4i_00000050	Protein_length		464aa	
+2061973757	sg4i_00000050	GC		.63	
+2061973757	sg4i_00000050	Signal_peptide		Yes	
+					
+2061973758	sg4i_00000060	COG_category	[M] Cell wall/membrane/envelope biogenesis		
+2061973758	sg4i_00000060	COG4591	ABC-type transport system, involved in lipoprotein release, permease component		2.0e-14
+2061973758	sg4i_00000060	pfam02687	FtsX		1.9e-22
+2061973758	sg4i_00000060	pfam02687	FtsX		2.0e-18
+2061973758	sg4i_00000060	Locus_type		CDS	
+2061973758	sg4i_00000060	Product_name		ABC-type transport system, involved in lipoprotein release, permease component	
+2061973758	sg4i_00000060	Scaffold		sg4i_contig00001	
+2061973758	sg4i_00000060	Coordinates		3539..5983(+)	
+2061973758	sg4i_00000060	DNA_length		2445bp	
+2061973758	sg4i_00000060	Protein_length		814aa	
+2061973758	sg4i_00000060	GC		.67	
+2061973758	sg4i_00000060	Transmembrane		Yes	
+					
+2061973759	sg4i_00000070	COG_category	[M] Cell wall/membrane/envelope biogenesis		
+2061973759	sg4i_00000070	COG0845	Membrane-fusion protein		6.0e-17
+2061973759	sg4i_00000070	TIGR01730	RND family efflux transporter, MFP subunit		5.8e-45
+2061973759	sg4i_00000070	KO:K02005	HlyD family secretion protein		1.4e-08
+2061973759	sg4i_00000070	Locus_type		CDS	
+2061973759	sg4i_00000070	Product_name		RND family efflux transporter, MFP subunit	
+2061973759	sg4i_00000070	Scaffold		sg4i_contig00001	
+2061973759	sg4i_00000070	Coordinates		5976..6947(+)	
+2061973759	sg4i_00000070	DNA_length		972bp	
+2061973759	sg4i_00000070	Protein_length		323aa	
+2061973759	sg4i_00000070	GC		.66	
+2061973759	sg4i_00000070	Signal_peptide		Yes	
+2061973759	sg4i_00000070	Transmembrane		Yes	
+					
+2061973760	sg4i_00000080	COG_category	[O] Posttranslational modification, protein turnover, chaperones		
+2061973760	sg4i_00000080	COG0606	Predicted ATPase with chaperone activity		7.0e-11
+2061973760	sg4i_00000080	Locus_type		CDS	
+2061973760	sg4i_00000080	Product_name		hypothetical protein	
+2061973760	sg4i_00000080	Scaffold		sg4i_contig00001	
+2061973760	sg4i_00000080	Coordinates		7097..8335(+)	
+2061973760	sg4i_00000080	DNA_length		1239bp	
+2061973760	sg4i_00000080	Protein_length		412aa	
+2061973760	sg4i_00000080	GC		.63	
+					
+2061973761	sg4i_00000090	KEGG_module	M00034: Methionine salvage pathway		
+2061973761	sg4i_00000090	KEGG_module	M00133: Polyamine biosynthesis, arginine => agmatine => putrescine => spermidine		
+2061973761	sg4i_00000090	Metacyc	BSUBPOLYAMSYN-PWY: spermidine biosynthesis I		
+2061973761	sg4i_00000090	COG_category	[E] Amino acid transport and metabolism		
+2061973761	sg4i_00000090	COG0421	Spermidine synthase		1.0e-67
+2061973761	sg4i_00000090	pfam01564	Spermine_synth		4.6e-67
+2061973761	sg4i_00000090	EC:2.5.1.16	Spermidine synthase.		
+2061973761	sg4i_00000090	TIGR00417	spermidine synthase		3.7e-80
+2061973761	sg4i_00000090	KO:K00797	spermidine synthase [EC:2.5.1.16]		0.0e+00
+2061973761	sg4i_00000090	Locus_type		CDS	
+2061973761	sg4i_00000090	Product_name		spermidine synthase	
+2061973761	sg4i_00000090	Scaffold		sg4i_contig00001	
+2061973761	sg4i_00000090	Coordinates		8426..9364(-)	
+2061973761	sg4i_00000090	DNA_length		939bp	
+2061973761	sg4i_00000090	Protein_length		312aa	
+2061973761	sg4i_00000090	GC		.65	
+					
+2061973762	sg4i_00000100	KEGG_module	M00034: Methionine salvage pathway		
+2061973762	sg4i_00000100	KEGG_module	M00133: Polyamine biosynthesis, arginine => agmatine => putrescine => spermidine		
+2061973762	sg4i_00000100	Metacyc	BSUBPOLYAMSYN-PWY: spermidine biosynthesis I		
+2061973762	sg4i_00000100	Metacyc	ARGSPECAT-PWY: spermine biosynthesis		
+2061973762	sg4i_00000100	COG_category	[E] Amino acid transport and metabolism		
+2061973762	sg4i_00000100	COG1586	S-adenosylmethionine decarboxylase		1.0e-29
+2061973762	sg4i_00000100	pfam02675	AdoMet_dc		6.2e-32
+2061973762	sg4i_00000100	EC:4.1.1.50	Adenosylmethionine decarboxylase.		
+2061973762	sg4i_00000100	TIGR03330	S-adenosylmethionine decarboxylase proenzyme, Bacillus form		7.0e-39
+2061973762	sg4i_00000100	KO:K01611	S-adenosylmethionine decarboxylase [EC:4.1.1.50]		3.4e-70
+2061973762	sg4i_00000100	Locus_type		CDS	
+2061973762	sg4i_00000100	Product_name		adenosylmethionine decarboxylase proenzyme (EC 4.1.1.50)	
+2061973762	sg4i_00000100	Scaffold		sg4i_contig00001	
+2061973762	sg4i_00000100	Coordinates		9357..9707(-)	
+2061973762	sg4i_00000100	DNA_length		351bp	
+2061973762	sg4i_00000100	Protein_length		116aa	
+2061973762	sg4i_00000100	GC		.62	
+					
+2061973763	sg4i_00000110	COG_category	[V] Defense mechanisms		
+2061973763	sg4i_00000110	COG0286	Type I restriction-modification system methyltransferase subunit		2.0e-74
+2061973763	sg4i_00000110	pfam02384	N6_Mtase		3.0e-85
+2061973763	sg4i_00000110	Locus_type		CDS	
+2061973763	sg4i_00000110	Product_name		Type I restriction-modification system methyltransferase subunit	
+2061973763	sg4i_00000110	Scaffold		sg4i_contig00712	
+2061973763	sg4i_00000110	Coordinates		2..1219(+)	
+2061973763	sg4i_00000110	DNA_length		1218bp	
+2061973763	sg4i_00000110	Protein_length		405aa	
+2061973763	sg4i_00000110	GC		.7	
+					
+2061973764	sg4i_00000120	COG_category	[P] Inorganic ion transport and metabolism		
+2061973764	sg4i_00000120	COG0735	Fe2+/Zn2+ uptake regulation proteins		4.0e-26
+2061973764	sg4i_00000120	pfam01475	FUR		2.0e-27
+2061973764	sg4i_00000120	KO:K03711	Fur family transcriptional regulator, ferric uptake regulator		4.0e-66
+2061973764	sg4i_00000120	Locus_type		CDS	
+2061973764	sg4i_00000120	Product_name		Fe2+/Zn2+ uptake regulation proteins	
+2061973764	sg4i_00000120	Scaffold		sg4i_contig01325	
+2061973764	sg4i_00000120	Coordinates		2..370(-)	
+2061973764	sg4i_00000120	DNA_length		369bp	
+2061973764	sg4i_00000120	Protein_length		123aa	
+2061973764	sg4i_00000120	GC		.7	
+					
+2061973765	sg4i_00000130	COG_category	[S] Function unknown		
+2061973765	sg4i_00000130	COG1873	Uncharacterized conserved protein		7.0e-04
+2061973765	sg4i_00000130	pfam05239	PRC		1.5e-07
+2061973765	sg4i_00000130	Locus_type		CDS	
+2061973765	sg4i_00000130	Product_name		PRC-barrel domain.	
+2061973765	sg4i_00000130	Scaffold		sg4i_contig01325	
+2061973765	sg4i_00000130	Coordinates		514..1038(+)	
+2061973765	sg4i_00000130	DNA_length		525bp	
+2061973765	sg4i_00000130	Protein_length		175aa	
+2061973765	sg4i_00000130	GC		.67	
+					
+2061973766	sg4i_00000140	Locus_type		CDS	
+2061973766	sg4i_00000140	Product_name		hypothetical protein	
+2061973766	sg4i_00000140	Scaffold		sg4i_contig02024	
+2061973766	sg4i_00000140	Coordinates		2..211(+)	
+2061973766	sg4i_00000140	DNA_length		210bp	
+2061973766	sg4i_00000140	Protein_length		69aa	
+2061973766	sg4i_00000140	GC		.7	
+2061973766	sg4i_00000140	Signal_peptide		Yes	
+2061973766	sg4i_00000140	Transmembrane		Yes	
+					
+2061973767	sg4i_00000150	COG_category	[L] Replication, recombination and repair		
+2061973767	sg4i_00000150	COG1518	Uncharacterized protein predicted to be involved in DNA repair		6.0e-57
+2061973767	sg4i_00000150	pfam01867	Cas_Cas1		5.1e-88
+2061973767	sg4i_00000150	TIGR00287	CRISPR-associated endonuclease Cas1		1.0e-75
+2061973767	sg4i_00000150	Locus_type		CDS	
+2061973767	sg4i_00000150	Product_name		CRISPR-associated protein Cas1	
+2061973767	sg4i_00000150	Scaffold		sg4i_contig02024	
+2061973767	sg4i_00000150	Coordinates		336..1220(+)	
+2061973767	sg4i_00000150	DNA_length		885bp	
+2061973767	sg4i_00000150	Protein_length		295aa	
+2061973767	sg4i_00000150	GC		.71	
+					
+2061973768	sg4i_00000160	Locus_type		CDS	
+2061973768	sg4i_00000160	Product_name		possible tyrosine transporter P-protein (TC 2.A.45.2.1)	
+2061973768	sg4i_00000160	Scaffold		sg4i_contig02749	
+2061973768	sg4i_00000160	Coordinates		1..114(+)	
+2061973768	sg4i_00000160	DNA_length		114bp	
+2061973768	sg4i_00000160	Protein_length		37aa	
+2061973768	sg4i_00000160	GC		.71	
+2061973768	sg4i_00000160	Signal_peptide		Yes	
+2061973768	sg4i_00000160	Transmembrane		Yes	
+					
+2061973769	sg4i_00000170	COG_category	[T] Signal transduction mechanisms		
+2061973769	sg4i_00000170	COG3448	CBS-domain-containing membrane protein		2.0e-04
+2061973769	sg4i_00000170	pfam00571	CBS		4.8e-04
+2061973769	sg4i_00000170	Locus_type		CDS	
+2061973769	sg4i_00000170	Product_name		CBS domain.	
+2061973769	sg4i_00000170	Scaffold		sg4i_contig02749	
+2061973769	sg4i_00000170	Coordinates		125..601(+)	
+2061973769	sg4i_00000170	DNA_length		477bp	
+2061973769	sg4i_00000170	Protein_length		158aa	
+2061973769	sg4i_00000170	GC		.71	
+					
+2061973770	sg4i_00000180	Locus_type		CDS	
+2061973770	sg4i_00000180	Product_name		hypothetical protein	
+2061973770	sg4i_00000180	Scaffold		sg4i_contig02749	
+2061973770	sg4i_00000180	Coordinates		615..956(-)	
+2061973770	sg4i_00000180	DNA_length		342bp	
+2061973770	sg4i_00000180	Protein_length		113aa	
+2061973770	sg4i_00000180	GC		.71	
+2061973770	sg4i_00000180	Signal_peptide		Yes	
+2061973770	sg4i_00000180	Transmembrane		Yes	
+					
+2061973771	sg4i_00000190	COG_category	[E] Amino acid transport and metabolism		
+2061973771	sg4i_00000190	COG0136	Aspartate-semialdehyde dehydrogenase		2.0e-101
+2061973771	sg4i_00000190	pfam01118	Semialdhyde_dh		1.1e-30
+2061973771	sg4i_00000190	pfam02774	Semialdhyde_dhC		1.8e-53
+2061973771	sg4i_00000190	TIGR01296	aspartate-semialdehyde dehydrogenase (peptidoglycan organisms)		1.4e-129
+2061973771	sg4i_00000190	Locus_type		CDS	
+2061973771	sg4i_00000190	Product_name		aspartate semialdehyde dehydrogenase (EC 1.2.1.11)	
+2061973771	sg4i_00000190	Scaffold		sg4i_contig02749	
+2061973771	sg4i_00000190	Coordinates		1062..2117(-)	
+2061973771	sg4i_00000190	DNA_length		1056bp	
+2061973771	sg4i_00000190	Protein_length		351aa	
+2061973771	sg4i_00000190	GC		.71	
+					
+2061973772	sg4i_00000200	COG_category	[E] Amino acid transport and metabolism		
+2061973772	sg4i_00000200	COG0527	Aspartokinases		4.0e-94
+2061973772	sg4i_00000200	pfam01842	ACT		2.2e-12
+2061973772	sg4i_00000200	pfam00696	AA_kinase		3.5e-35
+2061973772	sg4i_00000200	pfam01842	ACT		1.3e-12
+2061973772	sg4i_00000200	TIGR00656	aspartate kinase, monofunctional class		8.0e-107
+2061973772	sg4i_00000200	TIGR00657	aspartate kinase		1.4e-117
+2061973772	sg4i_00000200	Locus_type		CDS	
+2061973772	sg4i_00000200	Product_name		aspartate kinase (EC 2.7.2.4)	
+2061973772	sg4i_00000200	Scaffold		sg4i_contig02749	
+2061973772	sg4i_00000200	Coordinates		2114..3211(-)	
+2061973772	sg4i_00000200	DNA_length		1098bp	
+2061973772	sg4i_00000200	Protein_length		365aa	
+2061973772	sg4i_00000200	GC		.69	
+					
+2061973773	sg4i_00000210	COG_category	[R] General function prediction only		
+2061973773	sg4i_00000210	COG3631	Ketosteroid isomerase-related protein		2.0e-10
+2061973773	sg4i_00000210	pfam07366	SnoaL		9.8e-13
+2061973773	sg4i_00000210	Locus_type		CDS	
+2061973773	sg4i_00000210	Product_name		Ketosteroid isomerase-related protein	
+2061973773	sg4i_00000210	Scaffold		sg4i_contig03492	
+2061973773	sg4i_00000210	Coordinates		40..441(-)	
+2061973773	sg4i_00000210	DNA_length		402bp	
+2061973773	sg4i_00000210	Protein_length		133aa	
+2061973773	sg4i_00000210	GC		.69	
+					
+2061973774	sg4i_00000220	COG_category	[E] Amino acid transport and metabolism		
+2061973774	sg4i_00000220	COG1104	Cysteine sulfinate desulfinase/cysteine desulfurase and related enzymes		0.0e+00
+2061973774	sg4i_00000220	pfam00266	Aminotran_5		6.1e-79
+2061973774	sg4i_00000220	TIGR03402	cysteine desulfurase NifS		0.0e+00
+2061973774	sg4i_00000220	Locus_type		CDS	
+2061973774	sg4i_00000220	Product_name		Cysteine sulfinate desulfinase/cysteine desulfurase and related enzymes	
+2061973774	sg4i_00000220	Scaffold		sg4i_contig03492	
+2061973774	sg4i_00000220	Coordinates		597..1760(+)	
+2061973774	sg4i_00000220	DNA_length		1164bp	
+2061973774	sg4i_00000220	Protein_length		387aa	
+2061973774	sg4i_00000220	GC		.72	
+					
+2061973775	sg4i_00000230	Locus_type		CDS	
+2061973775	sg4i_00000230	Product_name		hypothetical protein	
+2061973775	sg4i_00000230	Scaffold		sg4i_contig03492	
+2061973775	sg4i_00000230	Coordinates		1741..2352(+)	
+2061973775	sg4i_00000230	DNA_length		612bp	
+2061973775	sg4i_00000230	Protein_length		203aa	
+2061973775	sg4i_00000230	GC		.71	
+					
+2061973776	sg4i_00000240	Locus_type		CDS	
+2061973776	sg4i_00000240	Product_name		hypothetical protein	
+2061973776	sg4i_00000240	Scaffold		sg4i_contig03492	
+2061973776	sg4i_00000240	Coordinates		2327..2941(-)	
+2061973776	sg4i_00000240	DNA_length		615bp	
+2061973776	sg4i_00000240	Protein_length		204aa	
+2061973776	sg4i_00000240	GC		.69	
+2061973776	sg4i_00000240	Signal_peptide		Yes	
+2061973776	sg4i_00000240	Transmembrane		Yes	
+					
+2061973777	sg4i_00000250	Locus_type		CDS	
+2061973777	sg4i_00000250	Product_name		hypothetical protein	
+2061973777	sg4i_00000250	Scaffold		sg4i_contig03492	
+2061973777	sg4i_00000250	Coordinates		3346..3669(+)	
+2061973777	sg4i_00000250	DNA_length		324bp	
+2061973777	sg4i_00000250	Protein_length		108aa	
+2061973777	sg4i_00000250	GC		.65	
+					
+2061973778	sg4i_00000260	Locus_type		CDS	
+2061973778	sg4i_00000260	Product_name		hypothetical protein	
+2061973778	sg4i_00000260	Scaffold		sg4i_contig04665	
+2061973778	sg4i_00000260	Coordinates		1..108(+)	
+2061973778	sg4i_00000260	DNA_length		108bp	
+2061973778	sg4i_00000260	Protein_length		35aa	
+2061973778	sg4i_00000260	GC		.51	
+					
+2061973779	sg4i_00000270	Locus_type		CDS	
+2061973779	sg4i_00000270	Product_name		hypothetical protein	
+2061973779	sg4i_00000270	Scaffold		sg4i_contig04665	
+2061973779	sg4i_00000270	Coordinates		317..1192(+)	
+2061973779	sg4i_00000270	DNA_length		876bp	
+2061973779	sg4i_00000270	Protein_length		292aa	
+2061973779	sg4i_00000270	GC		.58	
+					
+2061973780	sg4i_00000280	COG_category	[L] Replication, recombination and repair		
+2061973780	sg4i_00000280	COG0249	Mismatch repair ATPase (MutS family)		8.0e-123
+2061973780	sg4i_00000280	pfam05192	MutS_III		4.2e-45
+2061973780	sg4i_00000280	pfam05188	MutS_II		1.7e-22
+2061973780	sg4i_00000280	pfam05190	MutS_IV		2.5e-06
+2061973780	sg4i_00000280	pfam01624	MutS_I		1.7e-37
+2061973780	sg4i_00000280	KO:K03555	DNA mismatch repair protein MutS		1.2e-10
+2061973780	sg4i_00000280	Locus_type		CDS	
+2061973780	sg4i_00000280	Product_name		Mismatch repair ATPase (MutS family)	
+2061973780	sg4i_00000280	Scaffold		sg4i_contig07313	
+2061973780	sg4i_00000280	Coordinates		219..1604(+)	
+2061973780	sg4i_00000280	DNA_length		1386bp	
+2061973780	sg4i_00000280	Protein_length		462aa	
+2061973780	sg4i_00000280	GC		.75	
+					
+2061973781	sg4i_00000290	COG_category	[K] Transcription		
+2061973781	sg4i_00000290	COG_category	[G] Carbohydrate transport and metabolism		
+2061973781	sg4i_00000290	COG1940	Transcriptional regulator/sugar kinase		2.0e-51
+2061973781	sg4i_00000290	pfam00480	ROK		1.1e-43
+2061973781	sg4i_00000290	TIGR00744	ROK family protein (putative glucokinase)		1.9e-66
+2061973781	sg4i_00000290	Locus_type		CDS	
+2061973781	sg4i_00000290	Product_name		glucokinase (EC 2.7.1.2)	
+2061973781	sg4i_00000290	Scaffold		sg4i_contig10699	
+2061973781	sg4i_00000290	Coordinates		67..1044(-)	
+2061973781	sg4i_00000290	DNA_length		978bp	
+2061973781	sg4i_00000290	Protein_length		325aa	
+2061973781	sg4i_00000290	GC		.71	
+					
+2061973782	sg4i_00000300	COG_category	[M] Cell wall/membrane/envelope biogenesis		
+2061973782	sg4i_00000300	COG0463	Glycosyltransferases involved in cell wall biogenesis		5.0e-17
+2061973782	sg4i_00000300	pfam00535	Glycos_transf_2		2.5e-28
+2061973782	sg4i_00000300	Locus_type		CDS	
+2061973782	sg4i_00000300	Product_name		Glycosyltransferases involved in cell wall biogenesis	
+2061973782	sg4i_00000300	Scaffold		sg4i_contig10699	
+2061973782	sg4i_00000300	Coordinates		1080..1877(-)	
+2061973782	sg4i_00000300	DNA_length		798bp	
+2061973782	sg4i_00000300	Protein_length		265aa	
+2061973782	sg4i_00000300	GC		.67	
+					
+2061973783	sg4i_00000310	COG_category	[R] General function prediction only		
+2061973783	sg4i_00000310	COG4783	Putative Zn-dependent protease, contains TPR repeats		3.0e-06
+2061973783	sg4i_00000310	pfam09295	ChAPs		9.1e-05
+2061973783	sg4i_00000310	Locus_type		CDS	
+2061973783	sg4i_00000310	Product_name		Putative Zn-dependent protease, contains TPR repeats	
+2061973783	sg4i_00000310	Scaffold		sg4i_contig12019	
+2061973783	sg4i_00000310	Coordinates		3..680(-)	
+2061973783	sg4i_00000310	DNA_length		678bp	
+2061973783	sg4i_00000310	Protein_length		226aa	
+2061973783	sg4i_00000310	GC		.66	
+2061973783	sg4i_00000310	Signal_peptide		Yes	
+					
+2061973784	sg4i_00000320	COG_category	[I] Lipid transport and metabolism		
+2061973784	sg4i_00000320	COG0743	1-deoxy-D-xylulose 5-phosphate reductoisomerase		2.0e-31
+2061973784	sg4i_00000320	pfam02670	DXP_reductoisom		2.7e-33
+2061973784	sg4i_00000320	Locus_type		CDS	
+2061973784	sg4i_00000320	Product_name		1-deoxy-D-xylulose 5-phosphate reductoisomerase (EC 1.1.1.267)	
+2061973784	sg4i_00000320	Scaffold		sg4i_contig12019	
+2061973784	sg4i_00000320	Coordinates		679..1071(+)	
+2061973784	sg4i_00000320	DNA_length		393bp	
+2061973784	sg4i_00000320	Protein_length		131aa	
+2061973784	sg4i_00000320	GC		.72	
+					
+2061973785	sg4i_00000330	Locus_type		CDS	
+2061973785	sg4i_00000330	Product_name		hypothetical protein	
+2061973785	sg4i_00000330	Scaffold		sg4i_contig13114	
+2061973785	sg4i_00000330	Coordinates		1..408(+)	
+2061973785	sg4i_00000330	DNA_length		408bp	
+2061973785	sg4i_00000330	Protein_length		135aa	
+2061973785	sg4i_00000330	GC		.63	
+					
+2061973786	sg4i_00000340	COG_category	[G] Carbohydrate transport and metabolism		
+2061973786	sg4i_00000340	COG0383	Alpha-mannosidase		9.0e-03
+2061973786	sg4i_00000340	pfam01074	Glyco_hydro_38		8.8e-14
+2061973786	sg4i_00000340	Locus_type		CDS	
+2061973786	sg4i_00000340	Product_name		Glycosyl hydrolases family 38 N-terminal domain.	
+2061973786	sg4i_00000340	Scaffold		sg4i_contig13114	
+2061973786	sg4i_00000340	Coordinates		405..2972(-)	
+2061973786	sg4i_00000340	DNA_length		2568bp	
+2061973786	sg4i_00000340	Protein_length		855aa	
+2061973786	sg4i_00000340	GC		.69	
+					
+2061973787	sg4i_00000350	Locus_type		CDS	
+2061973787	sg4i_00000350	Product_name		hypothetical protein	
+2061973787	sg4i_00000350	Scaffold		sg4i_contig14540	
+2061973787	sg4i_00000350	Coordinates		3..242(+)	
+2061973787	sg4i_00000350	DNA_length		240bp	
+2061973787	sg4i_00000350	Protein_length		79aa	
+2061973787	sg4i_00000350	GC		.65	
+					
+2061973788	sg4i_00000360	Locus_type		CDS	
+2061973788	sg4i_00000360	Product_name		hypothetical protein	
+2061973788	sg4i_00000360	Scaffold		sg4i_contig14540	
+2061973788	sg4i_00000360	Coordinates		313..561(+)	
+2061973788	sg4i_00000360	DNA_length		249bp	
+2061973788	sg4i_00000360	Protein_length		82aa	
+2061973788	sg4i_00000360	GC		.67	
+2061973788	sg4i_00000360	Transmembrane		Yes	
+					
+2061973789	sg4i_00000370	KEGG_module	M00052: Pyrimidine ribonucleotide biosynthesis, UMP => UDP/UTP,CDP/CTP		
+2061973789	sg4i_00000370	COG_category	[F] Nucleotide transport and metabolism		
+2061973789	sg4i_00000370	COG0283	Cytidylate kinase		8.0e-64
+2061973789	sg4i_00000370	pfam02224	Cytidylate_kin		9.3e-50
+2061973789	sg4i_00000370	EC:2.7.4.14	Cytidylate kinase.		
+2061973789	sg4i_00000370	TIGR00017	cytidylate kinase		1.0e-72
+2061973789	sg4i_00000370	KO:K00945	cytidylate kinase [EC:2.7.4.14]		7.0e-10
+2061973789	sg4i_00000370	Locus_type		CDS	
+2061973789	sg4i_00000370	Product_name		cytidylate kinase	
+2061973789	sg4i_00000370	Scaffold		sg4i_contig14540	
+2061973789	sg4i_00000370	Coordinates		694..1398(+)	
+2061973789	sg4i_00000370	DNA_length		705bp	
+2061973789	sg4i_00000370	Protein_length		234aa	
+2061973789	sg4i_00000370	GC		.66	
+					
+2061973790	sg4i_00000380	COG_category	[I] Lipid transport and metabolism		
+2061973790	sg4i_00000380	COG0204	1-acyl-sn-glycerol-3-phosphate acyltransferase		4.0e-27
+2061973790	sg4i_00000380	pfam01553	Acyltransferase		4.4e-24
+2061973790	sg4i_00000380	TIGR00530	1-acyl-sn-glycerol-3-phosphate acyltransferases		1.5e-29
+2061973790	sg4i_00000380	Locus_type		CDS	
+2061973790	sg4i_00000380	Product_name		1-acyl-sn-glycerol-3-phosphate acyltransferases	
+2061973790	sg4i_00000380	Scaffold		sg4i_contig14540	
+2061973790	sg4i_00000380	Coordinates		1402..2004(+)	
+2061973790	sg4i_00000380	DNA_length		603bp	
+2061973790	sg4i_00000380	Protein_length		200aa	
+2061973790	sg4i_00000380	GC		.63	
+					
+2061973791	sg4i_00000390	KEGG_module	M00178: Ribosome, bacteria		
+2061973791	sg4i_00000390	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973791	sg4i_00000390	COG0539	Ribosomal protein S1		7.0e-100
+2061973791	sg4i_00000390	pfam00575	S1		6.4e-12
+2061973791	sg4i_00000390	pfam00575	S1		8.5e-26
+2061973791	sg4i_00000390	pfam00575	S1		6.4e-24
+2061973791	sg4i_00000390	pfam00575	S1		1.7e-20
+2061973791	sg4i_00000390	TIGR00717	ribosomal protein S1		1.0e-89
+2061973791	sg4i_00000390	KO:K02945	small subunit ribosomal protein S1		0.0e+00
+2061973791	sg4i_00000390	Locus_type		CDS	
+2061973791	sg4i_00000390	Product_name		SSU ribosomal protein S1P	
+2061973791	sg4i_00000390	Scaffold		sg4i_contig14540	
+2061973791	sg4i_00000390	Coordinates		2076..3269(+)	
+2061973791	sg4i_00000390	DNA_length		1194bp	
+2061973791	sg4i_00000390	Protein_length		397aa	
+2061973791	sg4i_00000390	GC		.62	
+					
+2061973792	sg4i_00000400	Locus_type		CDS	
+2061973792	sg4i_00000400	Product_name		hypothetical protein	
+2061973792	sg4i_00000400	Scaffold		sg4i_contig14540	
+2061973792	sg4i_00000400	Coordinates		3364..3540(+)	
+2061973792	sg4i_00000400	DNA_length		177bp	
+2061973792	sg4i_00000400	Protein_length		59aa	
+2061973792	sg4i_00000400	GC		.71	
+2061973792	sg4i_00000400	Signal_peptide		Yes	
+2061973792	sg4i_00000400	Transmembrane		Yes	
+					
+2061973793	sg4i_00000410	COG_category	[E] Amino acid transport and metabolism		
+2061973793	sg4i_00000410	COG1246	N-acetylglutamate synthase and related acetyltransferases		3.0e-13
+2061973793	sg4i_00000410	pfam00583	Acetyltransf_1		2.2e-10
+2061973793	sg4i_00000410	Locus_type		CDS	
+2061973793	sg4i_00000410	Product_name		N-acetylglutamate synthase and related acetyltransferases	
+2061973793	sg4i_00000410	Scaffold		sg4i_contig16408	
+2061973793	sg4i_00000410	Coordinates		3..323(-)	
+2061973793	sg4i_00000410	DNA_length		321bp	
+2061973793	sg4i_00000410	Protein_length		107aa	
+2061973793	sg4i_00000410	GC		.67	
+					
+2061973794	sg4i_00000420	COG_category	[K] Transcription		
+2061973794	sg4i_00000420	COG0640	Predicted transcriptional regulators		9.0e-13
+2061973794	sg4i_00000420	pfam01022	HTH_5		4.1e-18
+2061973794	sg4i_00000420	KO:K03892	ArsR family transcriptional regulator		3.4e-06
+2061973794	sg4i_00000420	Locus_type		CDS	
+2061973794	sg4i_00000420	Product_name		Predicted transcriptional regulators	
+2061973794	sg4i_00000420	Scaffold		sg4i_contig16408	
+2061973794	sg4i_00000420	Coordinates		335..697(-)	
+2061973794	sg4i_00000420	DNA_length		363bp	
+2061973794	sg4i_00000420	Protein_length		120aa	
+2061973794	sg4i_00000420	GC		.66	
+					
+2061973795	sg4i_00000430	Locus_type		tRNA	
+2061973795	sg4i_00000430	Product_name		tRNA_Leu_CAG	
+2061973795	sg4i_00000430	Scaffold		sg4i_contig16408	
+2061973795	sg4i_00000430	Coordinates		840..923(-)	
+2061973795	sg4i_00000430	DNA_length		84bp	
+2061973795	sg4i_00000430	GC		.67	
+					
+2061973796	sg4i_00000440	Locus_type		tRNA	
+2061973796	sg4i_00000440	Product_name		tRNA_Asn_GTT	
+2061973796	sg4i_00000440	Scaffold		sg4i_contig16408	
+2061973796	sg4i_00000440	Coordinates		1188..1260(+)	
+2061973796	sg4i_00000440	DNA_length		73bp	
+2061973796	sg4i_00000440	GC		.6	
+					
+2061973797	sg4i_00000450	COG_category	[R] General function prediction only		
+2061973797	sg4i_00000450	COG3968	Uncharacterized protein related to glutamine synthetase		2.0e-52
+2061973797	sg4i_00000450	Locus_type		CDS	
+2061973797	sg4i_00000450	Product_name		L-glutamine synthetase (EC 6.3.1.2)	
+2061973797	sg4i_00000450	Scaffold		sg4i_contig17896	
+2061973797	sg4i_00000450	Coordinates		2..634(+)	
+2061973797	sg4i_00000450	DNA_length		633bp	
+2061973797	sg4i_00000450	Protein_length		210aa	
+2061973797	sg4i_00000450	GC		.65	
+					
+2061973798	sg4i_00000460	COG_category	[K] Transcription		
+2061973798	sg4i_00000460	COG1595	DNA-directed RNA polymerase specialized sigma subunit, sigma24 homolog		4.0e-29
+2061973798	sg4i_00000460	pfam04542	Sigma70_r2		2.7e-19
+2061973798	sg4i_00000460	pfam08281	Sigma70_r4_2		9.0e-20
+2061973798	sg4i_00000460	TIGR02937	RNA polymerase sigma factor, sigma-70 family		8.6e-36
+2061973798	sg4i_00000460	Locus_type		CDS	
+2061973798	sg4i_00000460	Product_name		RNA polymerase sigma factor, sigma-70 family	
+2061973798	sg4i_00000460	Scaffold		sg4i_contig17896	
+2061973798	sg4i_00000460	Coordinates		748..1344(+)	
+2061973798	sg4i_00000460	DNA_length		597bp	
+2061973798	sg4i_00000460	Protein_length		198aa	
+2061973798	sg4i_00000460	GC		.62	
+					
+2061973799	sg4i_00000470	COG_category	[F] Nucleotide transport and metabolism		
+2061973799	sg4i_00000470	COG0015	Adenylosuccinate lyase		2.0e-24
+2061973799	sg4i_00000470	pfam00206	Lyase_1		8.4e-07
+2061973799	sg4i_00000470	Locus_type		CDS	
+2061973799	sg4i_00000470	Product_name		Adenylosuccinate lyase (EC 4.3.2.2)	
+2061973799	sg4i_00000470	Scaffold		sg4i_contig17896	
+2061973799	sg4i_00000470	Coordinates		1424..1696(+)	
+2061973799	sg4i_00000470	DNA_length		273bp	
+2061973799	sg4i_00000470	Protein_length		91aa	
+2061973799	sg4i_00000470	GC		.63	
+					
+2061973800	sg4i_00000480	COG_category	[U] Intracellular trafficking, secretion, and vesicular transport		
+2061973800	sg4i_00000480	COG0201	Preprotein translocase subunit SecY		6.0e-11
+2061973800	sg4i_00000480	Locus_type		CDS	
+2061973800	sg4i_00000480	Product_name		protein translocase subunit secY/sec61 alpha	
+2061973800	sg4i_00000480	Scaffold		sg4i_contig18598	
+2061973800	sg4i_00000480	Coordinates		2..232(-)	
+2061973800	sg4i_00000480	DNA_length		231bp	
+2061973800	sg4i_00000480	Protein_length		77aa	
+2061973800	sg4i_00000480	GC		.65	
+2061973800	sg4i_00000480	Transmembrane		Yes	
+					
+2061973801	sg4i_00000490	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973801	sg4i_00000490	COG0200	Ribosomal protein L15		5.0e-30
+2061973801	sg4i_00000490	pfam00828	Ribosomal_L18e		4.9e-29
+2061973801	sg4i_00000490	TIGR01071	ribosomal protein L15, bacterial/organelle		9.6e-47
+2061973801	sg4i_00000490	Locus_type		CDS	
+2061973801	sg4i_00000490	Product_name		ribosomal protein L15, bacterial/organelle	
+2061973801	sg4i_00000490	Scaffold		sg4i_contig18598	
+2061973801	sg4i_00000490	Coordinates		282..743(-)	
+2061973801	sg4i_00000490	DNA_length		462bp	
+2061973801	sg4i_00000490	Protein_length		153aa	
+2061973801	sg4i_00000490	GC		.66	
+					
+2061973802	sg4i_00000500	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973802	sg4i_00000500	COG1841	Ribosomal protein L30/L7E		4.0e-13
+2061973802	sg4i_00000500	pfam00327	Ribosomal_L30		4.3e-24
+2061973802	sg4i_00000500	TIGR01308	ribosomal protein L30, bacterial/organelle		4.7e-28
+2061973802	sg4i_00000500	Locus_type		CDS	
+2061973802	sg4i_00000500	Product_name		LSU ribosomal protein L30P	
+2061973802	sg4i_00000500	Scaffold		sg4i_contig18598	
+2061973802	sg4i_00000500	Coordinates		781..981(-)	
+2061973802	sg4i_00000500	DNA_length		201bp	
+2061973802	sg4i_00000500	Protein_length		66aa	
+2061973802	sg4i_00000500	GC		.58	
+					
+2061973803	sg4i_00000510	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973803	sg4i_00000510	COG0098	Ribosomal protein S5		5.0e-52
+2061973803	sg4i_00000510	pfam00333	Ribosomal_S5		1.1e-27
+2061973803	sg4i_00000510	pfam03719	Ribosomal_S5_C		2.0e-29
+2061973803	sg4i_00000510	TIGR01021	ribosomal protein S5, bacterial/organelle type		6.8e-67
+2061973803	sg4i_00000510	Locus_type		CDS	
+2061973803	sg4i_00000510	Product_name		SSU ribosomal protein S5P	
+2061973803	sg4i_00000510	Scaffold		sg4i_contig18598	
+2061973803	sg4i_00000510	Coordinates		1014..1562(-)	
+2061973803	sg4i_00000510	DNA_length		549bp	
+2061973803	sg4i_00000510	Protein_length		182aa	
+2061973803	sg4i_00000510	GC		.66	
+					
+2061973804	sg4i_00000520	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973804	sg4i_00000520	COG0256	Ribosomal protein L18		1.0e-30
+2061973804	sg4i_00000520	pfam00861	Ribosomal_L18p		5.1e-38
+2061973804	sg4i_00000520	TIGR00060	ribosomal protein L18, bacterial type		2.4e-41
+2061973804	sg4i_00000520	Locus_type		CDS	
+2061973804	sg4i_00000520	Product_name		LSU ribosomal protein L18P	
+2061973804	sg4i_00000520	Scaffold		sg4i_contig18598	
+2061973804	sg4i_00000520	Coordinates		1601..1960(-)	
+2061973804	sg4i_00000520	DNA_length		360bp	
+2061973804	sg4i_00000520	Protein_length		119aa	
+2061973804	sg4i_00000520	GC		.64	
+					
+2061973805	sg4i_00000530	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973805	sg4i_00000530	COG0097	Ribosomal protein L6P/L9E		4.0e-56
+2061973805	sg4i_00000530	pfam00347	Ribosomal_L6		9.5e-20
+2061973805	sg4i_00000530	pfam00347	Ribosomal_L6		9.7e-21
+2061973805	sg4i_00000530	TIGR03654	ribosomal protein L6, bacterial type		4.3e-72
+2061973805	sg4i_00000530	Locus_type		CDS	
+2061973805	sg4i_00000530	Product_name		LSU ribosomal protein L6P	
+2061973805	sg4i_00000530	Scaffold		sg4i_contig18598	
+2061973805	sg4i_00000530	Coordinates		2032..2586(-)	
+2061973805	sg4i_00000530	DNA_length		555bp	
+2061973805	sg4i_00000530	Protein_length		184aa	
+2061973805	sg4i_00000530	GC		.65	
+					
+2061973806	sg4i_00000540	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973806	sg4i_00000540	COG0096	Ribosomal protein S8		4.0e-46
+2061973806	sg4i_00000540	pfam00410	Ribosomal_S8		4.6e-48
+2061973806	sg4i_00000540	Locus_type		CDS	
+2061973806	sg4i_00000540	Product_name		Ribosomal protein S8	
+2061973806	sg4i_00000540	Scaffold		sg4i_contig18598	
+2061973806	sg4i_00000540	Coordinates		2627..3028(-)	
+2061973806	sg4i_00000540	DNA_length		402bp	
+2061973806	sg4i_00000540	Protein_length		133aa	
+2061973806	sg4i_00000540	GC		.62	
+					
+2061973807	sg4i_00000550	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973807	sg4i_00000550	COG0199	Ribosomal protein S14		3.0e-14
+2061973807	sg4i_00000550	pfam00253	Ribosomal_S14		7.3e-27
+2061973807	sg4i_00000550	Locus_type		CDS	
+2061973807	sg4i_00000550	Product_name		SSU ribosomal protein S14P	
+2061973807	sg4i_00000550	Scaffold		sg4i_contig18598	
+2061973807	sg4i_00000550	Coordinates		3056..3325(-)	
+2061973807	sg4i_00000550	DNA_length		270bp	
+2061973807	sg4i_00000550	Protein_length		89aa	
+2061973807	sg4i_00000550	GC		.62	
+					
+2061973808	sg4i_00000560	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973808	sg4i_00000560	COG0094	Ribosomal protein L5		3.0e-71
+2061973808	sg4i_00000560	pfam00281	Ribosomal_L5		1.2e-22
+2061973808	sg4i_00000560	pfam00673	Ribosomal_L5_C		1.3e-38
+2061973808	sg4i_00000560	Locus_type		CDS	
+2061973808	sg4i_00000560	Product_name		Ribosomal protein L5	
+2061973808	sg4i_00000560	Scaffold		sg4i_contig18598	
+2061973808	sg4i_00000560	Coordinates		3333..3908(-)	
+2061973808	sg4i_00000560	DNA_length		576bp	
+2061973808	sg4i_00000560	Protein_length		191aa	
+2061973808	sg4i_00000560	GC		.6	
+					
+2061973809	sg4i_00000570	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973809	sg4i_00000570	COG0198	Ribosomal protein L24		8.0e-20
+2061973809	sg4i_00000570	pfam00467	KOW		3.0e-07
+2061973809	sg4i_00000570	TIGR01079	ribosomal protein L24, bacterial/organelle		6.0e-30
+2061973809	sg4i_00000570	Locus_type		CDS	
+2061973809	sg4i_00000570	Product_name		LSU ribosomal protein L24P	
+2061973809	sg4i_00000570	Scaffold		sg4i_contig18598	
+2061973809	sg4i_00000570	Coordinates		3950..4252(-)	
+2061973809	sg4i_00000570	DNA_length		303bp	
+2061973809	sg4i_00000570	Protein_length		100aa	
+2061973809	sg4i_00000570	GC		.67	
+					
+2061973810	sg4i_00000580	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973810	sg4i_00000580	COG0093	Ribosomal protein L14		4.0e-51
+2061973810	sg4i_00000580	pfam00238	Ribosomal_L14		2.1e-55
+2061973810	sg4i_00000580	TIGR01067	ribosomal protein L14, bacterial/organelle		5.3e-59
+2061973810	sg4i_00000580	Locus_type		CDS	
+2061973810	sg4i_00000580	Product_name		ribosomal protein L14, bacterial/organelle	
+2061973810	sg4i_00000580	Scaffold		sg4i_contig18598	
+2061973810	sg4i_00000580	Coordinates		4339..4707(-)	
+2061973810	sg4i_00000580	DNA_length		369bp	
+2061973810	sg4i_00000580	Protein_length		122aa	
+2061973810	sg4i_00000580	GC		.6	
+					
+2061973811	sg4i_00000590	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973811	sg4i_00000590	COG0186	Ribosomal protein S17		4.0e-24
+2061973811	sg4i_00000590	pfam00366	Ribosomal_S17		1.7e-31
+2061973811	sg4i_00000590	TIGR03635	30S ribosomal protein S17		7.5e-38
+2061973811	sg4i_00000590	Locus_type		CDS	
+2061973811	sg4i_00000590	Product_name		SSU ribosomal protein S17P	
+2061973811	sg4i_00000590	Scaffold		sg4i_contig18598	
+2061973811	sg4i_00000590	Coordinates		4704..5009(-)	
+2061973811	sg4i_00000590	DNA_length		306bp	
+2061973811	sg4i_00000590	Protein_length		101aa	
+2061973811	sg4i_00000590	GC		.57	
+					
+2061973812	sg4i_00000600	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973812	sg4i_00000600	COG0255	Ribosomal protein L29		1.0e-05
+2061973812	sg4i_00000600	pfam00831	Ribosomal_L29		9.2e-20
+2061973812	sg4i_00000600	TIGR00012	ribosomal protein L29		5.9e-19
+2061973812	sg4i_00000600	Locus_type		CDS	
+2061973812	sg4i_00000600	Product_name		LSU ribosomal protein L29P	
+2061973812	sg4i_00000600	Scaffold		sg4i_contig18598	
+2061973812	sg4i_00000600	Coordinates		5057..5272(-)	
+2061973812	sg4i_00000600	DNA_length		216bp	
+2061973812	sg4i_00000600	Protein_length		71aa	
+2061973812	sg4i_00000600	GC		.53	
+					
+2061973813	sg4i_00000610	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973813	sg4i_00000610	COG0197	Ribosomal protein L16/L10E		1.0e-46
+2061973813	sg4i_00000610	pfam00252	Ribosomal_L16		5.3e-56
+2061973813	sg4i_00000610	TIGR01164	ribosomal protein L16, bacterial/organelle		6.1e-62
+2061973813	sg4i_00000610	Locus_type		CDS	
+2061973813	sg4i_00000610	Product_name		ribosomal protein L16, bacterial/organelle	
+2061973813	sg4i_00000610	Scaffold		sg4i_contig18598	
+2061973813	sg4i_00000610	Coordinates		5294..5728(-)	
+2061973813	sg4i_00000610	DNA_length		435bp	
+2061973813	sg4i_00000610	Protein_length		144aa	
+2061973813	sg4i_00000610	GC		.62	
+					
+2061973814	sg4i_00000620	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973814	sg4i_00000620	COG0092	Ribosomal protein S3		3.0e-70
+2061973814	sg4i_00000620	pfam07650	KH_2		4.4e-16
+2061973814	sg4i_00000620	pfam00417	Ribosomal_S3_N		3.4e-18
+2061973814	sg4i_00000620	pfam00189	Ribosomal_S3_C		6.9e-34
+2061973814	sg4i_00000620	TIGR01009	ribosomal protein S3, bacterial type		2.3e-91
+2061973814	sg4i_00000620	Locus_type		CDS	
+2061973814	sg4i_00000620	Product_name		SSU ribosomal protein S3P	
+2061973814	sg4i_00000620	Scaffold		sg4i_contig18598	
+2061973814	sg4i_00000620	Coordinates		5783..6532(-)	
+2061973814	sg4i_00000620	DNA_length		750bp	
+2061973814	sg4i_00000620	Protein_length		249aa	
+2061973814	sg4i_00000620	GC		.66	
+					
+2061973815	sg4i_00000630	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973815	sg4i_00000630	COG0091	Ribosomal protein L22		8.0e-21
+2061973815	sg4i_00000630	pfam00237	Ribosomal_L22		3.1e-30
+2061973815	sg4i_00000630	TIGR01044	ribosomal protein L22, bacterial type		2.4e-28
+2061973815	sg4i_00000630	Locus_type		CDS	
+2061973815	sg4i_00000630	Product_name		LSU ribosomal protein L22P	
+2061973815	sg4i_00000630	Scaffold		sg4i_contig18598	
+2061973815	sg4i_00000630	Coordinates		6576..6935(-)	
+2061973815	sg4i_00000630	DNA_length		360bp	
+2061973815	sg4i_00000630	Protein_length		119aa	
+2061973815	sg4i_00000630	GC		.67	
+2061973815	sg4i_00000630	Signal_peptide		Yes	
+					
+2061973816	sg4i_00000640	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973816	sg4i_00000640	COG0185	Ribosomal protein S19		3.0e-35
+2061973816	sg4i_00000640	pfam00203	Ribosomal_S19		7.3e-39
+2061973816	sg4i_00000640	TIGR01050	ribosomal protein S19, bacterial/organelle		2.6e-46
+2061973816	sg4i_00000640	Locus_type		CDS	
+2061973816	sg4i_00000640	Product_name		SSU ribosomal protein S19P	
+2061973816	sg4i_00000640	Scaffold		sg4i_contig18598	
+2061973816	sg4i_00000640	Coordinates		6949..7233(-)	
+2061973816	sg4i_00000640	DNA_length		285bp	
+2061973816	sg4i_00000640	Protein_length		94aa	
+2061973816	sg4i_00000640	GC		.58	
+					
+2061973817	sg4i_00000650	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973817	sg4i_00000650	COG0090	Ribosomal protein L2		3.0e-109
+2061973817	sg4i_00000650	pfam03947	Ribosomal_L2_C		7.4e-57
+2061973817	sg4i_00000650	pfam00181	Ribosomal_L2		1.6e-36
+2061973817	sg4i_00000650	TIGR01171	ribosomal protein L2, bacterial/organellar		0.0e+00
+2061973817	sg4i_00000650	Locus_type		CDS	
+2061973817	sg4i_00000650	Product_name		LSU ribosomal protein L2P	
+2061973817	sg4i_00000650	Scaffold		sg4i_contig18598	
+2061973817	sg4i_00000650	Coordinates		7271..8101(-)	
+2061973817	sg4i_00000650	DNA_length		831bp	
+2061973817	sg4i_00000650	Protein_length		276aa	
+2061973817	sg4i_00000650	GC		.63	
+					
+2061973818	sg4i_00000660	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973818	sg4i_00000660	COG0089	Ribosomal protein L23		2.0e-18
+2061973818	sg4i_00000660	pfam00276	Ribosomal_L23		1.0e-21
+2061973818	sg4i_00000660	Locus_type		CDS	
+2061973818	sg4i_00000660	Product_name		Ribosomal protein L23	
+2061973818	sg4i_00000660	Scaffold		sg4i_contig18598	
+2061973818	sg4i_00000660	Coordinates		8168..8470(-)	
+2061973818	sg4i_00000660	DNA_length		303bp	
+2061973818	sg4i_00000660	Protein_length		100aa	
+2061973818	sg4i_00000660	GC		.59	
+					
+2061973819	sg4i_00000670	Locus_type		CDS	
+2061973819	sg4i_00000670	Product_name		LSU ribosomal protein L4P	
+2061973819	sg4i_00000670	Scaffold		sg4i_contig18598	
+2061973819	sg4i_00000670	Coordinates		8494..8625(-)	
+2061973819	sg4i_00000670	DNA_length		132bp	
+2061973819	sg4i_00000670	Protein_length		43aa	
+2061973819	sg4i_00000670	GC		.68	
+					
+2061973820	sg4i_00000680	COG_category	[R] General function prediction only		
+2061973820	sg4i_00000680	COG1782	Predicted metal-dependent RNase, consists of a metallo-beta-lactamase domain and an RNA-binding KH domain		4.0e-31
+2061973820	sg4i_00000680	pfam10996	Beta-Casp		5.2e-30
+2061973820	sg4i_00000680	KO:K07576	metallo-beta-lactamase family protein		1.4e-103
+2061973820	sg4i_00000680	Locus_type		CDS	
+2061973820	sg4i_00000680	Product_name		Predicted metal-dependent RNase, consists of a metallo-beta-lactamase domain and an RNA-binding KH domain	
+2061973820	sg4i_00000680	Scaffold		sg4i_contig19098	
+2061973820	sg4i_00000680	Coordinates		2..643(+)	
+2061973820	sg4i_00000680	DNA_length		642bp	
+2061973820	sg4i_00000680	Protein_length		213aa	
+2061973820	sg4i_00000680	GC		.69	
+					
+2061973821	sg4i_00000690	Locus_type		CDS	
+2061973821	sg4i_00000690	Product_name		hypothetical protein	
+2061973821	sg4i_00000690	Scaffold		sg4i_contig19098	
+2061973821	sg4i_00000690	Coordinates		713..970(-)	
+2061973821	sg4i_00000690	DNA_length		258bp	
+2061973821	sg4i_00000690	Protein_length		85aa	
+2061973821	sg4i_00000690	GC		.71	
+					
+2061973822	sg4i_00000700	pfam04977	DivIC		1.4e-10
+2061973822	sg4i_00000700	Locus_type		CDS	
+2061973822	sg4i_00000700	Product_name		Septum formation initiator.	
+2061973822	sg4i_00000700	Scaffold		sg4i_contig19098	
+2061973822	sg4i_00000700	Coordinates		967..1251(-)	
+2061973822	sg4i_00000700	DNA_length		285bp	
+2061973822	sg4i_00000700	Protein_length		94aa	
+2061973822	sg4i_00000700	GC		.72	
+2061973822	sg4i_00000700	Signal_peptide		Yes	
+2061973822	sg4i_00000700	Transmembrane		Yes	
+					
+2061973823	sg4i_00000710	COG_category	[P] Inorganic ion transport and metabolism		
+2061973823	sg4i_00000710	COG0735	Fe2+/Zn2+ uptake regulation proteins		3.0e-29
+2061973823	sg4i_00000710	pfam01475	FUR		1.0e-25
+2061973823	sg4i_00000710	KO:K03711	Fur family transcriptional regulator, ferric uptake regulator		1.4e-96
+2061973823	sg4i_00000710	Locus_type		CDS	
+2061973823	sg4i_00000710	Product_name		ferric uptake regulator, Fur family	
+2061973823	sg4i_00000710	Scaffold		sg4i_contig19098	
+2061973823	sg4i_00000710	Coordinates		1363..1806(+)	
+2061973823	sg4i_00000710	DNA_length		444bp	
+2061973823	sg4i_00000710	Protein_length		147aa	
+2061973823	sg4i_00000710	GC		.66	
+					
+2061973824	sg4i_00000720	Metacyc	PWY-6018: seed germination protein turnover		
+2061973824	sg4i_00000720	Metacyc	PWY-5988: wound-induced proteolysis I		
+2061973824	sg4i_00000720	COG_category	[E] Amino acid transport and metabolism		
+2061973824	sg4i_00000720	COG0260	Leucyl aminopeptidase		2.0e-123
+2061973824	sg4i_00000720	pfam02789	Peptidase_M17_N		9.2e-18
+2061973824	sg4i_00000720	pfam00883	Peptidase_M17		4.0e-114
+2061973824	sg4i_00000720	EC:3.4.11.1	Leucyl aminopeptidase.		
+2061973824	sg4i_00000720	KO:K01255	leucyl aminopeptidase [EC:3.4.11.1]		0.0e+00
+2061973824	sg4i_00000720	Locus_type		CDS	
+2061973824	sg4i_00000720	Product_name		Leucyl aminopeptidase	
+2061973824	sg4i_00000720	Scaffold		sg4i_contig19098	
+2061973824	sg4i_00000720	Coordinates		1891..3282(-)	
+2061973824	sg4i_00000720	DNA_length		1392bp	
+2061973824	sg4i_00000720	Protein_length		463aa	
+2061973824	sg4i_00000720	GC		.71	
+					
+2061973825	sg4i_00000730	COG_category	[R] General function prediction only		
+2061973825	sg4i_00000730	COG3872	Predicted metal-dependent enzyme		3.0e-63
+2061973825	sg4i_00000730	pfam07136	DUF1385		4.9e-79
+2061973825	sg4i_00000730	Locus_type		CDS	
+2061973825	sg4i_00000730	Product_name		Predicted metal-dependent enzyme	
+2061973825	sg4i_00000730	Scaffold		sg4i_contig19098	
+2061973825	sg4i_00000730	Coordinates		3308..4198(+)	
+2061973825	sg4i_00000730	DNA_length		891bp	
+2061973825	sg4i_00000730	Protein_length		296aa	
+2061973825	sg4i_00000730	GC		.69	
+2061973825	sg4i_00000730	Signal_peptide		Yes	
+2061973825	sg4i_00000730	Transmembrane		Yes	
+					
+2061973826	sg4i_00000740	Metacyc	PWY-5354: molybdenum cofactor biosynthesis		
+2061973826	sg4i_00000740	Metacyc	PWY-5963: molybdenum cofactor (sulfide) biosynthesis		
+2061973826	sg4i_00000740	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973826	sg4i_00000740	COG0482	Predicted tRNA(5-methylaminomethyl-2-thiouridylate) methyltransferase, contains the PP-loop ATPase domain		2.0e-85
+2061973826	sg4i_00000740	pfam03054	tRNA_Me_trans		1.2e-89
+2061973826	sg4i_00000740	EC:2.8.1.-	Transferases. Transferring sulfur-containing groups. Sulfurtransferases.		
+2061973826	sg4i_00000740	TIGR00420	tRNA (5-methylaminomethyl-2-thiouridylate)-methyltransferase		3.9e-73
+2061973826	sg4i_00000740	KO:K00566	tRNA-specific 2-thiouridylase [EC:2.8.1.-]		0.0e+00
+2061973826	sg4i_00000740	Locus_type		CDS	
+2061973826	sg4i_00000740	Product_name		tRNA (5-methylaminomethyl-2-thiouridylate)-methyltransferase (EC 2.1.1.61)	
+2061973826	sg4i_00000740	Scaffold		sg4i_contig19098	
+2061973826	sg4i_00000740	Coordinates		4195..5037(+)	
+2061973826	sg4i_00000740	DNA_length		843bp	
+2061973826	sg4i_00000740	Protein_length		281aa	
+2061973826	sg4i_00000740	GC		.69	
+2061973826	sg4i_00000740	Signal_peptide		Yes	
+					
+2061973827	sg4i_00000750	KEGG_module	M00258: Uncharacterized ABC transport system		
+2061973827	sg4i_00000750	Locus_type		CDS	
+2061973827	sg4i_00000750	Product_name		hypothetical protein	
+2061973827	sg4i_00000750	Scaffold		sg4i_contig19598	
+2061973827	sg4i_00000750	Coordinates		52..216(+)	
+2061973827	sg4i_00000750	DNA_length		165bp	
+2061973827	sg4i_00000750	Protein_length		54aa	
+2061973827	sg4i_00000750	GC		.66	
+					
+2061973828	sg4i_00000760	KEGG_module	M00258: Uncharacterized ABC transport system		
+2061973828	sg4i_00000760	COG_category	[V] Defense mechanisms		
+2061973828	sg4i_00000760	COG1136	ABC-type antimicrobial peptide transport system, ATPase component		6.0e-54
+2061973828	sg4i_00000760	pfam00005	ABC_tran		6.4e-22
+2061973828	sg4i_00000760	Locus_type		CDS	
+2061973828	sg4i_00000760	Product_name		ABC-type antimicrobial peptide transport system, ATPase component	
+2061973828	sg4i_00000760	Scaffold		sg4i_contig19598	
+2061973828	sg4i_00000760	Coordinates		194..736(+)	
+2061973828	sg4i_00000760	DNA_length		543bp	
+2061973828	sg4i_00000760	Protein_length		180aa	
+2061973828	sg4i_00000760	GC		.71	
+					
+2061973829	sg4i_00000770	COG_category	[R] General function prediction only		
+2061973829	sg4i_00000770	COG0446	Uncharacterized NAD(FAD)-dependent dehydrogenases		7.0e-55
+2061973829	sg4i_00000770	pfam00070	Pyr_redox		4.7e-20
+2061973829	sg4i_00000770	pfam07992	Pyr_redox_2		5.8e-45
+2061973829	sg4i_00000770	pfam02852	Pyr_redox_dim		6.7e-13
+2061973829	sg4i_00000770	EC:1.6.-	Oxidoreductases. Acting on NADH or NADPH.		
+2061973829	sg4i_00000770	KO:K00359	NADH oxidase [EC:1.6.-.-]		0.0e+00
+2061973829	sg4i_00000770	Locus_type		CDS	
+2061973829	sg4i_00000770	Product_name		Uncharacterized NAD(FAD)-dependent dehydrogenases	
+2061973829	sg4i_00000770	Scaffold		sg4i_contig19598	
+2061973829	sg4i_00000770	Coordinates		784..2115(+)	
+2061973829	sg4i_00000770	DNA_length		1332bp	
+2061973829	sg4i_00000770	Protein_length		443aa	
+2061973829	sg4i_00000770	GC		.71	
+2061973829	sg4i_00000770	Signal_peptide		Yes	
+					
+2061973830	sg4i_00000780	KEGG_module	M00012: Glyoxylate cycle		
+2061973830	sg4i_00000780	Metacyc	GLYOXYLATE-BYPASS: glyoxylate cycle		
+2061973830	sg4i_00000780	Metacyc	P105-PWY: TCA cycle variation I		
+2061973830	sg4i_00000780	COG_category	[C] Energy production and conversion		
+2061973830	sg4i_00000780	COG2224	Isocitrate lyase		0.0e+00
+2061973830	sg4i_00000780	pfam00463	ICL		6.5e-61
+2061973830	sg4i_00000780	pfam00463	ICL		1.0e-83
+2061973830	sg4i_00000780	EC:4.1.3.1	Isocitrate lyase.		
+2061973830	sg4i_00000780	TIGR01346	isocitrate lyase		4.1e-74
+2061973830	sg4i_00000780	TIGR01346	isocitrate lyase		8.4e-102
+2061973830	sg4i_00000780	KO:K01637	isocitrate lyase [EC:4.1.3.1]		0.0e+00
+2061973830	sg4i_00000780	Locus_type		CDS	
+2061973830	sg4i_00000780	Product_name		isocitrate lyase (EC 4.1.3.1)	
+2061973830	sg4i_00000780	Scaffold		sg4i_contig19598	
+2061973830	sg4i_00000780	Coordinates		2262..3512(+)	
+2061973830	sg4i_00000780	DNA_length		1251bp	
+2061973830	sg4i_00000780	Protein_length		417aa	
+2061973830	sg4i_00000780	GC		.67	
+					
+2061973831	sg4i_00000790	Locus_type		CDS	
+2061973831	sg4i_00000790	Product_name		hypothetical protein	
+2061973831	sg4i_00000790	Scaffold		sg4i_contig20098	
+2061973831	sg4i_00000790	Coordinates		1..234(+)	
+2061973831	sg4i_00000790	DNA_length		234bp	
+2061973831	sg4i_00000790	Protein_length		77aa	
+2061973831	sg4i_00000790	GC		.64	
+					
+2061973832	sg4i_00000800	COG_category	[C] Energy production and conversion		
+2061973832	sg4i_00000800	COG2141	Coenzyme F420-dependent N5,N10-methylene tetrahydromethanopterin reductase and related flavin-dependent oxidoreductases		7.0e-43
+2061973832	sg4i_00000800	pfam00296	Bac_luciferase		9.6e-53
+2061973832	sg4i_00000800	TIGR03858	probable oxidoreductase, LLM family		0.0e+00
+2061973832	sg4i_00000800	Locus_type		CDS	
+2061973832	sg4i_00000800	Product_name		Coenzyme F420-dependent N5,N10-methylene tetrahydromethanopterin reductase and related flavin-dependent oxidoreductases	
+2061973832	sg4i_00000800	Scaffold		sg4i_contig20098	
+2061973832	sg4i_00000800	Coordinates		218..1285(-)	
+2061973832	sg4i_00000800	DNA_length		1068bp	
+2061973832	sg4i_00000800	Protein_length		355aa	
+2061973832	sg4i_00000800	GC		.68	
+					
+2061973833	sg4i_00000810	COG_category	[M] Cell wall/membrane/envelope biogenesis		
+2061973833	sg4i_00000810	COG_category	[G] Carbohydrate transport and metabolism		
+2061973833	sg4i_00000810	COG0702	Predicted nucleoside-diphosphate-sugar epimerases		9.0e-26
+2061973833	sg4i_00000810	pfam05368	NmrA		3.0e-22
+2061973833	sg4i_00000810	Locus_type		CDS	
+2061973833	sg4i_00000810	Product_name		Predicted nucleoside-diphosphate-sugar epimerases	
+2061973833	sg4i_00000810	Scaffold		sg4i_contig20098	
+2061973833	sg4i_00000810	Coordinates		1536..2420(-)	
+2061973833	sg4i_00000810	DNA_length		885bp	
+2061973833	sg4i_00000810	Protein_length		294aa	
+2061973833	sg4i_00000810	GC		.71	
+					
+2061973834	sg4i_00000820	Locus_type		CDS	
+2061973834	sg4i_00000820	Product_name		hypothetical protein	
+2061973834	sg4i_00000820	Scaffold		sg4i_contig20098	
+2061973834	sg4i_00000820	Coordinates		2489..2602(-)	
+2061973834	sg4i_00000820	DNA_length		114bp	
+2061973834	sg4i_00000820	Protein_length		37aa	
+2061973834	sg4i_00000820	GC		.57	
+2061973834	sg4i_00000820	Transmembrane		Yes	
+					
+2061973835	sg4i_00000830	Locus_type		CDS	
+2061973835	sg4i_00000830	Product_name		hypothetical protein	
+2061973835	sg4i_00000830	Scaffold		sg4i_contig20598	
+2061973835	sg4i_00000830	Coordinates		86..1228(+)	
+2061973835	sg4i_00000830	DNA_length		1143bp	
+2061973835	sg4i_00000830	Protein_length		381aa	
+2061973835	sg4i_00000830	GC		.72	
+2061973835	sg4i_00000830	Signal_peptide		Yes	
+					
+2061973836	sg4i_00000840	Locus_type		CDS	
+2061973836	sg4i_00000840	Product_name		hypothetical protein	
+2061973836	sg4i_00000840	Scaffold		sg4i_contig00729	
+2061973836	sg4i_00000840	Coordinates		1..237(+)	
+2061973836	sg4i_00000840	DNA_length		237bp	
+2061973836	sg4i_00000840	Protein_length		78aa	
+2061973836	sg4i_00000840	GC		.51	
+					
+2061973837	sg4i_00000850	COG_category	[R] General function prediction only		
+2061973837	sg4i_00000850	COG4824	Phage-related holin (Lysis protein)		2.0e-17
+2061973837	sg4i_00000850	pfam05105	Phage_holin_4		6.1e-32
+2061973837	sg4i_00000850	TIGR01593	toxin secretion/phage lysis holin		2.6e-24
+2061973837	sg4i_00000850	Locus_type		CDS	
+2061973837	sg4i_00000850	Product_name		toxin secretion/phage lysis holin	
+2061973837	sg4i_00000850	Scaffold		sg4i_contig00729	
+2061973837	sg4i_00000850	Coordinates		415..810(+)	
+2061973837	sg4i_00000850	DNA_length		396bp	
+2061973837	sg4i_00000850	Protein_length		131aa	
+2061973837	sg4i_00000850	GC		.47	
+2061973837	sg4i_00000850	Signal_peptide		Yes	
+2061973837	sg4i_00000850	Transmembrane		Yes	
+					
+2061973838	sg4i_00000860	pfam11151	DUF2929		3.0e-04
+2061973838	sg4i_00000860	Locus_type		CDS	
+2061973838	sg4i_00000860	Product_name		Protein of unknown function (DUF2929).	
+2061973838	sg4i_00000860	Scaffold		sg4i_contig00729	
+2061973838	sg4i_00000860	Coordinates		861..986(+)	
+2061973838	sg4i_00000860	DNA_length		126bp	
+2061973838	sg4i_00000860	Protein_length		42aa	
+2061973838	sg4i_00000860	GC		.44	
+2061973838	sg4i_00000860	Signal_peptide		Yes	
+2061973838	sg4i_00000860	Transmembrane		Yes	
+					
+2061973839	sg4i_00000870	COG_category	[C] Energy production and conversion		
+2061973839	sg4i_00000870	COG1034	NADH dehydrogenase/NADH:ubiquinone oxidoreductase 75 kD subunit (chain G)		1.0e-76
+2061973839	sg4i_00000870	pfam10588	NADH-G_4Fe-4S_3		8.5e-17
+2061973839	sg4i_00000870	pfam04879	Molybdop_Fe4S4		1.8e-09
+2061973839	sg4i_00000870	Locus_type		CDS	
+2061973839	sg4i_00000870	Product_name		NADH dehydrogenase/NADH:ubiquinone oxidoreductase 75 kD subunit (chain G)	
+2061973839	sg4i_00000870	Scaffold		sg4i_contig02934	
+2061973839	sg4i_00000870	Coordinates		1..912(-)	
+2061973839	sg4i_00000870	DNA_length		912bp	
+2061973839	sg4i_00000870	Protein_length		304aa	
+2061973839	sg4i_00000870	GC		.7	
+					
+2061973840	sg4i_00000880	Locus_type		CDS	
+2061973840	sg4i_00000880	Product_name		hypothetical protein	
+2061973840	sg4i_00000880	Scaffold		sg4i_contig04313	
+2061973840	sg4i_00000880	Coordinates		2..103(-)	
+2061973840	sg4i_00000880	DNA_length		102bp	
+2061973840	sg4i_00000880	Protein_length		34aa	
+2061973840	sg4i_00000880	GC		.7	
+					
+2061973841	sg4i_00000890	Locus_type		CDS	
+2061973841	sg4i_00000890	Product_name		hypothetical protein	
+2061973841	sg4i_00000890	Scaffold		sg4i_contig04313	
+2061973841	sg4i_00000890	Coordinates		220..384(-)	
+2061973841	sg4i_00000890	DNA_length		165bp	
+2061973841	sg4i_00000890	Protein_length		54aa	
+2061973841	sg4i_00000890	GC		.68	
+					
+2061973842	sg4i_00000900	COG_category	[M] Cell wall/membrane/envelope biogenesis		
+2061973842	sg4i_00000900	COG5337	Spore coat assembly protein		7.0e-20
+2061973842	sg4i_00000900	pfam08757	CotH		1.4e-24
+2061973842	sg4i_00000900	KO:K06330	spore coat protein H		2.6e-38
+2061973842	sg4i_00000900	Locus_type		CDS	
+2061973842	sg4i_00000900	Product_name		Spore coat assembly protein	
+2061973842	sg4i_00000900	Scaffold		sg4i_contig04313	
+2061973842	sg4i_00000900	Coordinates		356..853(-)	
+2061973842	sg4i_00000900	DNA_length		498bp	
+2061973842	sg4i_00000900	Protein_length		165aa	
+2061973842	sg4i_00000900	GC		.63	
+					
+2061973843	sg4i_00000910	COG_category	[K] Transcription		
+2061973843	sg4i_00000910	COG_category	[T] Signal transduction mechanisms		
+2061973843	sg4i_00000910	COG3835	Sugar diacid utilization regulator		4.0e-06
+2061973843	sg4i_00000910	Locus_type		CDS	
+2061973843	sg4i_00000910	Product_name		Sugar diacid utilization regulator	
+2061973843	sg4i_00000910	Scaffold		sg4i_contig10320	
+2061973843	sg4i_00000910	Coordinates		3..799(-)	
+2061973843	sg4i_00000910	DNA_length		797bp	
+2061973843	sg4i_00000910	Protein_length		265aa	
+2061973843	sg4i_00000910	GC		.77	
+					
+2061973844	sg4i_00000920	COG_category	[V] Defense mechanisms		
+2061973844	sg4i_00000920	COG1132	ABC-type multidrug transport system, ATPase and permease components		2.0e-49
+2061973844	sg4i_00000920	pfam00664	ABC_membrane		2.5e-50
+2061973844	sg4i_00000920	KO:K06147	ATP-binding cassette, subfamily B, bacterial		5.5e-110
+2061973844	sg4i_00000920	Locus_type		CDS	
+2061973844	sg4i_00000920	Product_name		ABC-type multidrug transport system, ATPase and permease components	
+2061973844	sg4i_00000920	Scaffold		sg4i_contig09415	
+2061973844	sg4i_00000920	Coordinates		3..749(-)	
+2061973844	sg4i_00000920	DNA_length		747bp	
+2061973844	sg4i_00000920	Protein_length		249aa	
+2061973844	sg4i_00000920	GC		.6	
+2061973844	sg4i_00000920	Signal_peptide		Yes	
+2061973844	sg4i_00000920	Transmembrane		Yes	
+					
+2061973845	sg4i_00000930	COG_category	[V] Defense mechanisms		
+2061973845	sg4i_00000930	COG0534	Na+-driven multidrug efflux pump		9.0e-12
+2061973845	sg4i_00000930	pfam01554	MatE		6.9e-09
+2061973845	sg4i_00000930	KO:K03327	multidrug resistance protein, MATE family		1.5e-30
+2061973845	sg4i_00000930	Locus_type		CDS	
+2061973845	sg4i_00000930	Product_name		Na+-driven multidrug efflux pump	
+2061973845	sg4i_00000930	Scaffold		sg4i_contig01614	
+2061973845	sg4i_00000930	Coordinates		56..364(-)	
+2061973845	sg4i_00000930	DNA_length		309bp	
+2061973845	sg4i_00000930	Protein_length		103aa	
+2061973845	sg4i_00000930	GC		.62	
+2061973845	sg4i_00000930	Transmembrane		Yes	
+					
+2061973846	sg4i_00000940	Locus_type		CDS	
+2061973846	sg4i_00000940	Product_name		hypothetical protein	
+2061973846	sg4i_00000940	Scaffold		sg4i_contig01614	
+2061973846	sg4i_00000940	Coordinates		383..658(-)	
+2061973846	sg4i_00000940	DNA_length		276bp	
+2061973846	sg4i_00000940	Protein_length		91aa	
+2061973846	sg4i_00000940	GC		.57	
+2061973846	sg4i_00000940	Signal_peptide		Yes	
+2061973846	sg4i_00000940	Transmembrane		Yes	
+					
+2061973847	sg4i_00000950	KEGG_module	M00360: Aminoacyl-tRNA biosynthesis, prokaryotes		
+2061973847	sg4i_00000950	KEGG_module	M00359: Aminoacyl-tRNA biosynthesis, eukaryotes		
+2061973847	sg4i_00000950	Metacyc	TRNA-CHARGING-PWY: tRNA charging pathway		
+2061973847	sg4i_00000950	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973847	sg4i_00000950	COG0525	Valyl-tRNA synthetase		6.0e-96
+2061973847	sg4i_00000950	pfam00133	tRNA-synt_1		2.2e-66
+2061973847	sg4i_00000950	EC:6.1.1.9	Valine--tRNA ligase.		
+2061973847	sg4i_00000950	KO:K01873	valyl-tRNA synthetase [EC:6.1.1.9]		1.6e-08
+2061973847	sg4i_00000950	Locus_type		CDS	
+2061973847	sg4i_00000950	Product_name		Valyl-tRNA synthetase	
+2061973847	sg4i_00000950	Scaffold		sg4i_contig03244	
+2061973847	sg4i_00000950	Coordinates		2..667(+)	
+2061973847	sg4i_00000950	DNA_length		666bp	
+2061973847	sg4i_00000950	Protein_length		222aa	
+2061973847	sg4i_00000950	GC		.7	
+					
+2061973848	sg4i_00000960	Locus_type		CDS	
+2061973848	sg4i_00000960	Product_name		hypothetical protein	
+2061973848	sg4i_00000960	Scaffold		sg4i_contig04727	
+2061973848	sg4i_00000960	Coordinates		2..262(+)	
+2061973848	sg4i_00000960	DNA_length		261bp	
+2061973848	sg4i_00000960	Protein_length		86aa	
+2061973848	sg4i_00000960	GC		.74	
+2061973848	sg4i_00000960	Signal_peptide		Yes	
+					
+2061973849	sg4i_00000970	COG_category	[H] Coenzyme transport and metabolism		
+2061973849	sg4i_00000970	COG0684	Demethylmenaquinone methyltransferase		4.0e-15
+2061973849	sg4i_00000970	pfam03737	Methyltransf_6		9.9e-20
+2061973849	sg4i_00000970	TIGR01935	RraA famliy		5.8e-29
+2061973849	sg4i_00000970	KO:K02553	regulator of ribonuclease activity A		2.5e-29
+2061973849	sg4i_00000970	Locus_type		CDS	
+2061973849	sg4i_00000970	Product_name		Demethylmenaquinone methyltransferase	
+2061973849	sg4i_00000970	Scaffold		sg4i_contig04727	
+2061973849	sg4i_00000970	Coordinates		401..628(+)	
+2061973849	sg4i_00000970	DNA_length		228bp	
+2061973849	sg4i_00000970	Protein_length		76aa	
+2061973849	sg4i_00000970	GC		.72	
+					
+2061973850	sg4i_00000980	COG_category	[H] Coenzyme transport and metabolism		
+2061973850	sg4i_00000980	COG_category	[P] Inorganic ion transport and metabolism		
+2061973850	sg4i_00000980	COG1120	ABC-type cobalamin/Fe3+-siderophores transport systems, ATPase components		1.0e-31
+2061973850	sg4i_00000980	pfam00005	ABC_tran		2.1e-10
+2061973850	sg4i_00000980	Locus_type		CDS	
+2061973850	sg4i_00000980	Product_name		ABC-type cobalamin/Fe3+-siderophores transport systems, ATPase components	
+2061973850	sg4i_00000980	Scaffold		sg4i_contig09420	
+2061973850	sg4i_00000980	Coordinates		3..419(+)	
+2061973850	sg4i_00000980	DNA_length		417bp	
+2061973850	sg4i_00000980	Protein_length		138aa	
+2061973850	sg4i_00000980	GC		.76	
+2061973850	sg4i_00000980	Signal_peptide		Yes	
+					
+2061973851	sg4i_00000990	Locus_type		CDS	
+2061973851	sg4i_00000990	Product_name		hypothetical protein	
+2061973851	sg4i_00000990	Scaffold		sg4i_contig09420	
+2061973851	sg4i_00000990	Coordinates		416..595(+)	
+2061973851	sg4i_00000990	DNA_length		180bp	
+2061973851	sg4i_00000990	Protein_length		60aa	
+2061973851	sg4i_00000990	GC		.79	
+2061973851	sg4i_00000990	Signal_peptide		Yes	
+					
+2061973852	sg4i_00001000	KEGG_module	M00016: Lysine biosynthesis, aspartate => lysine		
+2061973852	sg4i_00001000	Metacyc	PWY-2942: lysine biosynthesis III		
+2061973852	sg4i_00001000	Metacyc	PWY-5097: lysine biosynthesis VI		
+2061973852	sg4i_00001000	Metacyc	DAPLYSINESYN-PWY: lysine biosynthesis I		
+2061973852	sg4i_00001000	Metacyc	PWY-2941: lysine biosynthesis II		
+2061973852	sg4i_00001000	COG_category	[E] Amino acid transport and metabolism		
+2061973852	sg4i_00001000	COG_category	[M] Cell wall/membrane/envelope biogenesis		
+2061973852	sg4i_00001000	COG0329	Dihydrodipicolinate synthase/N-acetylneuraminate lyase		1.0e-20
+2061973852	sg4i_00001000	pfam00701	DHDPS		1.2e-16
+2061973852	sg4i_00001000	EC:4.2.1.52	Dihydrodipicolinate synthase.		
+2061973852	sg4i_00001000	KO:K01714	dihydrodipicolinate synthase [EC:4.2.1.52]		2.7e-45
+2061973852	sg4i_00001000	Locus_type		CDS	
+2061973852	sg4i_00001000	Product_name		Dihydrodipicolinate synthase/N-acetylneuraminate lyase	
+2061973852	sg4i_00001000	Scaffold		sg4i_contig05733	
+2061973852	sg4i_00001000	Coordinates		176..565(-)	
+2061973852	sg4i_00001000	DNA_length		390bp	
+2061973852	sg4i_00001000	Protein_length		129aa	
+2061973852	sg4i_00001000	GC		.7	
+					
+2061973853	sg4i_00001010	COG_category	[L] Replication, recombination and repair		
+2061973853	sg4i_00001010	COG0266	Formamidopyrimidine-DNA glycosylase		1.0e-36
+2061973853	sg4i_00001010	pfam01149	Fapy_DNA_glyco		7.5e-22
+2061973853	sg4i_00001010	pfam06831	H2TH		4.2e-20
+2061973853	sg4i_00001010	TIGR00577	formamidopyrimidine-DNA glycosylase (fpg)		5.1e-48
+2061973853	sg4i_00001010	Locus_type		CDS	
+2061973853	sg4i_00001010	Product_name		Formamidopyrimidine-DNA glycosylase	
+2061973853	sg4i_00001010	Scaffold		sg4i_contig12925	
+2061973853	sg4i_00001010	Coordinates		6..540(+)	
+2061973853	sg4i_00001010	DNA_length		535bp	
+2061973853	sg4i_00001010	Protein_length		178aa	
+2061973853	sg4i_00001010	GC		.72	
+					
+2061973854	sg4i_00001020	KEGG_module	M00122: Cobalamin biosynthesis, cobinamide => cobalamin		
+2061973854	sg4i_00001020	Metacyc	PWY-5509: adenosylcobalamin biosynthesis from cobyrinate <i>a,c</i>-diamide I		
+2061973854	sg4i_00001020	Metacyc	PWY-6269: adenosylcobalamin salvage from cobinamide II		
+2061973854	sg4i_00001020	Metacyc	COBALSYN-PWY: adenosylcobalamin salvage from cobinamide I		
+2061973854	sg4i_00001020	Metacyc	PWY-5508: adenosylcobalamin biosynthesis from cobyrinate <i>a,c</i>-diamide II		
+2061973854	sg4i_00001020	COG_category	[H] Coenzyme transport and metabolism		
+2061973854	sg4i_00001020	COG2038	NaMN:DMB phosphoribosyltransferase		1.0e-27
+2061973854	sg4i_00001020	pfam02277	DBI_PRT		3.1e-53
+2061973854	sg4i_00001020	EC:2.4.2.21	Nicotinate-nucleotide--dimethylbenzimidazole phosphoribosyltransferase.		
+2061973854	sg4i_00001020	TIGR03160	nicotinate-nucleotide--dimethylbenzimidazole phosphoribosyltransferase		1.0e-65
+2061973854	sg4i_00001020	KO:K00768	nicotinate-nucleotide--dimethylbenzimidazole phosphoribosyltransferase [EC:2.4.2.21]		6.7e-100
+2061973854	sg4i_00001020	Locus_type		CDS	
+2061973854	sg4i_00001020	Product_name		NaMN:DMB phosphoribosyltransferase	
+2061973854	sg4i_00001020	Scaffold		sg4i_contig17175	
+2061973854	sg4i_00001020	Coordinates		3..511(-)	
+2061973854	sg4i_00001020	DNA_length		509bp	
+2061973854	sg4i_00001020	Protein_length		170aa	
+2061973854	sg4i_00001020	GC		.75	
+2061973854	sg4i_00001020	Signal_peptide		Yes	
+					
+2061973855	sg4i_00001030	KEGG_module	M00121: Heme biosynthesis, glutamate => protoheme/siroheme		
+2061973855	sg4i_00001030	Metacyc	PWY-5188: tetrapyrrole biosynthesis I		
+2061973855	sg4i_00001030	COG_category	[H] Coenzyme transport and metabolism		
+2061973855	sg4i_00001030	COG0001	Glutamate-1-semialdehyde aminotransferase		5.0e-58
+2061973855	sg4i_00001030	pfam00202	Aminotran_3		1.4e-24
+2061973855	sg4i_00001030	EC:5.4.3.8	Glutamate-1-semialdehyde 2,1-aminomutase.		
+2061973855	sg4i_00001030	KO:K01845	glutamate-1-semialdehyde 2,1-aminomutase [EC:5.4.3.8]		6.6e-79
+2061973855	sg4i_00001030	Locus_type		CDS	
+2061973855	sg4i_00001030	Product_name		glutamate-1-semialdehyde 2,1-aminomutase (EC 5.4.3.8)	
+2061973855	sg4i_00001030	Scaffold		sg4i_contig05599	
+2061973855	sg4i_00001030	Coordinates		1..420(-)	
+2061973855	sg4i_00001030	DNA_length		420bp	
+2061973855	sg4i_00001030	Protein_length		140aa	
+2061973855	sg4i_00001030	GC		.67	
+					
+2061973856	sg4i_00001040	Locus_type		CDS	
+2061973856	sg4i_00001040	Product_name		hypothetical protein	
+2061973856	sg4i_00001040	Scaffold		sg4i_contig05599	
+2061973856	sg4i_00001040	Coordinates		395..517(+)	
+2061973856	sg4i_00001040	DNA_length		123bp	
+2061973856	sg4i_00001040	Protein_length		41aa	
+2061973856	sg4i_00001040	GC		.62	
+					
+2061973857	sg4i_00001050	COG_category	[L] Replication, recombination and repair		
+2061973857	sg4i_00001050	COG0556	Helicase subunit of the DNA excision repair complex		3.0e-74
+2061973857	sg4i_00001050	KO:K03702	excinuclease ABC subunit B		1.8e-92
+2061973857	sg4i_00001050	Locus_type		CDS	
+2061973857	sg4i_00001050	Product_name		Helicase subunit of the DNA excision repair complex	
+2061973857	sg4i_00001050	Scaffold		sg4i_contig06305	
+2061973857	sg4i_00001050	Coordinates		3..506(+)	
+2061973857	sg4i_00001050	DNA_length		504bp	
+2061973857	sg4i_00001050	Protein_length		168aa	
+2061973857	sg4i_00001050	GC		.62	
+					
+2061973858	sg4i_00001060	COG_category	[O] Posttranslational modification, protein turnover, chaperones		
+2061973858	sg4i_00001060	COG0330	Membrane protease subunits, stomatin/prohibitin homologs		4.0e-12
+2061973858	sg4i_00001060	pfam01145	Band_7		1.3e-13
+2061973858	sg4i_00001060	Locus_type		CDS	
+2061973858	sg4i_00001060	Product_name		SPFH domain, Band 7 family protein	
+2061973858	sg4i_00001060	Scaffold		sg4i_contig04480	
+2061973858	sg4i_00001060	Coordinates		3..311(-)	
+2061973858	sg4i_00001060	DNA_length		309bp	
+2061973858	sg4i_00001060	Protein_length		103aa	
+2061973858	sg4i_00001060	GC		.7	
+2061973858	sg4i_00001060	Signal_peptide		Yes	
+2061973858	sg4i_00001060	Transmembrane		Yes	
+					
+2061973859	sg4i_00001070	COG_category	[U] Intracellular trafficking, secretion, and vesicular transport		
+2061973859	sg4i_00001070	COG_category	[O] Posttranslational modification, protein turnover, chaperones		
+2061973859	sg4i_00001070	COG1585	Membrane protein implicated in regulation of membrane protease activity		1.0e-06
+2061973859	sg4i_00001070	pfam01957	NfeD		6.6e-13
+2061973859	sg4i_00001070	Locus_type		CDS	
+2061973859	sg4i_00001070	Product_name		Membrane protein implicated in regulation of membrane protease activity	
+2061973859	sg4i_00001070	Scaffold		sg4i_contig04480	
+2061973859	sg4i_00001070	Coordinates		316..498(-)	
+2061973859	sg4i_00001070	DNA_length		183bp	
+2061973859	sg4i_00001070	Protein_length		60aa	
+2061973859	sg4i_00001070	GC		.71	
+					
+2061973860	sg4i_00001080	COG_category	[D] Cell cycle control, cell division, chromosome partitioning		
+2061973860	sg4i_00001080	COG2919	Septum formation initiator		2.0e-03
+2061973860	sg4i_00001080	Locus_type		CDS	
+2061973860	sg4i_00001080	Product_name		hypothetical protein	
+2061973860	sg4i_00001080	Scaffold		sg4i_contig07926	
+2061973860	sg4i_00001080	Coordinates		2..490(-)	
+2061973860	sg4i_00001080	DNA_length		489bp	
+2061973860	sg4i_00001080	Protein_length		163aa	
+2061973860	sg4i_00001080	GC		.71	
+2061973860	sg4i_00001080	Signal_peptide		Yes	
+2061973860	sg4i_00001080	Transmembrane		Yes	
+					
+2061973861	sg4i_00001090	COG_category	[R] General function prediction only		
+2061973861	sg4i_00001090	COG2351	Transthyretin-like protein		1.0e-28
+2061973861	sg4i_00001090	pfam00576	Transthyretin		1.1e-24
+2061973861	sg4i_00001090	Locus_type		CDS	
+2061973861	sg4i_00001090	Product_name		Transthyretin-like protein	
+2061973861	sg4i_00001090	Scaffold		sg4i_contig04833	
+2061973861	sg4i_00001090	Coordinates		166..471(+)	
+2061973861	sg4i_00001090	DNA_length		306bp	
+2061973861	sg4i_00001090	Protein_length		102aa	
+2061973861	sg4i_00001090	GC		.67	
+					
+2061973862	sg4i_00001100	Locus_type		CDS	
+2061973862	sg4i_00001100	Product_name		hypothetical protein	
+2061973862	sg4i_00001100	Scaffold		sg4i_contig08970	
+2061973862	sg4i_00001100	Coordinates		1..459(+)	
+2061973862	sg4i_00001100	DNA_length		459bp	
+2061973862	sg4i_00001100	Protein_length		153aa	
+2061973862	sg4i_00001100	GC		.63	
+2061973862	sg4i_00001100	Signal_peptide		Yes	
+2061973862	sg4i_00001100	Transmembrane		Yes	
+					
+2061973863	sg4i_00001110	Locus_type		CDS	
+2061973863	sg4i_00001110	Product_name		hypothetical protein	
+2061973863	sg4i_00001110	Scaffold		sg4i_contig00013	
+2061973863	sg4i_00001110	Coordinates		1..357(+)	
+2061973863	sg4i_00001110	DNA_length		357bp	
+2061973863	sg4i_00001110	Protein_length		118aa	
+2061973863	sg4i_00001110	GC		.6	
+					
+2061973864	sg4i_00001120	COG_category	[S] Function unknown		
+2061973864	sg4i_00001120	COG1917	Uncharacterized conserved protein, contains double-stranded beta-helix domain		3.0e-07
+2061973864	sg4i_00001120	pfam07883	Cupin_2		3.5e-17
+2061973864	sg4i_00001120	Locus_type		CDS	
+2061973864	sg4i_00001120	Product_name		Uncharacterized conserved protein, contains double-stranded beta-helix domain	
+2061973864	sg4i_00001120	Scaffold		sg4i_contig14383	
+2061973864	sg4i_00001120	Coordinates		3..314(+)	
+2061973864	sg4i_00001120	DNA_length		312bp	
+2061973864	sg4i_00001120	Protein_length		104aa	
+2061973864	sg4i_00001120	GC		.75	
+					
+2061973865	sg4i_00001130	COG_category	[E] Amino acid transport and metabolism		
+2061973865	sg4i_00001130	COG2423	Predicted ornithine cyclodeaminase, mu-crystallin homolog		2.0e-03
+2061973865	sg4i_00001130	pfam03447	NAD_binding_3		4.2e-05
+2061973865	sg4i_00001130	Locus_type		CDS	
+2061973865	sg4i_00001130	Product_name		Homoserine dehydrogenase, NAD binding domain.	
+2061973865	sg4i_00001130	Scaffold		sg4i_contig17113	
+2061973865	sg4i_00001130	Coordinates		20..222(+)	
+2061973865	sg4i_00001130	DNA_length		203bp	
+2061973865	sg4i_00001130	Protein_length		68aa	
+2061973865	sg4i_00001130	GC		.65	
+					
+2061973866	sg4i_00001140	Locus_type		CDS	
+2061973866	sg4i_00001140	Product_name		hypothetical protein	
+2061973866	sg4i_00001140	Scaffold		sg4i_contig18029	
+2061973866	sg4i_00001140	Coordinates		80..127(+)	
+2061973866	sg4i_00001140	DNA_length		48bp	
+2061973866	sg4i_00001140	Protein_length		16aa	
+2061973866	sg4i_00001140	GC		.75	
+					
+2061973867	sg4i_00001150	Locus_type		CDS	
+2061973867	sg4i_00001150	Product_name		hypothetical protein	
+2061973867	sg4i_00001150	Scaffold		sg4i_contig00002	
+2061973867	sg4i_00001150	Coordinates		3..191(+)	
+2061973867	sg4i_00001150	DNA_length		189bp	
+2061973867	sg4i_00001150	Protein_length		62aa	
+2061973867	sg4i_00001150	GC		.71	
+					
+2061973868	sg4i_00001160	COG_category	[R] General function prediction only		
+2061973868	sg4i_00001160	COG2262	GTPases		3.0e-113
+2061973868	sg4i_00001160	pfam01926	MMR_HSR1		3.0e-21
+2061973868	sg4i_00001160	TIGR03156	GTP-binding protein HflX		0.0e+00
+2061973868	sg4i_00001160	TIGR00231	small GTP-binding protein domain		3.1e-10
+2061973868	sg4i_00001160	KO:K03665	GTP-binding protein HflX		1.0e-12
+2061973868	sg4i_00001160	Locus_type		CDS	
+2061973868	sg4i_00001160	Product_name		GTP-binding protein HflX	
+2061973868	sg4i_00001160	Scaffold		sg4i_contig00002	
+2061973868	sg4i_00001160	Coordinates		291..1565(+)	
+2061973868	sg4i_00001160	DNA_length		1275bp	
+2061973868	sg4i_00001160	Protein_length		424aa	
+2061973868	sg4i_00001160	GC		.71	
+					
+2061973869	sg4i_00001170	COG_category	[S] Function unknown		
+2061973869	sg4i_00001170	COG5495	Uncharacterized conserved protein		4.0e-21
+2061973869	sg4i_00001170	pfam10727	Rossmann-like		4.5e-07
+2061973869	sg4i_00001170	pfam10728	DUF2520		7.1e-37
+2061973869	sg4i_00001170	Locus_type		CDS	
+2061973869	sg4i_00001170	Product_name		Uncharacterized conserved protein	
+2061973869	sg4i_00001170	Scaffold		sg4i_contig00002	
+2061973869	sg4i_00001170	Coordinates		1562..2434(+)	
+2061973869	sg4i_00001170	DNA_length		873bp	
+2061973869	sg4i_00001170	Protein_length		290aa	
+2061973869	sg4i_00001170	GC		.74	
+2061973869	sg4i_00001170	Signal_peptide		Yes	
+					
+2061973870	sg4i_00001180	KEGG_module	M00124: Pyridoxal biosynthesis, erythrose-4P => pyridoxal-5P		
+2061973870	sg4i_00001180	Metacyc	PYRIDOXSYN-PWY: pyridoxal 5'-phosphate biosynthesis I		
+2061973870	sg4i_00001180	COG_category	[H] Coenzyme transport and metabolism		
+2061973870	sg4i_00001180	COG0854	Pyridoxal phosphate biosynthesis protein		5.0e-75
+2061973870	sg4i_00001180	pfam03740	PdxJ		3.0e-90
+2061973870	sg4i_00001180	EC:2.6.99.2	Pyridoxine 5'-phosphate synthase.		
+2061973870	sg4i_00001180	TIGR00559	pyridoxine 5'-phosphate synthase		1.5e-90
+2061973870	sg4i_00001180	KO:K03474	pyridoxine 5-phosphate synthase [EC:2.6.99.2]		5.0e-09
+2061973870	sg4i_00001180	Locus_type		CDS	
+2061973870	sg4i_00001180	Product_name		pyridoxine 5''-phosphate synthase (EC 2.6.99.2)	
+2061973870	sg4i_00001180	Scaffold		sg4i_contig00002	
+2061973870	sg4i_00001180	Coordinates		2434..3201(+)	
+2061973870	sg4i_00001180	DNA_length		768bp	
+2061973870	sg4i_00001180	Protein_length		255aa	
+2061973870	sg4i_00001180	GC		.72	
+					
+2061973871	sg4i_00001190	COG_category	[N] Cell motility		
+2061973871	sg4i_00001190	COG_category	[T] Signal transduction mechanisms		
+2061973871	sg4i_00001190	COG0643	Chemotaxis protein histidine kinase and related kinases		3.0e-05
+2061973871	sg4i_00001190	pfam01627	Hpt		7.8e-06
+2061973871	sg4i_00001190	Locus_type		CDS	
+2061973871	sg4i_00001190	Product_name		Hpt domain.	
+2061973871	sg4i_00001190	Scaffold		sg4i_contig00002	
+2061973871	sg4i_00001190	Coordinates		3211..4290(+)	
+2061973871	sg4i_00001190	DNA_length		1080bp	
+2061973871	sg4i_00001190	Protein_length		359aa	
+2061973871	sg4i_00001190	GC		.75	
+					
+2061973872	sg4i_00001200	COG_category	[S] Function unknown		
+2061973872	sg4i_00001200	COG0392	Predicted integral membrane protein		5.0e-10
+2061973872	sg4i_00001200	pfam03706	UPF0104		2.9e-44
+2061973872	sg4i_00001200	TIGR00374	conserved hypothetical protein		2.7e-21
+2061973872	sg4i_00001200	Locus_type		CDS	
+2061973872	sg4i_00001200	Product_name		conserved hypothetical protein	
+2061973872	sg4i_00001200	Scaffold		sg4i_contig00002	
+2061973872	sg4i_00001200	Coordinates		4287..5444(+)	
+2061973872	sg4i_00001200	DNA_length		1158bp	
+2061973872	sg4i_00001200	Protein_length		385aa	
+2061973872	sg4i_00001200	GC		.71	
+2061973872	sg4i_00001200	Signal_peptide		Yes	
+2061973872	sg4i_00001200	Transmembrane		Yes	
+					
+2061973873	sg4i_00001210	COG_category	[I] Lipid transport and metabolism		
+2061973873	sg4i_00001210	COG1947	4-diphosphocytidyl-2C-methyl-D-erythritol 2-phosphate synthase		8.0e-61
+2061973873	sg4i_00001210	pfam08544	GHMP_kinases_C		2.0e-07
+2061973873	sg4i_00001210	pfam00288	GHMP_kinases_N		6.5e-10
+2061973873	sg4i_00001210	TIGR00154	4-diphosphocytidyl-2C-methyl-D-erythritol kinase		8.6e-53
+2061973873	sg4i_00001210	Locus_type		CDS	
+2061973873	sg4i_00001210	Product_name		4-diphosphocytidyl-2C-methyl-D-erythritol kinase	
+2061973873	sg4i_00001210	Scaffold		sg4i_contig00002	
+2061973873	sg4i_00001210	Coordinates		5444..6319(+)	
+2061973873	sg4i_00001210	DNA_length		876bp	
+2061973873	sg4i_00001210	Protein_length		291aa	
+2061973873	sg4i_00001210	GC		.76	
+					
+2061973874	sg4i_00001220	Locus_type		tRNA	
+2061973874	sg4i_00001220	Product_name		tRNA_Gln_TTG	
+2061973874	sg4i_00001220	Scaffold		sg4i_contig00002	
+2061973874	sg4i_00001220	Coordinates		6356..6426(+)	
+2061973874	sg4i_00001220	DNA_length		71bp	
+2061973874	sg4i_00001220	GC		.65	
+					
+2061973875	sg4i_00001230	Locus_type		CDS	
+2061973875	sg4i_00001230	Product_name		hypothetical protein	
+2061973875	sg4i_00001230	Scaffold		sg4i_contig00002	
+2061973875	sg4i_00001230	Coordinates		6454..7143(+)	
+2061973875	sg4i_00001230	DNA_length		690bp	
+2061973875	sg4i_00001230	Protein_length		229aa	
+2061973875	sg4i_00001230	GC		.73	
+					
+2061973876	sg4i_00001240	KEGG_module	M00005: PRPP biosynthesis, ribose 5P => PRPP		
+2061973876	sg4i_00001240	Metacyc	PWY0-662: PRPP biosynthesis I		
+2061973876	sg4i_00001240	COG_category	[E] Amino acid transport and metabolism		
+2061973876	sg4i_00001240	COG_category	[F] Nucleotide transport and metabolism		
+2061973876	sg4i_00001240	COG0462	Phosphoribosylpyrophosphate synthetase		2.0e-112
+2061973876	sg4i_00001240	pfam00156	Pribosyltran		3.3e-11
+2061973876	sg4i_00001240	EC:2.7.6.1	Ribose-phosphate diphosphokinase.		
+2061973876	sg4i_00001240	TIGR01251	ribose-phosphate pyrophosphokinase		5.4e-115
+2061973876	sg4i_00001240	KO:K00948	ribose-phosphate pyrophosphokinase [EC:2.7.6.1]		0.0e+00
+2061973876	sg4i_00001240	Locus_type		CDS	
+2061973876	sg4i_00001240	Product_name		ribose-phosphate pyrophosphokinase	
+2061973876	sg4i_00001240	Scaffold		sg4i_contig00002	
+2061973876	sg4i_00001240	Coordinates		7323..8273(+)	
+2061973876	sg4i_00001240	DNA_length		951bp	
+2061973876	sg4i_00001240	Protein_length		316aa	
+2061973876	sg4i_00001240	GC		.69	
+					
+2061973877	sg4i_00001250	KEGG_module	M00178: Ribosome, bacteria		
+2061973877	sg4i_00001250	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973877	sg4i_00001250	COG1825	Ribosomal protein L25 (general stress protein Ctc)		5.0e-19
+2061973877	sg4i_00001250	pfam01386	Ribosomal_L25p		3.9e-28
+2061973877	sg4i_00001250	TIGR00731	ribosomal protein L25, Ctc-form		2.1e-53
+2061973877	sg4i_00001250	KO:K02897	large subunit ribosomal protein L25		3.1e-11
+2061973877	sg4i_00001250	Locus_type		CDS	
+2061973877	sg4i_00001250	Product_name		ribosomal protein L25, Ctc-form	
+2061973877	sg4i_00001250	Scaffold		sg4i_contig00002	
+2061973877	sg4i_00001250	Coordinates		8287..8949(+)	
+2061973877	sg4i_00001250	DNA_length		663bp	
+2061973877	sg4i_00001250	Protein_length		220aa	
+2061973877	sg4i_00001250	GC		.72	
+					
+2061973878	sg4i_00001260	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973878	sg4i_00001260	COG0193	Peptidyl-tRNA hydrolase		3.0e-54
+2061973878	sg4i_00001260	pfam01195	Pept_tRNA_hydro		8.1e-54
+2061973878	sg4i_00001260	EC:3.1.1.29	Aminoacyl-tRNA hydrolase.		
+2061973878	sg4i_00001260	TIGR00447	peptidyl-tRNA hydrolase		1.8e-49
+2061973878	sg4i_00001260	KO:K01056	peptidyl-tRNA hydrolase, PTH1 family [EC:3.1.1.29]		1.9e-08
+2061973878	sg4i_00001260	Locus_type		CDS	
+2061973878	sg4i_00001260	Product_name		peptidyl-tRNA hydrolase	
+2061973878	sg4i_00001260	Scaffold		sg4i_contig00002	
+2061973878	sg4i_00001260	Coordinates		8977..9540(+)	
+2061973878	sg4i_00001260	DNA_length		564bp	
+2061973878	sg4i_00001260	Protein_length		187aa	
+2061973878	sg4i_00001260	GC		.72	
+					
+2061973879	sg4i_00001270	COG_category	[C] Energy production and conversion		
+2061973879	sg4i_00001270	COG3808	Inorganic pyrophosphatase		0.0e+00
+2061973879	sg4i_00001270	pfam03030	H_PPase		0.0e+00
+2061973879	sg4i_00001270	EC:3.6.1.1	Inorganic diphosphatase.		
+2061973879	sg4i_00001270	TIGR01104	vacuolar-type H(+)-translocating pyrophosphatase		0.0e+00
+2061973879	sg4i_00001270	KO:K01507	inorganic pyrophosphatase [EC:3.6.1.1]		1.5e-09
+2061973879	sg4i_00001270	Locus_type		CDS	
+2061973879	sg4i_00001270	Product_name		vacuolar-type H(+)-translocating pyrophosphatase	
+2061973879	sg4i_00001270	Scaffold		sg4i_contig00002	
+2061973879	sg4i_00001270	Coordinates		9574..11706(+)	
+2061973879	sg4i_00001270	DNA_length		2133bp	
+2061973879	sg4i_00001270	Protein_length		710aa	
+2061973879	sg4i_00001270	GC		.7	
+2061973879	sg4i_00001270	Signal_peptide		Yes	
+2061973879	sg4i_00001270	Transmembrane		Yes	
+					
+2061973880	sg4i_00001280	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973880	sg4i_00001280	COG0012	Predicted GTPase, probable translation factor		0.0e+00
+2061973880	sg4i_00001280	pfam01926	MMR_HSR1		1.1e-21
+2061973880	sg4i_00001280	pfam06071	YchF-GTPase_C		1.1e-38
+2061973880	sg4i_00001280	TIGR00092	GTP-binding protein YchF		0.0e+00
+2061973880	sg4i_00001280	TIGR00231	small GTP-binding protein domain		1.5e-09
+2061973880	sg4i_00001280	Locus_type		CDS	
+2061973880	sg4i_00001280	Product_name		GTP-binding protein YchF	
+2061973880	sg4i_00001280	Scaffold		sg4i_contig00002	
+2061973880	sg4i_00001280	Coordinates		11980..13089(+)	
+2061973880	sg4i_00001280	DNA_length		1110bp	
+2061973880	sg4i_00001280	Protein_length		369aa	
+2061973880	sg4i_00001280	GC		.71	
+2061973880	sg4i_00001280	Signal_peptide		Yes	
+					
+2061973881	sg4i_00001290	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973881	sg4i_00001290	COG0360	Ribosomal protein S6		4.0e-21
+2061973881	sg4i_00001290	pfam01250	Ribosomal_S6		7.1e-29
+2061973881	sg4i_00001290	TIGR00166	ribosomal protein S6		6.9e-24
+2061973881	sg4i_00001290	Locus_type		CDS	
+2061973881	sg4i_00001290	Product_name		ribosomal protein S6	
+2061973881	sg4i_00001290	Scaffold		sg4i_contig00002	
+2061973881	sg4i_00001290	Coordinates		13312..13671(+)	
+2061973881	sg4i_00001290	DNA_length		360bp	
+2061973881	sg4i_00001290	Protein_length		119aa	
+2061973881	sg4i_00001290	GC		.68	
+					
+2061973882	sg4i_00001300	KEGG_module	M00178: Ribosome, bacteria		
+2061973882	sg4i_00001300	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973882	sg4i_00001300	COG0238	Ribosomal protein S18		8.0e-18
+2061973882	sg4i_00001300	pfam01084	Ribosomal_S18		1.5e-25
+2061973882	sg4i_00001300	TIGR00165	ribosomal protein S18		7.2e-30
+2061973882	sg4i_00001300	KO:K02963	small subunit ribosomal protein S18		1.2e-21
+2061973882	sg4i_00001300	Locus_type		CDS	
+2061973882	sg4i_00001300	Product_name		SSU ribosomal protein S18P	
+2061973882	sg4i_00001300	Scaffold		sg4i_contig00002	
+2061973882	sg4i_00001300	Coordinates		13674..13895(+)	
+2061973882	sg4i_00001300	DNA_length		222bp	
+2061973882	sg4i_00001300	Protein_length		73aa	
+2061973882	sg4i_00001300	GC		.65	
+					
+2061973883	sg4i_00001310	Locus_type		CDS	
+2061973883	sg4i_00001310	Product_name		hypothetical protein	
+2061973883	sg4i_00001310	Scaffold		sg4i_contig00002	
+2061973883	sg4i_00001310	Coordinates		13903..14058(+)	
+2061973883	sg4i_00001310	DNA_length		156bp	
+2061973883	sg4i_00001310	Protein_length		52aa	
+2061973883	sg4i_00001310	GC		.77	
+2061973883	sg4i_00001310	Signal_peptide		Yes	
+2061973883	sg4i_00001310	Transmembrane		Yes	
+					
+2061973884	sg4i_00001320	Locus_type		CDS	
+2061973884	sg4i_00001320	Product_name		hypothetical protein	
+2061973884	sg4i_00001320	Scaffold		sg4i_contig00714	
+2061973884	sg4i_00001320	Coordinates		2..220(-)	
+2061973884	sg4i_00001320	DNA_length		219bp	
+2061973884	sg4i_00001320	Protein_length		73aa	
+2061973884	sg4i_00001320	GC		.63	
+					
+2061973885	sg4i_00001330	Locus_type		CDS	
+2061973885	sg4i_00001330	Product_name		hypothetical protein	
+2061973885	sg4i_00001330	Scaffold		sg4i_contig00714	
+2061973885	sg4i_00001330	Coordinates		961..1116(-)	
+2061973885	sg4i_00001330	DNA_length		156bp	
+2061973885	sg4i_00001330	Protein_length		51aa	
+2061973885	sg4i_00001330	GC		.69	
+2061973885	sg4i_00001330	Signal_peptide		Yes	
+2061973885	sg4i_00001330	Transmembrane		Yes	
+					
+2061973886	sg4i_00001340	Locus_type		CDS	
+2061973886	sg4i_00001340	Product_name		hypothetical protein	
+2061973886	sg4i_00001340	Scaffold		sg4i_contig00714	
+2061973886	sg4i_00001340	Coordinates		1735..2373(+)	
+2061973886	sg4i_00001340	DNA_length		639bp	
+2061973886	sg4i_00001340	Protein_length		212aa	
+2061973886	sg4i_00001340	GC		.66	
+					
+2061973887	sg4i_00001350	pfam01548	Transposase_9		9.2e-12
+2061973887	sg4i_00001350	pfam02371	Transposase_20		2.9e-05
+2061973887	sg4i_00001350	Locus_type		CDS	
+2061973887	sg4i_00001350	Product_name		Transposase IS116/IS110/IS902 family./Transposase.	
+2061973887	sg4i_00001350	Scaffold		sg4i_contig00714	
+2061973887	sg4i_00001350	Coordinates		2340..2876(+)	
+2061973887	sg4i_00001350	DNA_length		537bp	
+2061973887	sg4i_00001350	Protein_length		178aa	
+2061973887	sg4i_00001350	GC		.75	
+					
+2061973888	sg4i_00001360	Locus_type		CDS	
+2061973888	sg4i_00001360	Product_name		hypothetical protein	
+2061973888	sg4i_00001360	Scaffold		sg4i_contig00714	
+2061973888	sg4i_00001360	Coordinates		2983..3144(+)	
+2061973888	sg4i_00001360	DNA_length		162bp	
+2061973888	sg4i_00001360	Protein_length		53aa	
+2061973888	sg4i_00001360	GC		.7	
+2061973888	sg4i_00001360	Signal_peptide		Yes	
+					
+2061973889	sg4i_00001370	Locus_type		CDS	
+2061973889	sg4i_00001370	Product_name		hypothetical protein	
+2061973889	sg4i_00001370	Scaffold		sg4i_contig00714	
+2061973889	sg4i_00001370	Coordinates		3545..3754(+)	
+2061973889	sg4i_00001370	DNA_length		210bp	
+2061973889	sg4i_00001370	Protein_length		69aa	
+2061973889	sg4i_00001370	GC		.64	
+					
+2061973890	sg4i_00001380	Locus_type		CDS	
+2061973890	sg4i_00001380	Product_name		hypothetical protein	
+2061973890	sg4i_00001380	Scaffold		sg4i_contig00714	
+2061973890	sg4i_00001380	Coordinates		3855..4415(-)	
+2061973890	sg4i_00001380	DNA_length		561bp	
+2061973890	sg4i_00001380	Protein_length		186aa	
+2061973890	sg4i_00001380	GC		.62	
+					
+2061973891	sg4i_00001390	Locus_type		CDS	
+2061973891	sg4i_00001390	Product_name		hypothetical protein	
+2061973891	sg4i_00001390	Scaffold		sg4i_contig00714	
+2061973891	sg4i_00001390	Coordinates		4611..5168(-)	
+2061973891	sg4i_00001390	DNA_length		558bp	
+2061973891	sg4i_00001390	Protein_length		185aa	
+2061973891	sg4i_00001390	GC		.63	
+					
+2061973892	sg4i_00001400	Locus_type		CDS	
+2061973892	sg4i_00001400	Product_name		hypothetical protein	
+2061973892	sg4i_00001400	Scaffold		sg4i_contig00714	
+2061973892	sg4i_00001400	Coordinates		5207..5284(+)	
+2061973892	sg4i_00001400	DNA_length		78bp	
+2061973892	sg4i_00001400	Protein_length		26aa	
+2061973892	sg4i_00001400	GC		.6	
+					
+2061973893	sg4i_00001410	COG_category	[S] Function unknown		
+2061973893	sg4i_00001410	COG3881	Uncharacterized protein conserved in bacteria		2.0e-04
+2061973893	sg4i_00001410	pfam05239	PRC		6.7e-09
+2061973893	sg4i_00001410	Locus_type		CDS	
+2061973893	sg4i_00001410	Product_name		PRC-barrel domain.	
+2061973893	sg4i_00001410	Scaffold		sg4i_contig01326	
+2061973893	sg4i_00001410	Coordinates		1..414(+)	
+2061973893	sg4i_00001410	DNA_length		414bp	
+2061973893	sg4i_00001410	Protein_length		137aa	
+2061973893	sg4i_00001410	GC		.68	
+2061973893	sg4i_00001410	Signal_peptide		Yes	
+					
+2061973894	sg4i_00001420	Metacyc	PWY-6322: phosphinothricin tripeptide biosynthesis		
+2061973894	sg4i_00001420	COG_category	[G] Carbohydrate transport and metabolism		
+2061973894	sg4i_00001420	COG2513	PEP phosphonomutase and related enzymes		4.0e-74
+2061973894	sg4i_00001420	pfam00463	ICL		1.7e-13
+2061973894	sg4i_00001420	EC:2.7.8.23	Carboxyvinyl-carboxyphosphonate phosphorylmutase.		
+2061973894	sg4i_00001420	TIGR02317	methylisocitrate lyase		2.1e-106
+2061973894	sg4i_00001420	KO:K01003	carboxyvinyl-carboxyphosphonate phosphorylmutase [EC:2.7.8.23]		1.5e-22
+2061973894	sg4i_00001420	Locus_type		CDS	
+2061973894	sg4i_00001420	Product_name		methylisocitrate lyase	
+2061973894	sg4i_00001420	Scaffold		sg4i_contig01326	
+2061973894	sg4i_00001420	Coordinates		428..1339(-)	
+2061973894	sg4i_00001420	DNA_length		912bp	
+2061973894	sg4i_00001420	Protein_length		303aa	
+2061973894	sg4i_00001420	GC		.69	
+					
+2061973895	sg4i_00001430	Metacyc	PWY0-42: 2-methylcitrate cycle I		
+2061973895	sg4i_00001430	EC:4.2.1.79	2-methylcitrate dehydratase.		
+2061973895	sg4i_00001430	KO:K01720	2-methylcitrate dehydratase [EC:4.2.1.79]		1.7e-19
+2061973895	sg4i_00001430	Locus_type		CDS	
+2061973895	sg4i_00001430	Product_name		hypothetical protein	
+2061973895	sg4i_00001430	Scaffold		sg4i_contig01326	
+2061973895	sg4i_00001430	Coordinates		1336..1491(-)	
+2061973895	sg4i_00001430	DNA_length		156bp	
+2061973895	sg4i_00001430	Protein_length		51aa	
+2061973895	sg4i_00001430	GC		.69	
+2061973895	sg4i_00001430	Signal_peptide		Yes	
+					
+2061973896	sg4i_00001440	COG_category	[S] Function unknown		
+2061973896	sg4i_00001440	COG2847	Uncharacterized protein conserved in bacteria		2.0e-31
+2061973896	sg4i_00001440	pfam04314	DUF461		1.8e-43
+2061973896	sg4i_00001440	Locus_type		CDS	
+2061973896	sg4i_00001440	Product_name		Uncharacterized protein conserved in bacteria	
+2061973896	sg4i_00001440	Scaffold		sg4i_contig02026	
+2061973896	sg4i_00001440	Coordinates		1..477(-)	
+2061973896	sg4i_00001440	DNA_length		477bp	
+2061973896	sg4i_00001440	Protein_length		159aa	
+2061973896	sg4i_00001440	GC		.62	
+2061973896	sg4i_00001440	Signal_peptide		Yes	
+					
+2061973897	sg4i_00001450	COG_category	[U] Intracellular trafficking, secretion, and vesicular transport		
+2061973897	sg4i_00001450	COG_category	[N] Cell motility		
+2061973897	sg4i_00001450	COG3063	Tfp pilus assembly protein PilF		5.0e-04
+2061973897	sg4i_00001450	pfam00515	TPR_1		3.1e-07
+2061973897	sg4i_00001450	pfam00515	TPR_1		3.0e-05
+2061973897	sg4i_00001450	Locus_type		CDS	
+2061973897	sg4i_00001450	Product_name		Tetratricopeptide repeat.	
+2061973897	sg4i_00001450	Scaffold		sg4i_contig02026	
+2061973897	sg4i_00001450	Coordinates		583..1215(-)	
+2061973897	sg4i_00001450	DNA_length		633bp	
+2061973897	sg4i_00001450	Protein_length		210aa	
+2061973897	sg4i_00001450	GC		.65	
+2061973897	sg4i_00001450	Signal_peptide		Yes	
+					
+2061973898	sg4i_00001460	Locus_type		CDS	
+2061973898	sg4i_00001460	Product_name		hypothetical protein	
+2061973898	sg4i_00001460	Scaffold		sg4i_contig02026	
+2061973898	sg4i_00001460	Coordinates		1440..2726(+)	
+2061973898	sg4i_00001460	DNA_length		1287bp	
+2061973898	sg4i_00001460	Protein_length		428aa	
+2061973898	sg4i_00001460	GC		.58	
+					
+2061973899	sg4i_00001470	COG_category	[R] General function prediction only		
+2061973899	sg4i_00001470	COG4152	ABC-type uncharacterized transport system, ATPase component		2.0e-12
+2061973899	sg4i_00001470	Locus_type		CDS	
+2061973899	sg4i_00001470	Product_name		ABC-type uncharacterized transport system, ATPase component	
+2061973899	sg4i_00001470	Scaffold		sg4i_contig02750	
+2061973899	sg4i_00001470	Coordinates		1..294(-)	
+2061973899	sg4i_00001470	DNA_length		294bp	
+2061973899	sg4i_00001470	Protein_length		98aa	
+2061973899	sg4i_00001470	GC		.74	
+					
+2061973900	sg4i_00001480	COG_category	[G] Carbohydrate transport and metabolism		
+2061973900	sg4i_00001480	COG0647	Predicted sugar phosphatases of the HAD superfamily		2.0e-27
+2061973900	sg4i_00001480	TIGR01458	HAD-superfamily subfamily IIA hydrolase, TIGR01458		1.6e-35
+2061973900	sg4i_00001480	Locus_type		CDS	
+2061973900	sg4i_00001480	Product_name		Predicted sugar phosphatases of the HAD superfamily	
+2061973900	sg4i_00001480	Scaffold		sg4i_contig02750	
+2061973900	sg4i_00001480	Coordinates		512..1294(-)	
+2061973900	sg4i_00001480	DNA_length		783bp	
+2061973900	sg4i_00001480	Protein_length		260aa	
+2061973900	sg4i_00001480	GC		.73	
+					
+2061973901	sg4i_00001490	Locus_type		CDS	
+2061973901	sg4i_00001490	Product_name		hypothetical protein	
+2061973901	sg4i_00001490	Scaffold		sg4i_contig02750	
+2061973901	sg4i_00001490	Coordinates		1291..1512(-)	
+2061973901	sg4i_00001490	DNA_length		222bp	
+2061973901	sg4i_00001490	Protein_length		73aa	
+2061973901	sg4i_00001490	GC		.71	
+					
+2061973902	sg4i_00001500	Locus_type		CDS	
+2061973902	sg4i_00001500	Product_name		hypothetical protein	
+2061973902	sg4i_00001500	Scaffold		sg4i_contig02750	
+2061973902	sg4i_00001500	Coordinates		1500..1766(-)	
+2061973902	sg4i_00001500	DNA_length		267bp	
+2061973902	sg4i_00001500	Protein_length		88aa	
+2061973902	sg4i_00001500	GC		.7	
+2061973902	sg4i_00001500	Signal_peptide		Yes	
+					
+2061973903	sg4i_00001510	Locus_type		CDS	
+2061973903	sg4i_00001510	Product_name		hypothetical protein	
+2061973903	sg4i_00001510	Scaffold		sg4i_contig02750	
+2061973903	sg4i_00001510	Coordinates		1763..2029(-)	
+2061973903	sg4i_00001510	DNA_length		267bp	
+2061973903	sg4i_00001510	Protein_length		88aa	
+2061973903	sg4i_00001510	GC		.72	
+2061973903	sg4i_00001510	Signal_peptide		Yes	
+					
+2061973904	sg4i_00001520	pfam04972	BON		2.4e-11
+2061973904	sg4i_00001520	Locus_type		CDS	
+2061973904	sg4i_00001520	Product_name		Putative phospholipid-binding domain.	
+2061973904	sg4i_00001520	Scaffold		sg4i_contig02750	
+2061973904	sg4i_00001520	Coordinates		2130..2300(-)	
+2061973904	sg4i_00001520	DNA_length		171bp	
+2061973904	sg4i_00001520	Protein_length		56aa	
+2061973904	sg4i_00001520	GC		.75	
+					
+2061973905	sg4i_00001530	Locus_type		CDS	
+2061973905	sg4i_00001530	Product_name		hypothetical protein	
+2061973905	sg4i_00001530	Scaffold		sg4i_contig03493	
+2061973905	sg4i_00001530	Coordinates		2..316(-)	
+2061973905	sg4i_00001530	DNA_length		315bp	
+2061973905	sg4i_00001530	Protein_length		105aa	
+2061973905	sg4i_00001530	GC		.72	
+2061973905	sg4i_00001530	Signal_peptide		Yes	
+2061973905	sg4i_00001530	Transmembrane		Yes	
+					
+2061973906	sg4i_00001540	COG_category	[R] General function prediction only		
+2061973906	sg4i_00001540	COG0641	Arylsulfatase regulator (Fe-S oxidoreductase)		3.0e-130
+2061973906	sg4i_00001540	pfam04055	Radical_SAM		2.3e-14
+2061973906	sg4i_00001540	TIGR03942	anaerobic sulfatase-maturating enzyme		0.0e+00
+2061973906	sg4i_00001540	TIGR04085	radical SAM additional 4Fe4S-binding domain		7.9e-19
+2061973906	sg4i_00001540	Locus_type		CDS	
+2061973906	sg4i_00001540	Product_name		Arylsulfatase regulator (Fe-S oxidoreductase)	
+2061973906	sg4i_00001540	Scaffold		sg4i_contig03493	
+2061973906	sg4i_00001540	Coordinates		351..1667(-)	
+2061973906	sg4i_00001540	DNA_length		1317bp	
+2061973906	sg4i_00001540	Protein_length		438aa	
+2061973906	sg4i_00001540	GC		.65	
+					
+2061973907	sg4i_00001550	COG_category	[H] Coenzyme transport and metabolism		
+2061973907	sg4i_00001550	COG0262	Dihydrofolate reductase		4.0e-19
+2061973907	sg4i_00001550	pfam01872	RibD_C		5.4e-22
+2061973907	sg4i_00001550	Locus_type		CDS	
+2061973907	sg4i_00001550	Product_name		Dihydrofolate reductase	
+2061973907	sg4i_00001550	Scaffold		sg4i_contig04674	
+2061973907	sg4i_00001550	Coordinates		27..584(-)	
+2061973907	sg4i_00001550	DNA_length		558bp	
+2061973907	sg4i_00001550	Protein_length		185aa	
+2061973907	sg4i_00001550	GC		.7	
+					
+2061973908	sg4i_00001560	COG_category	[E] Amino acid transport and metabolism		
+2061973908	sg4i_00001560	COG0076	Glutamate decarboxylase and related PLP-dependent proteins		2.0e-32
+2061973908	sg4i_00001560	pfam00282	Pyridoxal_deC		4.2e-27
+2061973908	sg4i_00001560	Locus_type		CDS	
+2061973908	sg4i_00001560	Product_name		Glutamate decarboxylase and related PLP-dependent proteins	
+2061973908	sg4i_00001560	Scaffold		sg4i_contig04674	
+2061973908	sg4i_00001560	Coordinates		634..1365(-)	
+2061973908	sg4i_00001560	DNA_length		732bp	
+2061973908	sg4i_00001560	Protein_length		243aa	
+2061973908	sg4i_00001560	GC		.73	
+					
+2061973909	sg4i_00001570	COG_category	[T] Signal transduction mechanisms		
+2061973909	sg4i_00001570	COG4753	Response regulator containing CheY-like receiver domain and AraC-type DNA-binding domain		3.0e-18
+2061973909	sg4i_00001570	pfam00165	HTH_AraC		3.9e-07
+2061973909	sg4i_00001570	pfam00072	Response_reg		7.8e-14
+2061973909	sg4i_00001570	KO:K07720	two-component system, response regulator YesN		6.5e-06
+2061973909	sg4i_00001570	Locus_type		CDS	
+2061973909	sg4i_00001570	Product_name		Response regulator containing CheY-like receiver domain and AraC-type DNA-binding domain	
+2061973909	sg4i_00001570	Scaffold		sg4i_contig07324	
+2061973909	sg4i_00001570	Coordinates		8..1303(+)	
+2061973909	sg4i_00001570	DNA_length		1296bp	
+2061973909	sg4i_00001570	Protein_length		432aa	
+2061973909	sg4i_00001570	GC		.55	
+					
+2061973910	sg4i_00001580	Locus_type		CDS	
+2061973910	sg4i_00001580	Product_name		signal peptide peptidase A. Serine peptidase. MEROPS family S49	
+2061973910	sg4i_00001580	Scaffold		sg4i_contig10700	
+2061973910	sg4i_00001580	Coordinates		3..170(+)	
+2061973910	sg4i_00001580	DNA_length		168bp	
+2061973910	sg4i_00001580	Protein_length		55aa	
+2061973910	sg4i_00001580	GC		.74	
+					
+2061973911	sg4i_00001590	COG_category	[E] Amino acid transport and metabolism		
+2061973911	sg4i_00001590	COG0334	Glutamate dehydrogenase/leucine dehydrogenase		8.0e-40
+2061973911	sg4i_00001590	pfam00208	ELFV_dehydrog		1.4e-33
+2061973911	sg4i_00001590	Locus_type		CDS	
+2061973911	sg4i_00001590	Product_name		Glutamate dehydrogenase/leucine dehydrogenase	
+2061973911	sg4i_00001590	Scaffold		sg4i_contig10700	
+2061973911	sg4i_00001590	Coordinates		428..1054(-)	
+2061973911	sg4i_00001590	DNA_length		627bp	
+2061973911	sg4i_00001590	Protein_length		208aa	
+2061973911	sg4i_00001590	GC		.62	
+					
+2061973912	sg4i_00001600	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973912	sg4i_00001600	COG0203	Ribosomal protein L17		2.0e-23
+2061973912	sg4i_00001600	pfam01196	Ribosomal_L17		3.8e-19
+2061973912	sg4i_00001600	TIGR00059	ribosomal protein L17		5.0e-25
+2061973912	sg4i_00001600	Locus_type		CDS	
+2061973912	sg4i_00001600	Product_name		Ribosomal protein L17	
+2061973912	sg4i_00001600	Scaffold		sg4i_contig12020	
+2061973912	sg4i_00001600	Coordinates		1..264(-)	
+2061973912	sg4i_00001600	DNA_length		264bp	
+2061973912	sg4i_00001600	Protein_length		88aa	
+2061973912	sg4i_00001600	GC		.62	
+2061973912	sg4i_00001600	Signal_peptide		Yes	
+					
+2061973913	sg4i_00001610	COG_category	[K] Transcription		
+2061973913	sg4i_00001610	COG0202	DNA-directed RNA polymerase, alpha subunit/40 kD subunit		2.0e-83
+2061973913	sg4i_00001610	pfam01193	RNA_pol_L		1.2e-24
+2061973913	sg4i_00001610	pfam03118	RNA_pol_A_CTD		3.6e-26
+2061973913	sg4i_00001610	pfam01000	RNA_pol_A_bac		8.5e-22
+2061973913	sg4i_00001610	TIGR02027	DNA-directed RNA polymerase, alpha subunit, bacterial and chloroplast-type		1.8e-115
+2061973913	sg4i_00001610	Locus_type		CDS	
+2061973913	sg4i_00001610	Product_name		DNA-directed RNA polymerase subunit alpha (EC 2.7.7.6)	
+2061973913	sg4i_00001610	Scaffold		sg4i_contig12020	
+2061973913	sg4i_00001610	Coordinates		297..1280(-)	
+2061973913	sg4i_00001610	DNA_length		984bp	
+2061973913	sg4i_00001610	Protein_length		327aa	
+2061973913	sg4i_00001610	GC		.63	
+					
+2061973914	sg4i_00001620	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973914	sg4i_00001620	COG0522	Ribosomal protein S4 and related proteins		1.0e-06
+2061973914	sg4i_00001620	Locus_type		CDS	
+2061973914	sg4i_00001620	Product_name		SSU ribosomal protein S4P	
+2061973914	sg4i_00001620	Scaffold		sg4i_contig12020	
+2061973914	sg4i_00001620	Coordinates		1360..1515(-)	
+2061973914	sg4i_00001620	DNA_length		156bp	
+2061973914	sg4i_00001620	Protein_length		51aa	
+2061973914	sg4i_00001620	GC		.53	
+					
+2061973915	sg4i_00001630	COG_category	[R] General function prediction only		
+2061973915	sg4i_00001630	COG4105	DNA uptake lipoprotein		1.0e-07
+2061973915	sg4i_00001630	Locus_type		CDS	
+2061973915	sg4i_00001630	Product_name		DNA uptake lipoprotein	
+2061973915	sg4i_00001630	Scaffold		sg4i_contig13115	
+2061973915	sg4i_00001630	Coordinates		2..826(-)	
+2061973915	sg4i_00001630	DNA_length		825bp	
+2061973915	sg4i_00001630	Protein_length		275aa	
+2061973915	sg4i_00001630	GC		.72	
+2061973915	sg4i_00001630	Signal_peptide		Yes	
+					
+2061973916	sg4i_00001640	Locus_type		CDS	
+2061973916	sg4i_00001640	Product_name		hypothetical protein	
+2061973916	sg4i_00001640	Scaffold		sg4i_contig13115	
+2061973916	sg4i_00001640	Coordinates		838..1047(-)	
+2061973916	sg4i_00001640	DNA_length		210bp	
+2061973916	sg4i_00001640	Protein_length		69aa	
+2061973916	sg4i_00001640	GC		.7	
+					
+2061973917	sg4i_00001650	COG_category	[J] Translation, ribosomal structure and biogenesis		
+2061973917	sg4i_00001650	COG0621	2-methylthioadenine synthetase		2.0e-126
+2061973917	sg4i_00001650	pfam04055	Radical_SAM		8.5e-26
+2061973917	sg4i_00001650	pfam00919	UPF0004		1.3e-16
+2061973917	sg4i_00001650	pfam01938	TRAM		1.1e-04
+2061973917	sg4i_00001650	TIGR00089	radical SAM methylthiotransferase, MiaB/RimO family		2.7e-98
+2061973917	sg4i_00001650	TIGR01125	ribosomal protein S12 methylthiotransferase RimO		0.0e+00
+2061973917	sg4i_00001650	Locus_type		CDS	
+2061973917	sg4i_00001650	Product_name		SSU ribosomal protein S12P methylthiotransferase (EC 2.-.-.-)	
+2061973917	sg4i_00001650	Scaffold		sg4i_contig14541	
+2061973917	sg4i_00001650	Coordinates		3..1328(+)	
+2061973917	sg4i_00001650	DNA_length		1326bp	
+2061973917	sg4i_00001650	Protein_length		441aa	
+2061973917	sg4i_00001650	GC		.64	
+					
+2061973918	sg4i_00001660	COG_category	[P] Inorganic ion transport and metabolism		
+2061973918	sg4i_00001660	COG0053	Predicted Co/Zn/Cd cation transporters		9.0e-61
+2061973918	sg4i_00001660	pfam01545	Cation_efflux		2.5e-61
+2061973918	sg4i_00001660	TIGR01297	cation diffusion facilitator family transporter		2.8e-66
+2061973918	sg4i_00001660	Locus_type		CDS	
+2061973918	sg4i_00001660	Product_name		cation diffusion facilitator family transporter	
+2061973918	sg4i_00001660	Scaffold		sg4i_contig14541	
+2061973918	sg4i_00001660	Coordinates		1444..2307(-)	
+2061973918	sg4i_00001660	DNA_length		864bp	
+2061973918	sg4i_00001660	Protein_length		287aa	
+2061973918	sg4i_00001660	GC		.62	
+2061973918	sg4i_00001660	Signal_peptide		Yes	
+2061973918	sg4i_00001660	Transmembrane		Yes	
+					
+2061973919	sg4i_00001670	pfam04307	DUF457		2.0e-10
+2061973919	sg4i_00001670	Locus_type		CDS	
+2061973919	sg4i_00001670	Product_name		Predicted membrane-bound metal-dependent hydrolase (DUF457).	
+2061973919	sg4i_00001670	Scaffold		sg4i_contig14541	
+2061973919	sg4i_00001670	Coordinates		2572..3387(+)	
+2061973919	sg4i_00001670	DNA_length		816bp	
+2061973919	sg4i_00001670	Protein_length		271aa	
+2061973919	sg4i_00001670	GC		.62	
+2061973919	sg4i_00001670	Signal_peptide		Yes	
+2061973919	sg4i_00001670	Transmembrane		Yes	
+					
+2061973920	sg4i_00001680	COG_category	[K] Transcription		
+2061973920	sg4i_00001680	COG1309	Transcriptional regulator		1.0e-10
+2061973920	sg4i_00001680	pfam00440	TetR_N		5.3e-10
+2061973920	sg4i_00001680	Locus_type		CDS	
+2061973920	sg4i_00001680	Product_name		Transcriptional regulator	
+2061973920	sg4i_00001680	Scaffold		sg4i_contig14541	
+2061973920	sg4i_00001680	Coordinates		3389..4006(-)	
+2061973920	sg4i_00001680	DNA_length		618bp	
+2061973920	sg4i_00001680	Protein_length		205aa	
+2061973920	sg4i_00001680	GC		.56	
+					
+2061973921	sg4i_00001690	COG_category	[Q] Secondary metabolites biosynthesis, transport and catabolism		
+2061973921	sg4i_00001690	COG_category	[I] Lipid transport and metabolism		
+2061973921	sg4i_00001690	COG0318	Acyl-CoA synthetases (AMP-forming)/AMP-acid ligases II		3.0e-85
+2061973921	sg4i_00001690	pfam00501	AMP-binding		2.4e-72
+2061973921	sg4i_00001690	Locus_type		CDS	
+2061973921	sg4i_00001690	Product_name		Acyl-CoA synthetases (AMP-forming)/AMP-acid ligases II	
+2061973921	sg4i_00001690	Scaffold		sg4i_contig14541	
+2061973921	sg4i_00001690	Coordinates		4551..5780(+)	
+2061973921	sg4i_00001690	DNA_length		1230bp	
+2061973921	sg4i_00001690	Protein_length		409aa	
+2061973921	sg4i_00001690	GC		.56	
+					
+2061973922	sg4i_00001700	COG_category	[I] Lipid transport and metabolism		
+2061973922	sg4i_00001700	COG0671	Membrane-associated phospholipid phosphatase		3.0e-07
+2061973922	sg4i_00001700	pfam01569	PAP2		1.4e-25
+2061973922	sg4i_00001700	Locus_type		CDS	
+2061973922	sg4i_00001700	Product_name		Membrane-associated phospholipid phosphatase	
+2061973922	sg4i_00001700	Scaffold		sg4i_contig14541	
+2061973922	sg4i_00001700	Coordinates		5895..6572(+)	
+2061973922	sg4i_00001700	DNA_length		678bp	
+2061973922	sg4i_00001700	Protein_length		225aa	
+2061973922	sg4i_00001700	GC		.57	
+2061973922	sg4i_00001700	Signal_peptide		Yes	
+2061973922	sg4i_00001700	Transmembrane		Yes	
+					
+2061973923	sg4i_00001710	COG_category	[H] Coenzyme transport and metabolism		
+2061973923	sg4i_00001710	COG0684	Demethylmenaquinone methyltransferase		7.0e-48
+2061973923	sg4i_00001710	pfam03737	Methyltransf_6		3.4e-22
+2061973923	sg4i_00001710	Locus_type		CDS	
+2061973923	sg4i_00001710	Product_name		Demethylmenaquinone methyltransferase	
+2061973923	sg4i_00001710	Scaffold		sg4i_contig14541	
+2061973923	sg4i_00001710	Coordinates		6642..7361(+)	
+2061973923	sg4i_00001710	DNA_length		720bp	
+2061973923	sg4i_00001710	Protein_length		239aa	
+2061973923	sg4i_00001710	GC		.58	
+					
+2061973924	sg4i_00001720	Metacyc	SOPHOROSYLOXYDOCOSANOATE-SYN-PWY: sophorosyloxydocosanoate biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY1-3: polyhydroxybutyrate biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-5987: sorgoleone biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-4801: aloesone biosynthesis I		
+2061973924	sg4i_00001720	Metacyc	PWY-5437: threonine degradation I		
+2061973924	sg4i_00001720	Metacyc	CENTBENZCOA-PWY: benzoyl-CoA degradation II (anaerobic)		
+2061973924	sg4i_00001720	Metacyc	PWY-5080: very long chain fatty acid biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWYG-321: mycolate biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-5268: salvianin biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-5129: sphingolipid biosynthesis (plants)		
+2061973924	sg4i_00001720	Metacyc	PWY-6515: phloridzin biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-6295: olivetol biosynthesis		
+2061973924	sg4i_00001720	Metacyc	P321-PWY: benzoyl-CoA degradation III (anaerobic)		
+2061973924	sg4i_00001720	Metacyc	P3-PWY: gallate degradation III (anaerobic)		
+2061973924	sg4i_00001720	Metacyc	PWY-6397: mycolyl-arabinogalactan-peptidoglycan complex biosynthesis		
+2061973924	sg4i_00001720	Metacyc	KDO-LIPASYN-PWY: KDO<sub>2</sub>-lipid A biosynthesis I		
+2061973924	sg4i_00001720	Metacyc	PWY1A0-6325: actinorhodin biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-5139: pelargonidin conjugates biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-5059: pinobanksin biosynthesis		
+2061973924	sg4i_00001720	Metacyc	PWY-5393: raspberry ketone biosynthesis		
