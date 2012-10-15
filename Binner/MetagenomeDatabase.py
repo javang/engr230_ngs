@@ -2,6 +2,7 @@ import Database
 import csv
 import collections
 import re
+import sys
 import logging
 import GeneParser
 log = logging.getLogger("MetagenomeDatabase")
@@ -81,17 +82,26 @@ class MetagenomeDatabase(Database.Database2):
         self.create_table(self.SequenceTable,self.SequenceFields,
                                                         self.SequenceTypes)
         parser = SeqIO.parse(fn_proteins_fasta_file, "fasta")
+        data = []
+        n_stored = 0
+        chunk_size = 1000
         for seq_record in parser:
             description = seq_record.description
             m = re.match(self.protein_record_pattern,description)
             gene_id = m.group(1)
             locus_tag = m.group(2)
             protein_description = m.group(3)                        
-            seq = seq_record.seq
-            table_record = [gene_id, locus_tag, protein_description, seq]
-            self.store_data(self.SequenceTable,[table_record])
-
-
+            table_record = [gene_id, locus_tag, protein_description,  seq_record.seq.tostring()]
+            data.append(table_record)
+            # store chunks of data
+            if len(data) > chunk_size:
+                self.store_data(self.SequenceTable,data)
+                n_stored += chunk_size
+                log.info("Stored %20d sequences\r",n_stored)
+                data = [] # empty data to avoid using a lot of memory
+        # store last chunk
+        if len(data) > 0:
+            self.store_data(self.SequenceTable,data)
 
 MarkerRecordTuple = collections.namedtuple("MarkerRecordTuple",MetagenomeDatabase.MarkersFields)
 SequenceRecordTuple = collections.namedtuple("SequenceRecordTuple",MetagenomeDatabase.SequenceFields)

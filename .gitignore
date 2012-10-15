@@ -27,3 +27,4 @@ pip-log.txt
 .mr.developer.cfg
 
 nohup.out
+quick_sql_query.py
