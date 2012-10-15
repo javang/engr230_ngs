@@ -3,7 +3,9 @@ import sys
 import csv
 import re
 import logging
+import collections
 log = logging.getLogger("GeneParser")
+
 
 class GeneRecord:
     """
@@ -13,6 +15,11 @@ class GeneRecord:
     coordinates_pattern = re.compile("([0-9]+)\.+([0-9]+)\(([+-])\)")
     dna_length_pattern = re.compile("([0-9]+)[Bb]*[Pp]*")
     protein_length_pattern = re.compile("([0-9]+)[aA]*")
+    fields_names = ["gene_id","locus_tag", "cog_id","cog_description", "cog_Evalue",
+                "scaffold", "pfam", "pfam_description", "pfam_Evalue",
+                "dna_length", "protein_length", "start", "end",
+                "strand"]
+    fields_types = [str,str,str,str,float,str,str,str,float,int,int,int,int,str]
 
     def set_default_values(self):
         """
@@ -27,7 +34,8 @@ class GeneRecord:
         self.protein_length = 0
 
 
-    def show(self, ):        
+
+    def show(self, ):
         print self.gene_id, self.locus_tag, self.cog, self.cog_Evalue,self.start, \
                 self.end,self.strand,self.dna_length,self.protein_length
 
@@ -56,26 +64,32 @@ class GeneRecord:
         self.set_default_values()
 
         while True:
-            fields = reader.next()
+            try:
+                fields = reader.next()
+            except StopIteration:
+                log.warning("End of the file found. This record might be " \
+                    "incomplete: %s" % self.gene_id)
+                
+                break 
             if not fields[0] == self.gene_id:
                 return fields
             if self.is_cog(fields):
-                self.cog = fields[2]
+                self.cog_id = fields[2]
                 self.cog_description = fields[3]
                 self.cog_Evalue = float(fields[5])
             if self.is_scaffold(fields):
-                self.scaffold = fields[3]
+                self.scaffold = fields[4]
             if self.is_pfam(fields):
                 self.pfam = fields[2]
                 self.pfam_description = fields[3]
                 self.pfam_Evalue = float(fields[5])
             if self.is_dna_length(fields):
                 m = re.match(self.dna_length_pattern, fields[4])
-                self.dna_length = m.group(1)
+                self.dna_length = int(m.group(1))
             if self.is_protein_length(fields):
                 log.debug("is protein length %s", fields[4])
                 m = re.match(self.protein_length_pattern, fields[4])
-                self.protein_length = m.group(1)
+                self.protein_length = int(m.group(1))
             if self.is_coordinates(fields):
                 log.debug("Parsing coordinates %s", fields[4])
                 m = re.match(self.coordinates_pattern, fields[4])
@@ -102,30 +116,56 @@ class GeneRecord:
         if fields[2].lower() == "scaffold":
             return True
         return False
-    
+
     def is_coordinates(self, fields):
         if fields[2].lower() == "coordinates":
             return True
-        return False    
+        return False
 
     def is_pfam(self, fields):
         if fields[2].lower()[0:4] == "pfam":
             return True
-        return False    
+        return False
 
     def is_dna_length(self, fields):
         if fields[2].lower() == "dna_length":
             return True
-        return False    
+        return False
 
     def is_protein_length(self, fields):
         """
             Check if the fileds correspond
-            @param    
+            @param
         """
         if fields[2].lower() == "protein_length":
             return True
-        return False    
+        return False
+
+
+
+    def get_values(self):
+        """
+            Returns the values for all the fields/members. There is no check for the
+            existance of all the members. Python will complain if a members noes not
+            exists
+        """
+        return [ self.gene_id,
+                self.locus_tag,
+                self.cog_id,
+                self.cog_description,
+                self.cog_Evalue,
+                self.scaffold,
+                self.pfam,
+                self.pfam_description,
+                self.pfam_Evalue,
+                self.dna_length,
+                self.protein_length,
+                self.start,
+                self.end,
+                self.strand
+                ]
+
+GeneRecordTuple = collections.namedtuple("GeneRecordTuple",GeneRecord.fields_names)
 
 
 if __name__ == "__main__":
@@ -135,12 +175,12 @@ if __name__ == "__main__":
 
     fh = open(sys.argv[1])
     reader =  csv.reader(fh, delimiter="\t")
-    reader.next() # discard first line 
+    reader.next() # discard first line
     for row in reader:
         if row[0] == "":
             continue
         g = GeneRecord()
         g.read(reader,row)
         g.show()
-     
+
 

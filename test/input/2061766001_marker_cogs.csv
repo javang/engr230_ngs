@@ -1,0 +1,71 @@
+COG	Name	Single Copy	Switchgrass and industrial compost incubating bioreactor microbial community from JBEI, CA, that is aerobic and thermophilic (454-Illumina assembly v2)
+COG0013	Alanyl-tRNA synthetase	Yes	7
+COG0016	Phenylalanyl-tRNA synthetase alpha subunit	Yes	8
+COG0048	Ribosomal protein S12	Yes	16
+COG0049	Ribosomal protein S7	Yes	13
+COG0051	Ribosomal protein S10	Yes	15
+COG0052	Ribosomal protein S2	Yes	8
+COG0080	Ribosomal protein L11	Almost	11
+COG0081	Ribosomal protein L1	Yes	12
+COG0087	Ribosomal protein L3	Yes	12
+COG0088	Ribosomal protein L4	Yes	10
+COG0089	Ribosomal protein L23	Yes	17
+COG0090	Ribosomal protein L2	Yes	11
+COG0091	Ribosomal protein L22	Yes	9
+COG0092	Ribosomal protein S3	Yes	11
+COG0093	Ribosomal protein L14	Yes	14
+COG0094	Ribosomal protein L5	Yes	12
+COG0096	Ribosomal protein S8	Yes	14
+COG0097	Ribosomal protein L6P/L9E	Yes	13
+COG0098	Ribosomal protein S5	Yes	11
+COG0099	Ribosomal protein S13	Yes	14
+COG0100	Ribosomal protein S11	Yes	14
+COG0102	Ribosomal protein L13	Yes	10
+COG0103	Ribosomal protein S9	Yes	10
+COG0130	Pseudouridine synthase	Almost	9
+COG0138	AICAR transformylase/IMP cyclohydrolase PurH (only IMP cyclohydrolase domain in Aful)	Almost	9
+COG0150	Phosphoribosylaminoimidazole (AIR) synthetase	Yes	12
+COG0184	Ribosomal protein S15P/S13E	Yes	15
+COG0185	Ribosomal protein S19	Yes	11
+COG0186	Ribosomal protein S17	Almost	11
+COG0197	Ribosomal protein L16/L10E	Yes	13
+COG0198	Ribosomal protein L24	Yes	11
+COG0200	Ribosomal protein L15	Yes	12
+COG0211	Ribosomal protein L27	Yes	17
+COG0216	Protein chain release factor A	Almost	11
+COG0222	Ribosomal protein L7/L12	Yes	14
+COG0233	Ribosome recycling factor	Almost	12
+COG0237	Dephospho-CoA kinase	Yes	9
+COG0244	Ribosomal protein L10	Yes	13
+COG0255	Ribosomal protein L29	Yes	14
+COG0256	Ribosomal protein L18	Yes	12
+COG0261	Ribosomal protein L21	Yes	15
+COG0268	Ribosomal protein S20	Yes	13
+COG0283	Cytidylate kinase	Almost	11
+COG0291	Ribosomal protein L35	Yes	13
+COG0292	Ribosomal protein L20	Yes	13
+COG0322	Nuclease subunit of the excinuclease complex	Almost	11
+COG0335	Ribosomal protein L19	Yes	11
+COG0336	tRNA-(guanine-N1)-methyltransferase	Yes	10
+COG0353	Recombinational DNA repair protein (RecF pathway)	Yes	10
+COG0357	Predicted S-adenosylmethionine-dependent methyltransferase involved in bacterial cell division	Yes	12
+COG0359	Ribosomal protein L9	Yes	13
+COG0452	Phosphopantothenoylcysteine synthetase/decarboxylase	Yes	9
+COG0486	Predicted GTPase	Almost	8
+COG0497	ATPase involved in DNA repair	Yes	8
+COG0504	CTP synthase (UTP-ammonia lyase)	Yes	10
+COG0536	Predicted GTPase	Almost	9
+COG0541	Signal recognition particle GTPase	Yes	10
+COG0556	Helicase subunit of the DNA excision repair complex	Yes	8
+COG0632	Holliday junction resolvasome, DNA-binding subunit	Yes	12
+COG0742	N6-adenine-specific methylase	Yes	11
+COG0771	UDP-N-acetylmuramoylalanine-D-glutamate ligase	Almost	6
+COG0816	Predicted endonuclease involved in recombination (possible Holliday junction resolvase in Mycoplasmas and B. subtilis)	Yes	12
+COG1066	Predicted ATP-dependent serine protease	Almost	11
+COG1159	GTPase	Almost	6
+COG1160	Predicted GTPases	Almost	11
+COG1198	Primosomal protein N' (replication factor Y) - superfamily II helicase	Yes	5
+COG1200	RecG-like helicase	Yes	8
+COG1207	N-acetylglucosamine-1-phosphate uridyltransferase (contains nucleotidyltransferase and I-patch acetyltransferase domains)	Yes	7
+COG1217	Predicted membrane GTPase involved in stress response	Yes	5
+COG1570	Exonuclease VII, large subunit	Almost	8
