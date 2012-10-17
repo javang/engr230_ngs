@@ -25,12 +25,15 @@ def blast_marker_cogs(args):
     for m in markers:
         cog = m[0]
         log.debug("Marker COG %s",cog)
-        sql_command = """SELECT {0}.gene_id FROM {0}
+        sql_command = """SELECT * FROM {0}
                         WHERE cog_id="{1}" """.format( 
                                 db.GenesTable,cog)
         print sql_command
         genes = db.retrieve_data(sql_command)
-        print len(genes)
+
+        for g in genes:
+            print g
+
         # select genes that have the marker COG annotation
         sql_command = """SELECT {0}.gene_id,sequence FROM {0}
                         INNER JOIN {1}
