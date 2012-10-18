@@ -36,7 +36,7 @@ class TestMetagenomeDatabase(unittest.TestCase):
         db.create_genes_table(fn_genes)
         sql_command = "SELECT * FROM {0}".format(db.GenesTable)
         genes = db.retrieve_data(sql_command)
-        self.assertEqual(len(genes),172)
+        self.assertEqual(len(genes),171)
         sql_command = """ SELECT *
                           FROM {0}
                           WHERE locus_tag="sg4i_00000050" """.format(db.GenesTable)

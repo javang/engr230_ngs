@@ -1978,23 +1978,3 @@ gene_oid	Locus Tag	Source	Cluster Information	Gene Information	E-value
 2061973923	sg4i_00001710	Protein_length		239aa	
 2061973923	sg4i_00001710	GC		.58	
 					
-2061973924	sg4i_00001720	Metacyc	SOPHOROSYLOXYDOCOSANOATE-SYN-PWY: sophorosyloxydocosanoate biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY1-3: polyhydroxybutyrate biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-5987: sorgoleone biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-4801: aloesone biosynthesis I		
-2061973924	sg4i_00001720	Metacyc	PWY-5437: threonine degradation I		
-2061973924	sg4i_00001720	Metacyc	CENTBENZCOA-PWY: benzoyl-CoA degradation II (anaerobic)		
-2061973924	sg4i_00001720	Metacyc	PWY-5080: very long chain fatty acid biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWYG-321: mycolate biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-5268: salvianin biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-5129: sphingolipid biosynthesis (plants)		
-2061973924	sg4i_00001720	Metacyc	PWY-6515: phloridzin biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-6295: olivetol biosynthesis		
-2061973924	sg4i_00001720	Metacyc	P321-PWY: benzoyl-CoA degradation III (anaerobic)		
-2061973924	sg4i_00001720	Metacyc	P3-PWY: gallate degradation III (anaerobic)		
-2061973924	sg4i_00001720	Metacyc	PWY-6397: mycolyl-arabinogalactan-peptidoglycan complex biosynthesis		
-2061973924	sg4i_00001720	Metacyc	KDO-LIPASYN-PWY: KDO<sub>2</sub>-lipid A biosynthesis I		
-2061973924	sg4i_00001720	Metacyc	PWY1A0-6325: actinorhodin biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-5139: pelargonidin conjugates biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-5059: pinobanksin biosynthesis		
-2061973924	sg4i_00001720	Metacyc	PWY-5393: raspberry ketone biosynthesis		

@@ -28,3 +28,4 @@ pip-log.txt
 
 nohup.out
 quick_sql_query.py
+*.log

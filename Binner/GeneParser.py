@@ -57,9 +57,7 @@ class GeneRecord:
             try:
                 fields = reader.next()
             except StopIteration:
-                log.warning("End of the file found. This record might be " \
-                    "incomplete: %s" % self.gene_id)
-
+                self.sanity_check()
                 break
             if not fields[0] == self.gene_id:
                 self.sanity_check()
@@ -68,26 +66,30 @@ class GeneRecord:
                 self.cog_id = fields[2]
                 self.cog_description = fields[3]
                 self.cog_Evalue = float(fields[5])
+                continue
             if self.is_scaffold(fields):
                 self.scaffold = fields[4]
             if self.is_pfam(fields):
                 self.pfam = fields[2]
                 self.pfam_description = fields[3]
                 self.pfam_Evalue = float(fields[5])
+                continue
             if self.is_dna_length(fields):
                 m = re.match(self.dna_length_pattern, fields[4])
                 self.dna_length = int(m.group(1))
+                continue
             if self.is_protein_length(fields):
                 log.debug("is protein length %s", fields[4])
                 m = re.match(self.protein_length_pattern, fields[4])
                 self.protein_length = int(m.group(1))
+                continue
             if self.is_coordinates(fields):
                 log.debug("Parsing coordinates %s", fields[4])
                 m = re.match(self.coordinates_pattern, fields[4])
                 self.start = int(m.group(1))
                 self.end = int(m.group(2))
                 self.strand = m.group(3)
-
+                continue
     def sanity_check(self):
         if self.cog_id == defs.NULL_ST:
             log.warning("The gene %s does not have a COG annotation", self.gene_id)
@@ -113,6 +115,7 @@ class GeneRecord:
         log.debug("is scaffold %s",fields)
         if fields[2].lower() == "scaffold":
             return True
+        log.debug("** %s %s",self.gene_id, fields[2].lower())
         return False
 
     def is_coordinates(self, fields):

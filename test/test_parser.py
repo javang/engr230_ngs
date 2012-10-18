@@ -45,6 +45,7 @@ class TestGeneParser(unittest.TestCase):
             g = GeneParser.GeneRecord()
             g.read(self.reader,row)
             cogs.append(g.cog_id)
+            row = self.reader.next()
         self.assertEqual(len(cogs), 10)
 
     def test_no_cog(self):
