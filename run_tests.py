@@ -4,7 +4,7 @@ import sys
 import logging
 
 logging.basicConfig(stream=sys.stdout)
-logging.root.setLevel(logging.ERROR)
+logging.root.setLevel(logging.DEBUG)
 
 loader = unittest.TestLoader()
 all_tests = loader.discover("test")

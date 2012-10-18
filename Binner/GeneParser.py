@@ -4,7 +4,9 @@ import csv
 import re
 import logging
 import collections
+import definitions as defs
 log = logging.getLogger("GeneParser")
+
 
 
 class GeneRecord:
@@ -25,12 +27,12 @@ class GeneRecord:
         """
             Set default values for some of the fields
         """
-        self.cog = ""
+        self.cog_id = defs.NULL_ST
         self.cog_Evalue = -1
-        self.cog_description = "NULL"
-        self.pfam = ""
+        self.cog_description = defs.NULL_ST
+        self.pfam = defs.NULL_ST # A GENE CAN HAVE MORE THAT ONE PFAN ENTRY
         self.pfam_Evalue = -1
-        self.pfam_description = "NULL"
+        self.pfam_description = defs.NULL_ST
         self.protein_length = 0
 
 
@@ -38,18 +40,6 @@ class GeneRecord:
     def show(self, ):
         print self.gene_id, self.locus_tag, self.cog, self.cog_Evalue,self.start, \
                 self.end,self.strand,self.dna_length,self.protein_length
-
-    def get_types(self):
-        """
-            Return a tuple with the type of each of the values in the record
-        """
-        pass
-
-    def get_names(self):
-        """
-            Return a tuple with the names of each of the values in the record
-        """
-        pass
 
     def read(self, reader, first_fields):
         """
@@ -69,9 +59,10 @@ class GeneRecord:
             except StopIteration:
                 log.warning("End of the file found. This record might be " \
                     "incomplete: %s" % self.gene_id)
-                
-                break 
+
+                break
             if not fields[0] == self.gene_id:
+                self.sanity_check()
                 return fields
             if self.is_cog(fields):
                 self.cog_id = fields[2]
@@ -97,6 +88,12 @@ class GeneRecord:
                 self.end = int(m.group(2))
                 self.strand = m.group(3)
 
+    def sanity_check(self):
+        if self.cog_id == defs.NULL_ST:
+            log.warning("The gene %s does not have a COG annotation", self.gene_id)
+        if not hasattr(self,"scaffold"):
+            log.error("The gene %s has not scaffold entry", self.gene_id)
+            raise ValueError,"The gene {0} has not scaffold entry".format(self.gene_id)
 
     def is_cog(self, fields):
         """
@@ -113,6 +110,7 @@ class GeneRecord:
             Returns True if a line contains a scaffold id
             @param fields fields in the line
         """
+        log.debug("is scaffold %s",fields)
         if fields[2].lower() == "scaffold":
             return True
         return False

@@ -5,14 +5,17 @@ import csv
 import Binner.GeneParser as GeneParser
 import logging
 import sys
+import utility
+import Binner.definitions as defs
+import logging
+log = logging.getLogger("test_parser")
 
 class TestGeneParser(unittest.TestCase):
 
     def setUp(self):
         """ Prepare the test file """
-        fn = os.path.abspath(__file__)
-        directory, nil = os.path.split(fn)
-        fn = os.path.join(directory,"input","gene_info_test_file.xls")
+        self.datadir = utility.get_data_directory(__file__)
+        fn = os.path.join(self.datadir,"gene_info_test_file.xls")
         self.fh = open(fn)
         self.reader =  csv.reader(self.fh, delimiter="\t")
         self.reader.next() # discard first line
@@ -37,12 +40,24 @@ class TestGeneParser(unittest.TestCase):
     def test_parse_records(self):
         """ Test reading more than one record """
         row = self.reader.next()
-        g = GeneParser.GeneRecord()
         cogs = []
         for i in range(0,10):
+            g = GeneParser.GeneRecord()
             g.read(self.reader,row)
-            cogs.append(g.cog)
+            cogs.append(g.cog_id)
         self.assertEqual(len(cogs), 10)
+
+    def test_no_cog(self):
+        """ Test that genes without COG annotation are identified """
+        for row in self.reader:
+            g = GeneParser.GeneRecord()
+            g.read(self.reader, row)
+            if g.gene_id == "2061973766":
+               self.assertTrue(g.cog_id, defs.NULL_ST) # ,"COG annotation must be defs.NULL_ST")
+            if g.gene_id == "2061973768":
+               self.assertTrue(g.cog_id, defs.NULL_ST)
+               break
+
 
     def tearDown(self):
         """
@@ -53,6 +68,6 @@ class TestGeneParser(unittest.TestCase):
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout)
-    logging.root.setLevel(logging.INFO)
+    logging.root.setLevel(logging.WARNING)
     unittest.main()
 

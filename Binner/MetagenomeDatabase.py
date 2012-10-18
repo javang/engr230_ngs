@@ -64,8 +64,9 @@ class MetagenomeDatabase(Database.Database2):
         for row in reader:
             if row[0] == "":
                 continue
-            gene_record.read(reader, row)
-            data.append(gene_record.get_values())
+            g = GeneParser.GeneRecord()
+            g.read(reader, row)
+            data.append(g.get_values())
         self.store_data(self.GenesTable,data)
 
     def create_protein_sequences_table(self,fn_proteins_fasta_file):
@@ -90,7 +91,7 @@ class MetagenomeDatabase(Database.Database2):
             m = re.match(self.protein_record_pattern,description)
             gene_id = m.group(1)
             locus_tag = m.group(2)
-            protein_description = m.group(3)                        
+            protein_description = m.group(3)
             table_record = [gene_id, locus_tag, protein_description,  seq_record.seq.tostring()]
             data.append(table_record)
             # store chunks of data
@@ -105,4 +106,4 @@ class MetagenomeDatabase(Database.Database2):
 
 MarkerRecordTuple = collections.namedtuple("MarkerRecordTuple",MetagenomeDatabase.MarkersFields)
 SequenceRecordTuple = collections.namedtuple("SequenceRecordTuple",MetagenomeDatabase.SequenceFields)
-        
+
