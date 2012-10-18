@@ -15,3 +15,6 @@ Directories:
 To run the tests:
    python run_tests.py --log logfile
 The argument --log is optional
+
+News
+
