@@ -10,4 +10,8 @@ Directories:
     scripts - Directory with command line scripts. This scripts are intended
               to be run from the command line.
     test - directory with the tests
-        input - All the files required for the tests are in here.
+        data - All the files required for the tests are in here.
+
+To run the tests:
+   python run_tests.py --log logfile
+The argument --log is optional
