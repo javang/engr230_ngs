@@ -1,6 +1,8 @@
 
 
 import Binner.MetagenomeDatabase as MetagenomeDatabase
+import Binner.MultiProcessingBLAST as MultiProcessingBLAST
+
 from Bio.Blast.Applications import NcbipsiblastCommandline
 from Bio.Blast.Applications import NcbiblastpCommandline
 import multiprocessing
@@ -12,91 +14,8 @@ import logging
 log = logging.getLogger("blast_marker_cogs")
 
 
-def do_blast(sequence, identifier ):
-    """
-        Do a BLAST run
-        @param sequence A protein sequence
-        @param identifer A identifier to name temporary input file and the
-                output file
-    """
-    if len(sequence) == 0:
-        raise ValueError("Empty sequence")
-    fn = "{0}.fasta".format(identifier)
-    fn_output = "{0}.xml".format(identifier)
-    fhandle = open(fn, "w")
-    fhandle.write(">" + identifier + "\n" + sequence + "\n")
-    fhandle.close()
-    p = NcbiblastpCommandline(query=fn, db="nr", evalue=0.001,outfmt=5, out=fn_output)
-    command = str(p)
-    log.info("running BLAST: %s", command)
-    # Popen does not like a string, I have to split in the whitespaces
-    process_id = subprocess.Popen(command.split(" "),shell=False,env=os.environ,
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    (out, err) = process_id.communicate()
-    if (err != ""): # there is some error output
-        log.error( "There was an error: %s" % err)
-        raise IOError
-    os.remove(fn)
-
-
-def do_multiprocessing_blast(sequences, identifiers):
-    """
-        Do a BLAST run using various processors
-        @param sequences A set of protein sequences
-        @param identifer A set of identifiers
-    """
-    if len(sequences) == 0:
-        raise ValueError("")
-    fn = "{0}.fasta".format(identifier)
-    fn_output = "{0}.xml".format(identifier)
-    fhandle = open(fn, "w")
-    fhandle.write(">" + identifier + "\n" + sequence + "\n")
-    fhandle.close()
-    p = NcbipsiblastCommandline(query=fn, db="/chime1/home/javi/bioinformatics/ncbi_databases/nr", evalue=0.001,
-                                     outfmt=5, out=fn_output)
-    psiblast_command = str(p)
-    log.info("running BLAST: %s", psiblast_command)
-    # Popen does not like a string, I have to split in the whitespaces
-    process_id = subprocess.Popen(psiblast_command.split(" "),shell=False,env=os.environ,
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    (out, err) = process_id.communicate()
-    if (err != ""): # there is some error output
-        log.error( "There was an error: %s" % err)
-        raise IOError
-    os.remove(fn)
-
-
-def (sequence, identifier ):
-    """
-        Do a BLAST run
-        @param sequence A protein sequence
-        @param identifer A identifier to name temporary input file and the
-                output file
-    """
-    if len(sequence) == 0:
-        raise ValueError("Empty sequence")
-    fn = "{0}.fasta".format(identifier)
-    fn_output = "{0}.xml".format(identifier)
-    fhandle = open(fn, "w")
-    fhandle.write(">" + identifier + "\n" + sequence + "\n")
-    fhandle.close()
-    p = NcbipsiblastCommandline(query=fn, db="/chime1/home/javi/bioinformatics/ncbi_databases/nr", evalue=0.001,
-                                     outfmt=5, out=fn_output)
-    psiblast_command = str(p)
-    log.info("running BLAST: %s", psiblast_command)
-    # Popen does not like a string, I have to split in the whitespaces
-    process_id = subprocess.Popen(psiblast_command.split(" "),shell=False,env=os.environ,
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    (out, err) = process_id.communicate()
-    if (err != ""): # there is some error output
-        log.error( "There was an error: %s" % err)
-        raise IOError
-    os.remove(fn)
-
-
-
 def blast_marker_cogs(args):
-    log.debug("Running blast for the marker COGS")
+    log.info("Running blast for the marker COGS")
     db = MetagenomeDatabase.MetagenomeDatabase()
     db.connect(args.fn_database)
     names = db.get_tables_names()
@@ -111,6 +30,9 @@ def blast_marker_cogs(args):
     markers = db.retrieve_data(sql_command)
     if len(markers) == 0:
         raise ValueError("There are no marker COGs in the database")
+
+    blaster = MultiProcessingBLAST.MultiProcessingBLAST()
+
     for m in markers[0:1]:
         cog = m[0]
         log.debug("Marker COG %s",cog)
@@ -130,10 +52,13 @@ def blast_marker_cogs(args):
         if not len(genes) == len(records):
             raise ValueError,"The number of genes recovered is not the same as " \
                 "the number of sequences"
-        for record in records[0:3]:
+        for record in records[0:20]:
             sequence = record[2]
             gene_id = record[0]
-            do_blast(sequence,gene_id)
+            blaster.add_sequence(sequence, gene_id)
+#            do_blast(sequence,gene_id)
+        
+    blaster.run()
     db.close()
 
 
