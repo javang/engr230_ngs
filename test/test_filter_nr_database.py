@@ -51,7 +51,7 @@ class TestNRDatabaseFilter(unittest.TestCase):
         f.close()
         log.debug("Filtering COGS %s",cogs_ids)
         log.debug("Descriptions: %s",cogs_names)
-        fn_database = os.path.join(self.datadir, "nr_test")
+        fn_database = os.path.join(self.datadir, "nr_test2")
         dbfilter = NRDatabaseFilter.NRDatabaseFilter(fn_database)
         dbfilter.set_ids(cogs_ids)
         dbfilter.set_descriptions(cogs_names)
