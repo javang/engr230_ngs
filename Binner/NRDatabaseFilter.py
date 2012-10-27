@@ -27,6 +27,10 @@ def contains_all_keywords(words, keywords):
 
 
 class NRDatabaseFilter:
+    """
+        Filter a NR database by splitting it according to the annotations that
+        match the description of COGs obtained from IMG/M.
+    """
 
     def __init__(self, fn_nr_database):
         """
@@ -70,6 +74,8 @@ class NRDatabaseFilter:
            raise ValueError("The database cannot be filtered. No descriptions " \
            "to extract are given")
         if len(self.ids) == 0 and len(self.ids) != len(self.descriptions_keywords):
+            log.debug("self.ids: %s",self.ids)
+            log.debug("self.descriptions_keywords: %s",self.descriptions_keywords)
             raise ValueError("The number of ids provided do not match the number " \
                 "of descriptions. An id per description is needed. ")
         if overwrite:

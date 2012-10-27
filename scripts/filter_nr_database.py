@@ -4,7 +4,7 @@ import time
 import logging
 import csv
 import Binner.NRDatabaseFilter as NRDatabaseFilter
-
+log = logging.getLogger("filter_nr_database")
 
 
 if __name__ == "__main__":
@@ -28,8 +28,9 @@ if __name__ == "__main__":
         logging.basicConfig(stream=sys.stdout)
     logging.root.setLevel(logging.INFO)
 
-    f = open(args.fn_cogs)
+    f = open(args.fn_cogs,"rU")
     reader = csv.reader(f, delimiter="\t")
+    reader.next() # ignore title line
     i = 0
     cogs_names = []
     cogs_ids = []
@@ -38,6 +39,8 @@ if __name__ == "__main__":
         cogs_names.append(row[1].lower())
     f.close()
     nr_filter = NRDatabaseFilter.NRDatabaseFilter(args.fn_nr)
-    nr_filter.set_descriptions(cogs_names[0:2])
-    nr_filter.set_descriptions(cogs_ids[0:2])
+    log.info("Cogs names %s",cogs_names)
+    log.info("Cogs ids %s",cogs_ids)
+    nr_filter.set_descriptions(cogs_names)
+    nr_filter.set_ids(cogs_ids)
     nr_filter.do_filtering()

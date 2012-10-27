@@ -104,6 +104,7 @@ class MetagenomeDatabase(Database.Database2):
         if len(data) > 0:
             self.store_data(self.SequenceTable,data)
 
+
 MarkerRecordTuple = collections.namedtuple("MarkerRecordTuple",MetagenomeDatabase.MarkersFields)
 SequenceRecordTuple = collections.namedtuple("SequenceRecordTuple",MetagenomeDatabase.SequenceFields)
 
