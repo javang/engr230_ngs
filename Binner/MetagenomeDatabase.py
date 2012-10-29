@@ -5,6 +5,7 @@ import re
 import sys
 import logging
 import GeneParser
+import MultiProcessingBLAST
 log = logging.getLogger("MetagenomeDatabase")
 
 class MetagenomeDatabase(Database.Database2):
@@ -24,6 +25,9 @@ class MetagenomeDatabase(Database.Database2):
     SequenceTable = "Sequences"
     SequenceFields = ["gene_id", "locus_tag", "description", "sequence"]
     SequenceTypes = [str, str, str, str]
+
+    BlastResultsTable = "BlastResults"
+
     protein_record_pattern = re.compile("([0-9]+)\s+(sg4i_[0-9]+)\s+(.*)\s+(\[.*\])")
 
     def create_markers_table(self, fn_markers):
@@ -103,6 +107,31 @@ class MetagenomeDatabase(Database.Database2):
         # store last chunk
         if len(data) > 0:
             self.store_data(self.SequenceTable,data)
+
+
+    def create_blast_results_table(self):
+        """
+            Creates the genes table and reads the genes from the file
+            @param fn_genes File with the information for the Genes
+        """
+        self.check_if_is_connected()
+        res = MultiProcessingBLAST.BLASTResult()
+        log.info("Creating table to store BLAST results ...")
+        fields = ["gene_id"] + res.fields_names
+        types = [str]+res.fields_types
+        self.create_table(self.BlastResultsTable,fields, types)
+
+
+    def store_blast_results(self, results_list):
+        """ Store a set of BLAST results in the database
+
+            @param Results_list A list of pairs (identifier, blast results). The identifier
+            is the gene id. Blast results is an istance of BlastResult.
+        """
+        data = []
+        for gene_id, r in results_list:
+            data.append([gene_id] + r.get_formatted_for_db())
+        self.store_data(self.BlastResultsTable, data)
 
 
 MarkerRecordTuple = collections.namedtuple("MarkerRecordTuple",MetagenomeDatabase.MarkersFields)

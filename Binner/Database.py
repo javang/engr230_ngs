@@ -70,27 +70,6 @@ class Database2:
         self.cursor.execute(sql_command)
         self.connection.commit()
 
-    def store_dataV1(self,table_name,data):
-        """ Inserts information in a given table of the database.
-        The info must be a list of tuples containing as many values
-        as columns in the table
-            Conversion of values is done AUTOMATICALLY after checking the
-            types stored in the table
-        """
-        self.check_if_is_connected()
-        n = len(data[0]) # number of columns for each row inserted
-        tuple_format="("+"?,"*(n-1)+"?)"
-        sql_command="INSERT INTO %s VALUES %s " % (table_name, tuple_format)
-        # Fill the table with the info in the tuples
-        types = self.get_table_types(table_name)
-#        log.debug("Storing types: %s", types)
-        for x in data:
-#            log.debug("DATA %s", x)
-            # convert (applies the types stored in the table dictionary to each value in x
-            y = [apply_type(i) for i,apply_type in zip(x, types)]
-            self.cursor.execute(sql_command, y)
-        self.connection.commit()
-
     def store_data(self,table_name,data):
         """ Inserts information in a given table of the database.
         The info must be a list of tuples containing as many values

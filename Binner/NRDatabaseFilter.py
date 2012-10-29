@@ -67,7 +67,8 @@ class NRDatabaseFilter:
         """
             Does the filtering seleting the sequences with descriptions matching
             the descriptions stored in the class
-            @param overwrite
+            @param overwrite It true, all the previous NR files created for the COGs
+            are overwritten.
         """
         log.info("Filtering database with the descriptions provided")
         if len(self.descriptions_keywords) == 0:
