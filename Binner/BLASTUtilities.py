@@ -62,7 +62,7 @@ class BaseMultiprocess:
         log.debug("Number of processors to use %s", prs_used)
         return prs_used
 
-class BLASTUtilities(BaseMultiprocess):
+class BLASTMultiprocessing(BaseMultiprocess):
     """
         Class for doing BLAST alignments in parallel using multiprocessing
     """

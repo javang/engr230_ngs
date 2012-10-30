@@ -47,7 +47,7 @@ class TestBLAST(unittest.TestCase):
     def test_multi_processing_blast(self):
         """ Test that a set of blast runs using multiprocessing run """
         fn_database = os.path.join(self.datadir, "mini_nr", "nr_test2")
-        blaster = BLASTUtilities.BLASTUtilities()
+        blaster = BLASTUtilities.BLASTMultiProcessing()
         parser = SeqIO.parse(fn_database, "fasta")
         identifier = "temp.{0}"
         i = 0
@@ -59,7 +59,7 @@ class TestBLAST(unittest.TestCase):
             i += 1
         fn_identifier_pairs = blaster.run()
         self.assertEqual(len(fn_identifier_pairs), n_seqs, "Unexpected number of BLAST results")
-        blast_parser = BLASTUtilities.BLASTUtilitiesParser()
+        blast_parser = BLASTUtilities.BLASTMultiProcessingParser()
         for i, fn in fn_identifier_pairs:
             blast_parser.add_file(identifier.format(i),fn)
         parsing_results = blast_parser.run()

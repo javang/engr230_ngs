@@ -18,12 +18,12 @@ def blast(seqs):
     """
     if len(seqs) == 0:
        raise ValueError("No sequences provided")
-    blaster = BLASTUtilities.BLASTUtilities()
+    blaster = BLASTUtilities.BLASTMultiProcessing()
     log.debug("Running blast from %s sequences",len(seqs))
     for seq in seqs:
         blaster.add_sequence(*seq)
     fns_blast_output = blaster.run()
-    parser = BLASTUtilities.BLASTUtilitiesParser()
+    parser = BLASTUtilities.BLASTMultiProcessingParser()
     for identifier, fn in fns_blast_output:
         parser.add_file(identifier, fn)
     parsing_results = parser.run()
