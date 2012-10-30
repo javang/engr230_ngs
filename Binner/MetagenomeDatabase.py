@@ -5,7 +5,7 @@ import re
 import sys
 import logging
 import GeneParser
-import MultiProcessingBLAST
+import BLASTUtilities
 log = logging.getLogger("MetagenomeDatabase")
 
 class MetagenomeDatabase(Database.Database2):
@@ -115,7 +115,7 @@ class MetagenomeDatabase(Database.Database2):
             @param fn_genes File with the information for the Genes
         """
         self.check_if_is_connected()
-        res = MultiProcessingBLAST.BLASTResult()
+        res = BLASTUtilities.BLASTResult()
         log.info("Creating table to store BLAST results ...")
         fields = ["gene_id"] + res.fields_names
         types = [str]+res.fields_types

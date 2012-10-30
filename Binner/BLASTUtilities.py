@@ -4,9 +4,11 @@ from Bio.Blast.Applications import NcbiblastpCommandline
 from Bio.Blast import NCBIXML
 import multiprocessing as mpr
 import subprocess
+import collections
 import sys
 import os
 import time
+import re
 import logging
 log = logging.getLogger("MultiProcessingBAST")
 
@@ -60,7 +62,7 @@ class BaseMultiprocess:
         log.debug("Number of processors to use %s", prs_used)
         return prs_used
 
-class MultiProcessingBLAST(BaseMultiprocess):
+class BLASTUtilities(BaseMultiprocess):
     """
         Class for doing BLAST alignments in parallel using multiprocessing
     """
@@ -130,7 +132,7 @@ class MultiProcessingBLAST(BaseMultiprocess):
         return self.failed_processes
 
 
-class MultiProcessingBLASTParser(BaseMultiprocess):
+class BLASTUtilitiesParser(BaseMultiprocess):
     """
         Class for parsing the results of BLAST alignments in parallel using multiprocessing
     """
@@ -138,6 +140,7 @@ class MultiProcessingBLASTParser(BaseMultiprocess):
         BaseMultiprocess.__init__(self)
         self.fn_inputs = []
         self.identifiers = []
+        self.failed_processes = set()
 
     def add_file(self, identifier, name):
         """
@@ -214,6 +217,7 @@ class BLASTResult:
         self.evalues = []
         self.scores = []
         self.bits = []
+        self.organism_pattern = re.compile("\[.+?\]")
 
     def get_formatted_for_db(self):
         es = "/".join(map(str,self.evalues))
@@ -221,4 +225,25 @@ class BLASTResult:
         bs = "/".join(map(str,self.bits))
         record = [ "/".join(self.titles),es,sc,bs]
         return record
+
+
+    def parse_organisms(self, description):
+        """ Parse the name of the organisms in a FASTA description
+
+            The function assumes that the name of the microorganism is enclosed in brackets
+            @param description Fasta header for a sequence, as stored by the NR Database
+            @return A set with the genus and species of the organisms found. Subespecies and
+            strains are ignored.
+        """
+        matches = re.finditer(self.organism_pattern, description)
+        organisms = set()
+        for m in matches:
+            words = m.group(0).rstrip("]").lstrip("[").split(" ")
+            genus = words[0].lower()
+            species = words[1].lower()
+            name = genus + " " + species
+            organisms.add(name)
+        return organisms
+
+BLASTResultRecordTuple = collections.namedtuple("BLASTResultRecordTuple",BLASTResult.fields_names)
 
