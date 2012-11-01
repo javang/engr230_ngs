@@ -1,3 +1,7 @@
+try:
+   import Bio.SeqIO as SeqIO
+except:
+   raise ImportError("BioPython is required to read FASTA files")
 import Database
 import csv
 import collections
@@ -27,6 +31,17 @@ class MetagenomeDatabase(Database.Database2):
     SequenceTypes = [str, str, str, str]
 
     BlastResultsTable = "BlastResults"
+
+    ScaffoldAssignmentsTable = "ScaffoldsAssignments"
+    ScaffoldAssignmentsFields = ["scaffold", "genus"]
+    ScaffoldAssignmentsTypes = [str, str]
+
+
+
+    ScaffoldsTable = "Scaffolds"
+    ScaffoldsFields = ["scaffold_id", "scaffold", "sequence"]
+    ScaffoldsTypes = [str, str, str]
+
 
     protein_record_pattern = re.compile("([0-9]+)\s+(sg4i_[0-9]+)\s+(.*)\s+(\[.*\])")
 
@@ -79,10 +94,7 @@ class MetagenomeDatabase(Database.Database2):
             annotated in the metagenome and stores each sequence together with
             its id
         """
-        try:
-           import Bio.SeqIO as SeqIO
-        except:
-           raise ImportError("BioPython is required to read FASTA files")
+        self.check_if_is_connected()
         log.info("Creating table of protein sequences ...")
         self.create_table(self.SequenceTable,self.SequenceFields,
                                                         self.SequenceTypes)
@@ -132,6 +144,53 @@ class MetagenomeDatabase(Database.Database2):
         for gene_id, r in results_list:
             data.append([gene_id] + r.get_formatted_for_db())
         self.store_data(self.BlastResultsTable, data)
+
+    def create_scaffold_assignments_table(self):
+        """ Creates the table to store the scaffold assigments
+
+        """
+        self.check_if_is_connected()
+        log.info("Creating table to store Scaffold genus assignments ...")
+        self.create_table(self.ScaffoldAssignmentsTable ,self.ScaffoldAssignmentsFields,
+                                                         self.ScaffoldAssignmentsTypes)
+
+    def fill_scaffolds_table(self,fn_scaffolds, overwrite=True):
+        """ Creates and fills a table with the sequences of the scaffols
+
+            @param fn_scaffolds A file in FASTA format with the sequences of
+            all the Scaffolds
+        """
+        self.check_if_is_connected()
+        scaffold_record_pattern = re.compile("(.+?)\s+(.+?)\s+(.+)")
+        tables_names = self.get_tables_names()
+        log.info("Creating and filling table of scaffolds ...")
+        if overwrite and self.ScaffoldsTable in tables_names:
+            self.drop_table(self.ScaffoldsTable)
+            self.create_table(self.ScaffoldsTable ,
+            self.ScaffoldsFields, self.ScaffoldsTypes)
+        parser = SeqIO.parse(fn_scaffolds, "fasta")
+        data = []
+        n_stored = 0
+        batch_size = 1000
+        for seq_record in parser:
+            description = seq_record.description
+            m = re.match(scaffold_record_pattern,description)
+            if not m:
+                raise ValueError("Problem reading description %s", description)
+            scaffold_id = m.group(1)
+            scaffold= m.group(2)
+            table_record = [scaffold_id,scaffold, seq_record.seq.tostring()]
+            data.append(table_record)
+            # store batch of data
+            if len(data) > batch_size:
+                self.store_data(self.ScaffoldsTable, data)
+                n_stored += batch_size
+                log.info("Stored %20d sequences\r", n_stored)
+                data = [] # empty data to avoid using a lot of memory
+        # store last batch
+        if len(data) > 0:
+            self.store_data(self.ScaffoldsTable, data)
+
 
 
 MarkerRecordTuple = collections.namedtuple("MarkerRecordTuple",MetagenomeDatabase.MarkersFields)
