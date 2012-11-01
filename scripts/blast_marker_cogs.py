@@ -97,6 +97,81 @@ def blast_marker_cogs(args):
         db.close()
 
 
+def blast_marker_cogs_WHIT_MEMORY(args):
+    """
+        These function checks for blast results that are already in the database.
+        Not recommended unless you want to speed up a search that failed and you
+        know what you are doing
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase()
+    db.connect(args.fn_database)
+    names = db.get_tables_names()
+    if not db.MarkersTable in names:
+        raise ValueError("The database does not have a table of marker COGs")
+    if not db.GenesTable in names:
+        raise ValueError("The database does not have a table of genes")
+    if not db.SequenceTable in names:
+        raise ValueError("The database does not have a table sequences")
+    if not db.BlastResultsTable in names:
+        raise ValueError("There is no table of previous BLAST results")
+
+
+    # Read file marker cogs
+    fhandle = open(args.fn_marker_cogs, "r")
+    reader = csv.reader(fhandle, delimiter="\t")
+    markercogs = frozenset([row[0] for row in reader])
+    if len(markercogs) == 0:
+        raise ValueError("No marker COGs provided")
+
+    for cog in markercogs:
+        fn = os.path.join(args.cogsdbdir, cog + ".phr")
+        if not os.path.exists(fn):
+            raise IOError(
+            "The database file {0} for the COG {1} does not exist".format(fn,cog))
+
+    # Get genes
+    sql_command = """SELECT gene_id,cog_id FROM {0}""".format(db.GenesTable)
+    data = db.retrieve_data(sql_command)
+
+    sql_command = """SELECT gene_id FROM {0}""".format(db.BlastResultsTable)
+    xxx = db.retrieve_data(sql_command)
+    genes_alread_blasted = set([row[0] for row in xxx])
+    db.close()
+
+    log.info("Running BLAST for %s marker COGS",len(markercogs))
+    n_batch_sequences = 100 # sequences to blast per batch
+    sequence_tuples = []
+    for gene_id,cog_id in data:
+        if cog_id in markercogs:
+            db.connect(args.fn_database)
+            sql_command = """SELECT sequence, gene_id FROM {0}
+                        WHERE gene_id="{1}" """.format(db.SequenceTable, gene_id)
+            records = db.retrieve_data(sql_command)
+            db.close()
+            if len(records) != 1:
+                # Report but do not raise, continue processing other genes
+                log.error("Problem with gene_id %s. There are no sequences is the database or "
+                "there are more than one", gene_id)
+                continue
+            blast_database = os.path.join(args.cogsdbdir, cog_id)
+            if records[0][1] not in genes_alread_blasted:
+                log.warning("skipped gene_id %s", records[0][1])
+                sequence_tuples.append((records[0][0], gene_id, blast_database))
+            if len(sequence_tuples) == n_batch_sequences:
+                batch_results = blast(sequence_tuples)
+                db.connect(args.fn_database)
+                db.store_blast_results(batch_results)
+                db.close()
+                sequence_tuples = []
+    # Final run
+    if len(sequence_tuples):
+        batch_results = blast(sequence_tuples)
+        batch_genes_ids = [tup[1] for tup in sequence_tuples]
+        db.connect(args.fn_database)
+        db.store_blast_results(batch_results)
+        db.close()
+
+
 if __name__ == "__main__":
 
     import argparse
