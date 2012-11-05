@@ -7,6 +7,10 @@ def run_jellyfish(fn_sequence, identifier, params=False):
     """ Runs the k-mer counting program Jellyfish
 
         @param params A dictionary of parameters for Jellyfish
+
+        ~/bioinformatics/jellyfish-1.1.6/bin/jellyfish count -o count -t 6 -m 3 -s 3G test/data/test_kmer_counting.fastaz
+
+        ~/bioinformatics/jellyfish-1.1.6/bin/jellyfish dump count_0 -o count.fasta
     """
     if len(sequence) == 0:
         raise ValueError("Empty sequence")

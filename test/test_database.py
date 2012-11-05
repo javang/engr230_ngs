@@ -3,8 +3,8 @@ import unittest
 import os
 import csv
 import utility
-import Binner.GeneParser as GeneParser
-import Binner.MetagenomeDatabase as MetagenomeDatabase
+import MetaBinner.GeneParser as GeneParser
+import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import sys
 import logging
 log = logging.getLogger("test_database")

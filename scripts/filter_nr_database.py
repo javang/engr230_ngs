@@ -3,7 +3,7 @@ import os
 import time
 import logging
 import csv
-import Binner.NRDatabaseFilter as NRDatabaseFilter
+import MetaBinner.NRDatabaseFilter as NRDatabaseFilter
 log = logging.getLogger("filter_nr_database")
 
 

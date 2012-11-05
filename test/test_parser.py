@@ -2,11 +2,11 @@
 import unittest
 import os
 import csv
-import Binner.GeneParser as GeneParser
+import MetaBinner.GeneParser as GeneParser
 import logging
 import sys
 import utility
-import Binner.definitions as defs
+import MetaBinner.definitions as defs
 import logging
 log = logging.getLogger("test_parser")
 

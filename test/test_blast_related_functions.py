@@ -3,8 +3,8 @@ import unittest
 import os
 import csv
 import utility
-import Binner.GeneParser as GeneParser
-import Binner.BLASTUtilities as BLASTUtilities
+import MetaBinner.GeneParser as GeneParser
+import MetaBinner.BLASTUtilities as BLASTUtilities
 import sys
 import logging
 import Bio.SeqIO as SeqIO

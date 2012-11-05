@@ -2,7 +2,7 @@
 import unittest
 import os
 import csv
-import Binner.NRDatabaseFilter as NRDatabaseFilter
+import MetaBinner.NRDatabaseFilter as NRDatabaseFilter
 import Bio.SeqIO as SeqIO
 import sys
 import utility

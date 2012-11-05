@@ -1,7 +1,7 @@
 
-import Binner.MetagenomeDatabase as MetagenomeDatabase
-import Binner.BLASTUtilities as BLASTUtilities
-import Binner.BiologyBasedRules as BiologyBasedRules
+import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
+import MetaBinner.BLASTUtilities as BLASTUtilities
+import MetaBinner.BiologyBasedRules as BiologyBasedRules
 import sys
 import os
 import time

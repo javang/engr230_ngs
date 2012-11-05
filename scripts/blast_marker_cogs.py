@@ -1,6 +1,6 @@
 
-import Binner.MetagenomeDatabase as MetagenomeDatabase
-import Binner.BLASTUtilities as BLASTUtilities
+import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
+import MetaBinner.BLASTUtilities as BLASTUtilities
 
 import sys
 import os

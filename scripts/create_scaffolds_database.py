@@ -1,5 +1,5 @@
 
-import Binner.MetagenomeDatabase as MetagenomeDatabase
+import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 
 import sys
 import os
