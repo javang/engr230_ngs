@@ -43,31 +43,13 @@ def do_blast(sequence, identifier, database="nr"):
     log.debug("Returning: %s",fn_output)
     return fn_output
 
-class BaseMultiprocess:
 
-    def __init__(self):
-        """
-            Starts a pool of workers
-        """
-        log.info("Starting pool of processes")
-        self.pool = mpr.Pool(self.get_default_number_of_processes())
-
-    def get_default_number_of_processes(self):
-        """
-            By default, the number of workers used is the number of processors
-            minus one. The last one is left alone so the machine does not freeze
-        """
-        prs = mpr.cpu_count()
-        prs_used = prs - 1
-        log.debug("Number of processors to use %s", prs_used)
-        return prs_used
-
-class BLASTMultiProcessing(BaseMultiprocess):
+class BLASTMultiProcessing:
     """
         Class for doing BLAST alignments in parallel using multiprocessing
     """
     def __init__(self):
-        BaseMultiprocess.__init__(self)
+        BaseMultiprocess.BaseMultiprocess.__init__(self)
         self.sequences = []
         self.identifiers = []
         self.databases = []
@@ -102,12 +84,14 @@ class BLASTMultiProcessing(BaseMultiprocess):
         """
         log.info("Running blast on a batch of %s sequences",self.get_number_of_sequences())
         results = []
+        pool = mpr.Pool(mpr.cpu_count()-1)
+
         for s, i, d in zip(self.sequences, self.identifiers, self.databases):
             log.debug("Sending blast for %s",i)
-            result = self.pool.apply_async(do_blast,args=(s, i, d))
+            result = pool.apply_async(do_blast,args=(s, i, d))
             results.append(result)
-        self.pool.close()
-        self.pool.join()
+        pool.close()
+        pool.join()
         fns_output = []
         for i, r in zip(self.identifiers,results):
             try:
@@ -132,12 +116,12 @@ class BLASTMultiProcessing(BaseMultiprocess):
         return self.failed_processes
 
 
-class BLASTMultiProcessingParser(BaseMultiprocess):
+class BLASTMultiProcessingParser(BaseMultiprocess.BaseMultiprocess):
     """
         Class for parsing the results of BLAST alignments in parallel using multiprocessing
     """
     def __init__(self):
-        BaseMultiprocess.__init__(self)
+        BaseMultiprocess.BaseMultiprocess.__init__(self)
         self.fn_inputs = []
         self.identifiers = []
         self.failed_processes = set()

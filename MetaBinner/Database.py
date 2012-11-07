@@ -99,6 +99,9 @@ class Database2:
         self.cursor.execute(sql_command)
         return self.cursor.fetchall()
 
+    def fetchone(self):
+        return self.cursor.fetchone()
+
     def update_data(self, table_name,
                     updated_fields,
                     updated_values,
