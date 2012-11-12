@@ -12,7 +12,7 @@ import GeneParser
 import BLASTUtilities
 log = logging.getLogger("MetagenomeDatabase")
 
-class MetagenomeDatabase(Database.Database2):
+class MetagenomeDatabase(Database.Database3):
     """
         Database to hold all the data related to a MetagenomeDatabase.
         Tables:
@@ -32,15 +32,20 @@ class MetagenomeDatabase(Database.Database2):
 
     BlastResultsTable = "BlastResults"
 
-    ScaffoldAssignmentsTable = "ScaffoldsAssignments"
-    ScaffoldAssignmentsFields = ["scaffold", "genus"]
-    ScaffoldAssignmentsTypes = [str, str]
-
+    ScaffoldsAssignmentsTable = "ScaffoldsAssignments"
+    ScaffoldAssignmentsFields = ["scaffold", "genus","bits"]
+    ScaffoldAssignmentsTypes = [str, str, float]
 
 
     ScaffoldsTable = "Scaffolds"
     ScaffoldsFields = ["scaffold_id", "scaffold", "sequence"]
     ScaffoldsTypes = [str, str, str]
+
+    ScaffoldKmerComparisonTable = "ScaffoldKmerComparison"
+    # Scaffold, Scaffold that matches best according to the kmers, and distance
+    # between the sequences according to the kmers.
+    ScaffoldKmerComparisonFields = ["scaffold", "ref_scaffold", "distance"]
+    ScaffoldKmerComparisonTypes = [str, str, float]
 
 
     protein_record_pattern = re.compile("([0-9]+)\s+(sg4i_[0-9]+)\s+(.*)\s+(\[.*\])")
@@ -52,7 +57,6 @@ class MetagenomeDatabase(Database.Database2):
             @param fn_markers Name of the file containing the marker genes.
             It is expected in the format provided by the IMG/M database
         """
-        self.check_if_is_connected()
         log.info("Create marker genes table ...")
         self.create_table(self.MarkersTable,self.MarkersFields,self.MarkersTypes)
         fhandle = open(fn_markers,"r")
@@ -66,7 +70,6 @@ class MetagenomeDatabase(Database.Database2):
             Creates the genes table and reads the genes from the file
             @param fn_genes File with the information for the Genes
         """
-        self.check_if_is_connected()
         log.info("Creating genes table ...")
         gene_record = GeneParser.GeneRecord()
         names = gene_record.fields_names
@@ -94,7 +97,6 @@ class MetagenomeDatabase(Database.Database2):
             annotated in the metagenome and stores each sequence together with
             its id
         """
-        self.check_if_is_connected()
         log.info("Creating table of protein sequences ...")
         self.create_table(self.SequenceTable,self.SequenceFields,
                                                         self.SequenceTypes)
@@ -126,7 +128,6 @@ class MetagenomeDatabase(Database.Database2):
             Creates the genes table and reads the genes from the file
             @param fn_genes File with the information for the Genes
         """
-        self.check_if_is_connected()
         res = BLASTUtilities.BLASTResult()
         log.info("Creating table to store BLAST results ...")
         fields = ["gene_id"] + res.fields_names
@@ -145,13 +146,19 @@ class MetagenomeDatabase(Database.Database2):
             data.append([gene_id] + r.get_formatted_for_db())
         self.store_data(self.BlastResultsTable, data)
 
+
+    def create_scaffold_kmer_comparison_table(self):
+        log.info("Creating the table with the kmer comparison between scaffolds")
+        self.create_table(self.ScaffoldKmerComparisonTable,
+                          self.ScaffoldKmerComparisonFields,
+                          self.ScaffoldKmerComparisonTypes)
+
     def create_scaffold_assignments_table(self):
         """ Creates the table to store the scaffold assigments
 
         """
-        self.check_if_is_connected()
         log.info("Creating table to store Scaffold genus assignments ...")
-        self.create_table(self.ScaffoldAssignmentsTable ,self.ScaffoldAssignmentsFields,
+        self.create_table(self.ScaffoldsAssignmentsTable ,self.ScaffoldAssignmentsFields,
                                                          self.ScaffoldAssignmentsTypes)
 
     def fill_scaffolds_table(self,fn_scaffolds, overwrite=True):
@@ -160,7 +167,6 @@ class MetagenomeDatabase(Database.Database2):
             @param fn_scaffolds A file in FASTA format with the sequences of
             all the Scaffolds
         """
-        self.check_if_is_connected()
         scaffold_record_pattern = re.compile("(.+?)\s+(.+?)\s+(.+)")
         tables_names = self.get_tables_names()
         log.info("Creating and filling table of scaffolds ...")
