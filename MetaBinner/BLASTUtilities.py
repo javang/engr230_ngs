@@ -237,7 +237,7 @@ class BLASTResult:
             (organism_name, evalue, bits) for the best hit
 
         """
-        result = [get_best_hit_name(titles_string)]
+        result = [self.get_best_hit_name(titles_string)]
         for iterable in args:
             result.append( iterable.split(self.delimiter)[0])
         return result

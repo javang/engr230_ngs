@@ -5,57 +5,29 @@ import MetaBinner.BiologyBasedRules as BiologyBasedRules
 import sys
 import os
 import time
+import operator
 import csv
 import logging
-log = logging.getLogger("assign genus to scaffolds")
+import MetaBinner.paranoid_log as paranoid_log
+log = logging.getLogger("assign_genus")
 
+def add_to_scaffold_dictionary(scaffolds_dict, scaffold, genus, bit_score):
+    """ Add values to the dictionary of scaffolds_dict
 
-def assign_genus_to_scaffoldsV1(args):
-    """ Assign genus to scaffolds in the database
-
-    The function:
-    1) Reads the genes in the database that belong to a given COG
-    2) Reads the BLAST results for them.
-    3) Assigns the best hit to the scaffold containing the gene
-
+        To handle multiple scaffold assignments, use a dictionary of scaffolds.
+        Each entry of the scaffold dictionary is in turn another dictionary to store the
+        bit score for different genera
+        @param scaffolds_dict dictionary of scaffolds to fill
+        @param scaffold A string with the name of scaffold. It is used as key
+        @param genus The genus assigned to the scaffold
+        @param bit_score The bit score of the BLAST assignment
     """
-    db = MetagenomeDatabase.MetagenomeDatabase()
-    db.connect(args.fn_database)
-    names = db.get_tables_names()
-    if not db.GenesTable in names:
-        raise ValueError("The database does not have a table of genes")
-    if not db.BlastResultsTable in names:
-        raise ValueError("The database does not have a table of BLAST results")
-
-    # Read file marker cogs
-    fhandle = open(args.fn_marker_cogs, "rU")
-    reader = csv.reader(fhandle, delimiter=" ")
-    marker_cogs = frozenset([row[0] for row in reader])
-    if len(marker_cogs) == 0:
-        raise ValueError("No marker COGs provided")
-
-    if db.ScaffoldAssignmentsTable in names:
-        db.drop_table(db.ScaffoldAssignmentsTable)
-    db.create_scaffold_assignments_table()
-
-    # read the genes and scaffolds for the cog
-    blast_result = BLASTUtilities.BLASTResult()
-    scaffolds_data =[]
-    for cog_id in marker_cogs:
-        sql_command = """SELECT {0}.gene_id,{0}.scaffold,{1}.titles
-                         FROM {0}
-                         INNER JOIN {1}
-                         WHERE {0}.cog_id="{2}" AND {0}.gene_id={1}.gene_id
-                      """.format(db.GenesTable,db.BlastResultsTable,cog_id)
-        data = db.retrieve_data(sql_command)
-        log.info("%s Genes retrieved for %s",len(data),cog_id)
-        # parse organisms
-        for row in data:
-            organism = blast_result.get_best_hit_name(row[2])
-            genus = organism.split(" ")[0]
-            scaffolds_data.append((row[1],genus))
-    db.store_data(db.ScaffoldAssignmentsTable,scaffolds_data)
-    db.close()
+    if scaffold not in scaffolds_dict:
+        scaffolds_dict[scaffold] = {genus:bit_score}
+    elif genus in scaffolds_dict[scaffold]:
+        scaffolds_dict[scaffold][genus] += bit_score # accumulate the bit score for the genus.
+    else:
+        scaffolds_dict[scaffold][genus] = bit_score
 
 
 def assign_genus_to_scaffolds(args):
@@ -63,12 +35,18 @@ def assign_genus_to_scaffolds(args):
 
     The function:
     1) Reads the genes in the database that belong to a given COG
-    2) Reads the BLAST results for them.
-    3) Recovers the best hit for the scaffold containing the gene (scaffold and bit_score)
+    2) Reads the BLAST results for each of the genes.
+    3) Recovers the best hit (genus and bit score) for the gene and
+    identifies the scaffold where the gene is located
+    4) Assigns the genus found in the hit to the scaffold.
 
+    Various scaffolds can have different assignments. To select one assignment,
+    1) sum the bit scores for the each of the genus assigned to a scaffold.
+    2) Chose the genus with the largest total bit score
+
+    Finally, store the assignments in the database
     """
-    db = MetagenomeDatabase.MetagenomeDatabase()
-    db.connect(args.fn_database)
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     names = db.get_tables_names()
     if not db.GenesTable in names:
         raise ValueError("The database does not have a table of genes")
@@ -82,28 +60,38 @@ def assign_genus_to_scaffolds(args):
     if len(marker_cogs) == 0:
         raise ValueError("No marker COGs provided")
 
-    if db.ScaffoldAssignmentsTable in names:
-        db.drop_table(db.ScaffoldAssignmentsTable)
+    if db.ScaffoldsAssignmentsTable in names:
+        db.drop_table(db.ScaffoldsAssignmentsTable)
     db.create_scaffold_assignments_table()
 
     # read the genes and scaffolds for the cog
     blast_result = BLASTUtilities.BLASTResult()
-    scaffolds_data =[]
+    scaffolds_dict = {}
+    lengths_dict = {}
     for cog_id in marker_cogs:
-        sql_command = """SELECT {0}.gene_id,{0}.scaffold,{1}.titles,{1}.bits,
+        sql_command = """SELECT {0}.gene_id,{0}.scaffold, {0}.dna_length,{1}.titles,{1}.bits
                          FROM {0}
                          INNER JOIN {1}
                          WHERE {0}.cog_id="{2}" AND {0}.gene_id={1}.gene_id
                       """.format(db.GenesTable,db.BlastResultsTable,cog_id)
-        data = db.retrieve_data(sql_command)
-        log.info("%s Genes retrieved for %s",len(data),cog_id)
-        # parse organisms
-        for r in data:
+        cursor = db.execute(sql_command)
+        r = cursor.fetchone()
+        while r:
+            sc = r["scaffold"]
             organism, bit_score = blast_result.get_best_hit(r["titles"],r["bits"])
             genus = organism.split(" ")[0]
-            scaffolds_data.append((r["scaffold"],genus, bit_score))
-    db.store_data(db.ScaffoldAssignmentsTable,scaffolds_data)
+            add_to_scaffold_dictionary(scaffolds_dict, sc, genus, float(bit_score))
+            lengths_dict[sc] = int(r["dna_length"])
+            r = cursor.fetchone()
+
+    # process the dictionary to get the assign the genus with the largest bit score
+    data = []
+    for scaffold in scaffolds_dict:
+        genus, bit_score = max(scaffolds_dict[scaffold].iteritems(), key=operator.itemgetter(1))
+        data.append((scaffold, genus, bit_score))
+    db.store_data(db.ScaffoldsAssignmentsTable,data)
     db.close()
+
 
 if __name__ == "__main__":
 
@@ -121,6 +109,8 @@ if __name__ == "__main__":
                     "This database needs to be created with teh create_database.py script")
     parser.add_argument("fn_marker_cogs",
                     help="File of COG ids that are going to be used as markers.")
+    parser.add_argument("fn_output",
+                    help="File with the final assignments of genus for each of the scaffolds")
     parser.add_argument("--log",
                     dest="log",
                     default = False,
@@ -130,5 +120,7 @@ if __name__ == "__main__":
         logging.basicConfig(filename=args.log, filemode="w")
     else:
         logging.basicConfig(stream=sys.stdout)
-    logging.root.setLevel(logging.DEBUG)
+    logging.root.setLevel(logging.INFO)
+#    logging.root.setLevel(paranoid_log.PARANOID)
     assign_genus_to_scaffolds(args)
+#    select_genus_for_scaffolds(args)

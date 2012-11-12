@@ -7,6 +7,8 @@ import logging
 log = logging.getLogger("Database")
 
 class Database3(sqlite.Connection):
+    """ Class to manage a SQL database built with sqlite3 """
+
     name_to_type = {'INT':int, 'DOUBLE':float, 'VARCHAR(10)':str}
     type_to_name = {int:'INT', float:'DOUBLE', str:'VARCHAR(10)'}
 
@@ -22,24 +24,20 @@ class Database3(sqlite.Connection):
         self.row_factory = sqlite.Row
 
     def drop_table(self, table_name):
-        """
-            Delete a table if it exists
-        """
+        """ Delete a table if it exists """
         self.execute("DROP TABLE IF EXISTS %s" % (table_name))
         self.commit()
 
     def retrieve_data(self,sql_command):
         """ Retrieves data from the database using the sql_command
         returns the records as a list of tuples"""
-        cursor = self.execute(sql_command)
-        return cursor.fetchall()
+        return self.execute(sql_command).fetchall()
 
     def get_tables_names(self):
         """ Return the name of all the tables in the database """
         sql_command = """ SELECT tbl_name FROM sqlite_master """
         data = self.retrieve_data(sql_command)
-        names = frozenset([d[0] for d in data])
-        return names
+        return frozenset([d[0] for d in data])
 
     def create_table(self, table_name, column_names, column_types):
         """ Creates a table.
@@ -87,100 +85,62 @@ class Database3(sqlite.Connection):
         return [self.name_to_type[row[2]] for row in info]
 
 
+    def get_table_column_names(self, name):
+        """ Get the names of the columns for a given table
+            @param name The name of the  table
+        """
+        cursor = self.execute("PRAGMA table_info(%s)" % name)
+        return [ row[1] for row in cursor.fetchall()]
+
+    def add_column(self,table, column, data_type):
+        """ Add a column to a table
+            @param column - the name of the column.
+            @param data_type - the type: int, float, str
+        """
+        sql_command = "ALTER TABLE %s ADD %s %s" % (table, column, type_to_name[data_type])
+        self.execute(sql_command)
+
+    def add_columns(self, table, names, types, check=True):
+        """ Add columns to the database.
+
+            @param check If check=True, columns with names
+            already in the database are skipped. If check=False no check
+            is done and trying to add a column that already exists will
+            raise and exception
+        """
+        if check:
+            col_names = self.get_table_column_names(table)
+            for name, dtype in zip(names, types):
+                if name not in col_names:
+                    self.add_column(table, name, dtype)
+        else:
+            for name, dtype in zip(names, types):
+                self.add_column(table, name, dtype)
+
+
+
+    def drop_view(self,view_name):
+        """ Removes a view from the database """
+        self.execute('DROP VIEW %s' % view_name)
+
+
+    def drop_columns(self, table, columns):
+
+        cnames = self.get_table_column_names(table)
+        map(cnames.remove,columns)
+        names_txt = ", ".join(cnames)
+        sql_command = [
+        "CREATE TEMPORARY TABLE backup(%s);" % names_txt,
+        "INSERT INTO backup SELECT %s FROM %s" % (names_txt, table),
+        "DROP TABLE %s;" % table,
+        "CREATE TABLE %s(%s);" % (table, names_txt),
+        "INSERT INTO %s SELECT * FROM backup;" % table,
+        "DROP TABLE backup;",
+        ]
+        map(self.execute,sql_command)
+
+
 class Database2:
-    """ Class to manage a SQL database built with sqlite3 """
-
-    def __init__(self):
-        # Connection to the database
-        self.connection = None
-        # Cursor of actions
-        self.cursor = None
-        # Dictionary of tablenames and types (used to convert values when storing data)
-
-    def create(self,filename,overwrite=False):
-        """ Creates a database by simply connecting to the file """
-        log.info("Creating database")
-        if overwrite and os.path.exists(filename):
-            os.remove(filename)
-        sqlite.connect(filename)
-
-    def connect(self,filename):
-        """ Connects to the database in filename """
-        if not os.path.isfile(filename):
-            raise IOError,"Database file not found: %s" % filename
-        self.connection = sqlite.connect(filename)
-        self.cursor = self.connection.cursor()
-
-    def check_if_is_connected(self):
-        """ Checks if the class is connected to the database filename """
-        if self.connection == None:
-            raise ValueError,"The database has not been created " \
-            "or connection not established "
-
-    def create_table(self, table_name, column_names, column_types):
-        """ Creates a table.
-            @param table_name The name of the table_name
-            @param column_names List with the names of all the columns of the
-             table
-            @param column_type Type of all the values in the database. They
-            are python types.
-            Example: create_database("table",["number","string"],[int,str])
-        """
-        log.info("Creating table %s",table_name)
-        self.check_if_is_connected()
-        sql_command = "CREATE TABLE %s (" % (table_name)
-        for name, data_type in zip(column_names, column_types):
-            sql_typename = get_sql_type_name(data_type)
-            sql_command += "%s %s," % (name, sql_typename)
-        # replace last comma for a parenthesis
-        n = len(sql_command)
-        sql_command = sql_command[0:n-1] + ")"
-        log.debug(sql_command)
-        self.cursor.execute(sql_command)
-        self.connection.commit()
-
-    def drop_table(self, table_name):
-        """
-            Delete a table if it exists
-        """
-        log.info("Deleting table %s",table_name)
-        self.check_if_is_connected()
-        sql_command = "DROP TABLE IF EXISTS %s" % (table_name)
-        log.debug(sql_command)
-        self.cursor.execute(sql_command)
-        self.connection.commit()
-
-    def store_data(self,table_name,data):
-        """ Inserts information in a given table of the database.
-        The info must be a list of tuples containing as many values
-        as columns in the table
-            Conversion of values is done AUTOMATICALLY after checking the
-            types stored in the table
-        """
-        if len(data) == 0:
-            log.warning("Inserting empty data")
-            return
-        self.check_if_is_connected()
-        n = len(data[0]) # number of columns for each row inserted
-        tuple_format="("+"?,"*(n-1)+"?)"
-        sql_command="INSERT INTO %s VALUES %s " % (table_name, tuple_format)
-        # Fill the table with the info in the tuples
-        types = self.get_table_types(table_name)
-#        log.debug("Storing types: %s", types)
-        for i in xrange(len(data)):
-            data[i] = [apply_type(d) for d,apply_type in zip(data[i], types)]
-        self.cursor.executemany(sql_command, data)
-        self.connection.commit()
-
-    def retrieve_data(self,sql_command):
-        """ Retrieves data from the database using the sql_command
-        returns the records as a list of tuples"""
-        self.check_if_is_connected()
-        self.cursor.execute(sql_command)
-        return self.cursor.fetchall()
-
-    def fetchone(self):
-        return self.cursor.fetchone()
 
     def update_data(self, table_name,
                     updated_fields,
@@ -227,9 +187,6 @@ class Database2:
         log.info("Creating view %s", sql_command)
         self.cursor.execute(sql_command)
 
-    def drop_view(self,view_name):
-        """ Removes a view from the database """
-        self.cursor.execute('DROP VIEW %s' % view_name)
 
     def get_table(self, table_name, fields=False, orderby=False):
         """ Returns th fields requested from the table """
@@ -245,11 +202,6 @@ class Database2:
             return field_delim.join(fields)
         return "*"
 
-    def close(self):
-        """ Closes the database """
-        self.check_if_is_connected()
-        self.cursor.close()
-        self.connection.close()
 
     def get_condition_string(self, fields, values):
         """ creates a condition applying each value to each field
@@ -261,72 +213,6 @@ class Database2:
         n = len(s)
         s = s[0:n-5]
         return s
-
-    def get_table_types(self, name):
-        """
-            Gets info about a table and retuns all the types in it
-        """
-        self.check_if_is_connected()
-        sql_command = "PRAGMA table_info(%s)" % name
-        self.cursor.execute(sql_command)
-        info = self.cursor.fetchall()
-        types = []
-        for row in info:
-            if row[2] == "INT":
-                types.append(int)
-            elif row[2] == "DOUBLE":
-                types.append(float)
-            elif row[2][0:7] == "VARCHAR":
-                types.append(str)
-        return types
-
-    def get_table_column_names(self, name):
-        """
-            Get the names of the columns for a given table
-        """
-        self.check_if_is_connected()
-        sql_command = "PRAGMA table_info(%s)" % name
-        self.cursor.execute(sql_command)
-        info = self.cursor.fetchall()
-        return [ row[1] for row in info]
-
-    def execute_sql_command(self, sql_command):
-        self.check_if_is_connected()
-        self.cursor.execute(sql_command)
-        self.connection.commit()
-
-
-    def add_column(self,table,column, data_type):
-        """
-            Add a column to a table
-            column - the name of the column.
-            data_type - the type: int, float, str
-        """
-        sql_typename = get_sql_type_name(data_type)
-        sql_command = "ALTER TABLE %s ADD %s %s" % (table, column, sql_typename)
-        self.execute_sql_command(sql_command)
-
-    def add_columns(self, table, names, types, check=True):
-        """
-            Add columns to the database. If check=True, columns with names
-            already in the database are skipped. If check=False no check
-            is done and trying to add a column that already exists will
-            raise and exception
-        """
-        col_names = self.get_table_column_names(table)
-        if check:
-            for name, dtype in zip(names, types):
-                if name not in col_names:
-                    self.add_column(table, name, dtype)
-        else:
-            for name, dtype in zip(names, types):
-                self.add_column(table, name, dtype)
-
-    def get_tables_names(self):
-        sql_command = """ SELECT tbl_name FROM sqlite_master """
-        data = self.retrieve_data(sql_command)
-        names = set([d[0] for d in data])
-        return names
 
 
     def select_table(self):
@@ -347,24 +233,7 @@ class Database2:
         return table_name, columns
 
 
-    def drop_columns(self, table, columns):
 
-        cnames = self.get_table_column_names(table)
-        for name in columns:
-            cnames.remove(name)
-        names_txt = ", ".join(cnames)
-        sql_command = [
-        "CREATE TEMPORARY TABLE backup(%s);" % names_txt,
-        "INSERT INTO backup SELECT %s FROM %s" % (names_txt, table),
-        "DROP TABLE %s;" % table,
-        "CREATE TABLE %s(%s);" % (table, names_txt),
-        "INSERT INTO %s SELECT * FROM backup;" % table,
-        "DROP TABLE backup;",
-        ]
-        for command in sql_command:
-            log.debug(command)
-            print command
-            self.cursor.execute(command)
 
 def print_data(data, delimiter=" "):
     """ Prints the data recovered from a database """
@@ -376,25 +245,11 @@ def write_data(data,output_file,delimiter=" "):
     """writes data to a file. The output file is expected to be a python
     file object """
     w = csv.writer(output_file, delimiter=delimiter)
-    for row in data:
-        w.writerow(row)
+    map(w.writerow, data)
 
-def get_sql_type_name(data_type):
-    if(data_type == int):
-        return "INT"
-    elif(data_type == float):
-        return "DOUBLE"
-    elif(data_type == str):
-        return "VARCHAR(10)" # 10 is a random number, SQLITE does not chop strings
-
-def open(fn_database):
-    db = Database2()
-    db.connect(fn_database)
-    return db
 
 def read_data(fn_database, sql_command):
-    db = Database2()
-    db.connect(fn_database)
+    db = Database3(fn_database)
     data = db.retrieve_data(sql_command)
     db.close()
     return data
@@ -412,21 +267,17 @@ def merge_databases(fns, fn_output, tbl):
        Makes sure to reorder all column names if neccesary before merging
     """
     # Get names and types of the columns from first database file
-    db = Database2()
-    db.connect(fns[0])
+    db = Database3(fns[0])
     names = db.get_table_column_names(tbl)
     types = db.get_table_types(tbl)
     indices = get_sorting_indices(names)
     sorted_names = [ names[i] for i in indices]
     sorted_types = [ types[i] for i in indices]
     log.info("Merging databases. Saving to %s", fn_output)
-    out_db = Database2()
-    out_db.create(fn_output, overwrite=True)
-    out_db.connect(fn_output)
+    out_db = Database3(fn_output, overwrite=True)
     out_db.create_table(tbl, sorted_names, sorted_types)
     for fn in fns:
         log.debug("Reading %s",fn)
-        db.connect(fn)
         names = db.get_table_column_names(tbl)
         names.sort()
         they_are_sorted = ",".join(names)
