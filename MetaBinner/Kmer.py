@@ -61,7 +61,6 @@ class KmerCounter:
         """
         self.IM = np.zeros((self.alphabet_size, self.k),dtype=float)
         p = np.array([self.alphabet_size**i for i in range(self.k)]) # powers
-        log.debug("Powers %s",p)
         for i,j in itertools.product(range(self.alphabet_size), range(len(p))):
             self.IM[i][j] = i * p[j]
         self.spectrum_length = len(self.alphabet)**self.k
@@ -95,7 +94,7 @@ class KmerCounter:
                 if letter not in self.LetterToNumber:
                     count = False
                     break # Ignore the kmer if an unknown character appears
-                log.paranoid("(i,j) = (%s,%s) i+j %s k-j %s",i,j,i+j,k-j)
+                #log.paranoid("(i,j) = (%s,%s) i+j %s k-j %s",i,j,i+j,k-j)
                 index += self.IM[ self.LetterToNumber[sequence[i + j]] ][k - j - 1]
             if count:
                 kmers_count[index] += 1
@@ -103,14 +102,13 @@ class KmerCounter:
 
 
 
-class KmerComparer(BaseMultiprocess.BaseMultiprocess):
+class KmerComparer:
     """ Class to compare a set of sequences to a reference set of sequences based on
         k-mer comparison
 
     """
 
     def __init__(self):
-        BaseMultiprocess.BaseMultiprocess.__init__(self)
         self.sequences = []
         self.identifiers = []
         self.databases = []
@@ -162,11 +160,13 @@ class KmerComparer(BaseMultiprocess.BaseMultiprocess):
         pool.join()
         for r, i in zip(results, self.reference_identifiers):
             try:
+                log.debug("%s",r)
                 s = r.get()
                 self.reference_kmer_spectrums.append(s)
             except:
                 log.error("Problem calculating spectrum of reference sequence %s",i)
                 self.failed_processes.add(i)
+                raise
         self.ref_spectrums_done = True
 
     def run(self):
@@ -192,8 +192,8 @@ class KmerComparer(BaseMultiprocess.BaseMultiprocess):
         best_matches = []
         for r, i in zip(results, self.identifiers):
             try:
-                most_similar_id = r.get()
-                best_matches.apppend((i, most_similar_id))
+                most_similar_id, distance = r.get()
+                best_matches.append((i, most_similar_id, distance))
             except:
                 log.error("Problem with sequence %s",i)
                 self.failed_processes.add(i)
@@ -202,6 +202,7 @@ class KmerComparer(BaseMultiprocess.BaseMultiprocess):
         self.sequences = []
         self.identifiers = []
         self.lengths = []
+        log.paranoid("Best matches %s",best_matches)
         return best_matches
 
 
@@ -238,7 +239,8 @@ def compare_kmers(seq, ref_spectrums, identifiers, lenghts, k):
         if d < minimum_distance:
             best_match = i
             minimum_distance = d
-    return best_match
+    log.debug("Returning best match %s",best_match)
+    return best_match, minimum_distance
 
 
 
@@ -254,5 +256,5 @@ def Edgar_kmer_distance(kmer_spectrum1, length1, kmer_spectrum2, length2, k):
     """
     L = min(length1, length2) - k + 1
     F = 1.0 * np.minimum(kmer_spectrum1, kmer_spectrum2).sum()
-    distance = np.log(0.1 + F/L)
+    distance = np.log10(0.1 + F/L)
     return distance
