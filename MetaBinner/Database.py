@@ -6,6 +6,86 @@ import logging
 
 log = logging.getLogger("Database")
 
+class Database3(sqlite.Connection):
+    name_to_type = {'INT':int, 'DOUBLE':float, 'VARCHAR(10)':str}
+    type_to_name = {int:'INT', float:'DOUBLE', str:'VARCHAR(10)'}
+
+    def __init__(self, fn_database, overwrite=False):
+        """ Creates a database by simply connecting to the file
+
+            @param overwrite If true, the database is deleted and created again
+        """
+        if overwrite and os.path.exists(fn_database):
+            log.info("Creating database")
+            os.remove(fn_database)
+        sqlite.Connection.__init__(self, fn_database)
+        self.row_factory = sqlite.Row
+
+    def drop_table(self, table_name):
+        """
+            Delete a table if it exists
+        """
+        self.execute("DROP TABLE IF EXISTS %s" % (table_name))
+        self.commit()
+
+    def retrieve_data(self,sql_command):
+        """ Retrieves data from the database using the sql_command
+        returns the records as a list of tuples"""
+        cursor = self.execute(sql_command)
+        return cursor.fetchall()
+
+    def get_tables_names(self):
+        """ Return the name of all the tables in the database """
+        sql_command = """ SELECT tbl_name FROM sqlite_master """
+        data = self.retrieve_data(sql_command)
+        names = frozenset([d[0] for d in data])
+        return names
+
+    def create_table(self, table_name, column_names, column_types):
+        """ Creates a table.
+            @param table_name The name of the table_name
+            @param column_names List with the names of all the columns of the
+             table
+            @param column_type Type of all the values in the database. They
+            are python types.
+            Example: create_database("table",["number","string"],[int,str])
+        """
+        log.info("Creating table %s",table_name)
+        sql_command = "CREATE TABLE %s (" % (table_name)
+        for name, data_type in zip(column_names, column_types):
+            sql_command += "{0} {1},".format(name, self.type_to_name[data_type])
+        # replace last comma for a parenthesis
+        self.execute(sql_command[0:-1] + ")")
+        self.commit()
+
+    def store_data(self,table_name,data):
+        """ Inserts information in a given table of the database.
+        The info must be a list of tuples containing as many values
+        as columns in the table
+            Conversion of values is done AUTOMATICALLY after checking the
+            types stored in the table
+        """
+        if len(data) == 0:
+            log.warning("Inserting empty data")
+            return
+        n = len(data[0]) # number of columns for each row inserted
+        tuple_format="("+"?,"*(n-1)+"?)"
+        sql_command="INSERT INTO %s VALUES %s " % (table_name, tuple_format)
+        # Fill the table with the info in the tuples
+        types = self.get_table_types(table_name)
+#        log.debug("Storing types: %s", types)
+        for i in xrange(len(data)):
+            data[i] = [apply_type(d) for d,apply_type in zip(data[i], types)]
+        self.executemany(sql_command, data)
+        self.commit()
+
+    def get_table_types(self, name):
+        """ Retuns all the types in a table
+        """
+        sql_command = "PRAGMA table_info(%s)" % name
+        info = self.execute(sql_command).fetchall()
+        return [self.name_to_type[row[2]] for row in info]
+
 
 class Database2:
     """ Class to manage a SQL database built with sqlite3 """
@@ -245,7 +325,7 @@ class Database2:
     def get_tables_names(self):
         sql_command = """ SELECT tbl_name FROM sqlite_master """
         data = self.retrieve_data(sql_command)
-        names = [d[0] for d in data]
+        names = set([d[0] for d in data])
         return names
 
 
