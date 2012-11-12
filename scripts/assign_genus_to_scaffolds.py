@@ -10,7 +10,7 @@ import logging
 log = logging.getLogger("assign genus to scaffolds")
 
 
-def assign_genus_to_scaffolds(args):
+def assign_genus_to_scaffoldsV1(args):
     """ Assign genus to scaffolds in the database
 
     The function:
@@ -57,6 +57,53 @@ def assign_genus_to_scaffolds(args):
     db.store_data(db.ScaffoldAssignmentsTable,scaffolds_data)
     db.close()
 
+
+def assign_genus_to_scaffolds(args):
+    """ Assign genus to scaffolds in the database
+
+    The function:
+    1) Reads the genes in the database that belong to a given COG
+    2) Reads the BLAST results for them.
+    3) Recovers the best hit for the scaffold containing the gene (scaffold and bit_score)
+
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase()
+    db.connect(args.fn_database)
+    names = db.get_tables_names()
+    if not db.GenesTable in names:
+        raise ValueError("The database does not have a table of genes")
+    if not db.BlastResultsTable in names:
+        raise ValueError("The database does not have a table of BLAST results")
+
+    # Read file marker cogs
+    fhandle = open(args.fn_marker_cogs, "rU")
+    reader = csv.reader(fhandle, delimiter=" ")
+    marker_cogs = frozenset([row[0] for row in reader])
+    if len(marker_cogs) == 0:
+        raise ValueError("No marker COGs provided")
+
+    if db.ScaffoldAssignmentsTable in names:
+        db.drop_table(db.ScaffoldAssignmentsTable)
+    db.create_scaffold_assignments_table()
+
+    # read the genes and scaffolds for the cog
+    blast_result = BLASTUtilities.BLASTResult()
+    scaffolds_data =[]
+    for cog_id in marker_cogs:
+        sql_command = """SELECT {0}.gene_id,{0}.scaffold,{1}.titles,{1}.bits,
+                         FROM {0}
+                         INNER JOIN {1}
+                         WHERE {0}.cog_id="{2}" AND {0}.gene_id={1}.gene_id
+                      """.format(db.GenesTable,db.BlastResultsTable,cog_id)
+        data = db.retrieve_data(sql_command)
+        log.info("%s Genes retrieved for %s",len(data),cog_id)
+        # parse organisms
+        for r in data:
+            organism, bit_score = blast_result.get_best_hit(r["titles"],r["bits"])
+            genus = organism.split(" ")[0]
+            scaffolds_data.append((r["scaffold"],genus, bit_score))
+    db.store_data(db.ScaffoldAssignmentsTable,scaffolds_data)
+    db.close()
 
 if __name__ == "__main__":
 

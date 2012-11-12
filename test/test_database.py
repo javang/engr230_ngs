@@ -20,10 +20,8 @@ class TestMetagenomeDatabase(unittest.TestCase):
     def test_database(self):
         """ Test the creation of the database for the metagenome """
         log.debug("Test creating a database with the metagenome data")
-        db = MetagenomeDatabase.MetagenomeDatabase()
         fn_database = os.path.join(self.datadir,"tmp_database.db")
-        db.create(fn_database, overwrite=True)
-        db.connect(fn_database)
+        db = MetagenomeDatabase.MetagenomeDatabase(fn_database,overwrite=True)
         # test the phylogenetic markers table
         fn_markers = os.path.join(self.datadir, "2061766001_marker_cogs.csv")
         db.create_markers_table(fn_markers)
