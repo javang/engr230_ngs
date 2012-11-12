@@ -12,6 +12,20 @@ import re
 import logging
 log = logging.getLogger("MultiProcessingBAST")
 
+def write_fasta_file(identifier, sequence, fn):
+    """ Write a simple file for a sequence with the identifier as header
+        @param identifier The A string with text for the header
+        @param sequence A string with the sequence
+        @param fn Name of the file to write
+        @
+    """
+    fn = "{0}.fasta".format(identifier)
+    fhandle = open(fn, "w")
+    fhandle.write(">" + identifier + "\n" + sequence + "\n")
+    fhandle.close()
+    return fn
+
+
 def do_blast(sequence, identifier, database="nr"):
     """
         Do a BLAST run
@@ -23,10 +37,8 @@ def do_blast(sequence, identifier, database="nr"):
     if len(sequence) == 0:
         raise ValueError("Empty sequence")
     fn = "{0}.fasta".format(identifier)
+    write_fasta_file(identifier, sequence, fn)
     fn_output = "{0}.xml".format(identifier)
-    fhandle = open(fn, "w")
-    fhandle.write(">" + identifier + "\n" + sequence + "\n")
-    fhandle.close()
     p = NcbiblastpCommandline(query=fn, db=database, evalue=0.001,outfmt=5, out=fn_output)
     command = str(p)
     log.debug("running BLAST: %s", command)
@@ -49,7 +61,6 @@ class BLASTMultiProcessing:
         Class for doing BLAST alignments in parallel using multiprocessing
     """
     def __init__(self):
-        BaseMultiprocess.BaseMultiprocess.__init__(self)
         self.sequences = []
         self.identifiers = []
         self.databases = []
@@ -101,6 +112,7 @@ class BLASTMultiProcessing:
             except:
                 log.error("Problem with sequence %s",i)
                 self.failed_processes.add(i)
+                raise
         # Empty the lists
         self.sequences = []
         self.identifiers = []
@@ -116,12 +128,11 @@ class BLASTMultiProcessing:
         return self.failed_processes
 
 
-class BLASTMultiProcessingParser(BaseMultiprocess.BaseMultiprocess):
+class BLASTMultiProcessingParser:
     """
         Class for parsing the results of BLAST alignments in parallel using multiprocessing
     """
     def __init__(self):
-        BaseMultiprocess.BaseMultiprocess.__init__(self)
         self.fn_inputs = []
         self.identifiers = []
         self.failed_processes = set()
@@ -139,12 +150,13 @@ class BLASTMultiProcessingParser(BaseMultiprocess.BaseMultiprocess):
         """
             Runs all the parsing jobs
         """
+        pool = mpr.Pool(mpr.cpu_count()-1)
         handles = []
         for i, fn in zip(self.identifiers, self.fn_inputs):
-            handle = self.pool.apply_async(parse_blast,args=(fn,))
+            handle = pool.apply_async(parse_blast,args=(fn,))
             handles.append(handle)
-        self.pool.close()
-        self.pool.join()
+        pool.close()
+        pool.join()
         results = []
         for i, r in zip(self.identifiers,handles):
             try:
@@ -210,6 +222,25 @@ class BLASTResult:
         bs = self.delimiter.join(map(str,self.bits))
         record = [self.delimiter.join(self.titles),es,sc,bs]
         return record
+
+    def get_best_hit(self,titles_string, *args):
+        """ Recover the scientific name and value for the best hit
+
+            The format must be format obtained from get_formatted_for_database()
+            @param titles_string A string with the descriptions (in FASTA format) of
+            the best hits of a BLAST search.
+            @param *args Each of the args is expected to we an iterable with values. There
+            can be more than one iterable. For example the evalues and bits.
+
+            @return The scientific name of the organism, and one value per iterable.
+            For example get_best_hit(titles, evalues, bits) will return:
+            (organism_name, evalue, bits) for the best hit
+
+        """
+        result = [get_best_hit_name(titles_string)]
+        for iterable in args:
+            result.append( iterable.split(self.delimiter)[0])
+        return result
 
     def get_best_hit_name(self,titles_string):
         """ Recover the scientific name of the organism that is the first hit
