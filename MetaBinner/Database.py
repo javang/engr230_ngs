@@ -97,7 +97,7 @@ class Database3(sqlite.Connection):
             @param column - the name of the column.
             @param data_type - the type: int, float, str
         """
-        sql_command = "ALTER TABLE %s ADD %s %s" % (table, column, type_to_name[data_type])
+        sql_command = "ALTER TABLE %s ADD %s %s" % (table, column, self.type_to_name[data_type])
         self.execute(sql_command)
 
     def add_columns(self, table, names, types, check=True):
@@ -140,8 +140,6 @@ class Database3(sqlite.Connection):
         map(self.execute,sql_command)
 
 
-class Database2:
-
     def update_data(self, table_name,
                     updated_fields,
                     updated_values,
@@ -150,32 +148,41 @@ class Database2:
         """ updates the register in the table identified by the condition
             values for the condition fields
         """
-        self.check_if_is_connected()
-        sql_command = "UPDATE %s SET " % (table_name)
-        for field, value in zip(updated_fields, updated_values):
-            sql_command += "%s=%s," % (field, value)
-        sql_command = sql_command.rstrip(",") + " WHERE "
-        s = self.get_condition_string(condition_fields, condition_values)
-        sql_command = sql_command + s
-        #print sql_command
+        s = ["{0}={1}".format(f, v) for f,v in zip(updated_fields, updated_values)]
+        update_str = ",".join(s)
+        s = ["{0}={1}".format(f, v) for f,v in zip(condition_fields, condition_values)]
+        condition_str = " AND ".join(s)
+        sql_command = """ UPDATE {0}
+                          SET {1}
+                          WHERE {2}
+                      """.format(table_name, update_str, condition_str)
         log.debug("Updating %s: %s",table_name, sql_command)
-        self.cursor.execute(sql_command)
-        self.connection.commit()
+        self.execute(sql_command)
+        self.commit()
+
+
+
 
     def create_view(self,view_name,table_name,
                                 condition_fields, condition_values):
         """ creates a view of the given table where the values are selected
             using the condition values. See the help for update_data()
         """
-        try: # if this fails is because the view already exist
+        try: # if this fails is because the view does not exist
            self.drop_view(view_name)
         except:
             pass
-        sql_command = 'CREATE VIEW %s AS SELECT * FROM %s WHERE ' % (view_name, table_name)
-        condition = self.get_condition_string(condition_fields, condition_values)
-        sql_command += condition
+        s = ["{0}={1}".format(f, v) for f,v in zip(condition_fields, condition_values)]
+        condition_str = " AND ".join(s)
+        sql_command = """ CREATE VIEW {0}
+                          AS SELECT * FROM {1}
+                          WHERE {2} """.format(view_name, table_name, condition_str)
         log.info("Creating view %s", sql_command)
-        self.cursor.execute(sql_command)
+        self.execute(sql_command)
+
+
+class Database2:
+
 
     def create_view_of_best_records(self, view_name, table_name, orderby, n_records):
         try: # if this fails is because the view already exist
@@ -202,17 +209,6 @@ class Database2:
             return field_delim.join(fields)
         return "*"
 
-
-    def get_condition_string(self, fields, values):
-        """ creates a condition applying each value to each field
-        """
-        s = ""
-        for field,value in zip(fields,values):
-            s += "%s=%s AND " % (field, value)
-        # remove last AND
-        n = len(s)
-        s = s[0:n-5]
-        return s
 
 
     def select_table(self):

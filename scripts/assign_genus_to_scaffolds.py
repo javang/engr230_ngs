@@ -52,7 +52,8 @@ def assign_genus_to_scaffolds(args):
         raise ValueError("The database does not have a table of genes")
     if not db.BlastResultsTable in names:
         raise ValueError("The database does not have a table of BLAST results")
-
+    print names
+    quit()
     # Read file marker cogs
     fhandle = open(args.fn_marker_cogs, "rU")
     reader = csv.reader(fhandle, delimiter=" ")
@@ -64,11 +65,10 @@ def assign_genus_to_scaffolds(args):
         db.drop_table(db.ScaffoldsAssignmentsTable)
     db.create_scaffold_assignments_table()
 
-    # read the genes and scaffolds for the cog
     blast_result = BLASTUtilities.BLASTResult()
     scaffolds_dict = {}
-    lengths_dict = {}
     for cog_id in marker_cogs:
+        # read the genes and scaffolds for the cog
         sql_command = """SELECT {0}.gene_id,{0}.scaffold, {0}.dna_length,{1}.titles,{1}.bits
                          FROM {0}
                          INNER JOIN {1}
@@ -81,10 +81,9 @@ def assign_genus_to_scaffolds(args):
             organism, bit_score = blast_result.get_best_hit(r["titles"],r["bits"])
             genus = organism.split(" ")[0]
             add_to_scaffold_dictionary(scaffolds_dict, sc, genus, float(bit_score))
-            lengths_dict[sc] = int(r["dna_length"])
             r = cursor.fetchone()
 
-    # process the dictionary to get the assign the genus with the largest bit score
+    # Assign the genus with the largest bit score
     data = []
     for scaffold in scaffolds_dict:
         genus, bit_score = max(scaffolds_dict[scaffold].iteritems(), key=operator.itemgetter(1))

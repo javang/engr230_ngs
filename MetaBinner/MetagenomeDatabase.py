@@ -16,15 +16,12 @@ class MetagenomeDatabase(Database.Database3):
     """
         Database to hold all the data related to a MetagenomeDatabase.
         Tables:
-            Markers - Table of marker genes
-
             Genes - Genes annotated in the Metagenome
 
-            Proteins - Sequences of all the proteins in the Metagenome
+            Sequences - Sequences of all the proteins in the Metagenome
+            Scaffolds - Sequences of all the scaffolds in the Metagenome
+            BlastResults - Results of all blast searches
     """
-    MarkersTable = "Markers"
-    MarkersFields = ["cog_id", "cog_description","single_copy","n_genes"]
-    MarkersTypes = [str, str,str,int]
     GenesTable = "Genes"
     SequenceTable = "Sequences"
     SequenceFields = ["gene_id", "locus_tag", "description", "sequence"]
@@ -38,8 +35,8 @@ class MetagenomeDatabase(Database.Database3):
 
 
     ScaffoldsTable = "Scaffolds"
-    ScaffoldsFields = ["scaffold_id", "scaffold", "sequence"]
-    ScaffoldsTypes = [str, str, str]
+    ScaffoldsFields = ["scaffold_id", "scaffold", "sequence", "length", "CG"]
+    ScaffoldsTypes = [str, str, str, int, float]
 
     ScaffoldKmerComparisonTable = "ScaffoldKmerComparison"
     # Scaffold, Scaffold that matches best according to the kmers, and distance
@@ -50,20 +47,6 @@ class MetagenomeDatabase(Database.Database3):
 
     protein_record_pattern = re.compile("([0-9]+)\s+(sg4i_[0-9]+)\s+(.*)\s+(\[.*\])")
 
-    def create_markers_table(self, fn_markers):
-        """
-            Creates the markers table and reads the file of COGS containing
-            all the marker Genes
-            @param fn_markers Name of the file containing the marker genes.
-            It is expected in the format provided by the IMG/M database
-        """
-        log.info("Create marker genes table ...")
-        self.create_table(self.MarkersTable,self.MarkersFields,self.MarkersTypes)
-        fhandle = open(fn_markers,"r")
-        reader = csv.reader(fhandle, delimiter="\t")
-        reader.next()
-        data = [row for row in reader]
-        self.store_data(self.MarkersTable,data)
 
     def create_genes_table(self, fn_genes):
         """
@@ -172,8 +155,10 @@ class MetagenomeDatabase(Database.Database3):
         log.info("Creating and filling table of scaffolds ...")
         if overwrite and self.ScaffoldsTable in tables_names:
             self.drop_table(self.ScaffoldsTable)
+        if not self.ScaffoldsTable in tables_names:
             self.create_table(self.ScaffoldsTable ,
             self.ScaffoldsFields, self.ScaffoldsTypes)
+
         parser = SeqIO.parse(fn_scaffolds, "fasta")
         data = []
         n_stored = 0
@@ -185,7 +170,11 @@ class MetagenomeDatabase(Database.Database3):
                 raise ValueError("Problem reading description %s", description)
             scaffold_id = m.group(1)
             scaffold= m.group(2)
-            table_record = [scaffold_id,scaffold, seq_record.seq.tostring()]
+
+            s = seq_record.seq
+            length = len(s)
+            GC = 1.* (s.count("G") + s.count("C")) / length
+            table_record = [scaffold_id,scaffold, str(seq_record.seq), length, GC]
             data.append(table_record)
             # store batch of data
             if len(data) > batch_size:
@@ -198,7 +187,26 @@ class MetagenomeDatabase(Database.Database3):
             self.store_data(self.ScaffoldsTable, data)
 
 
+    def add_scaffold_coverage(self, fn):
+        """ Add the coverage values to the table containing the Scaffolds
 
-MarkerRecordTuple = collections.namedtuple("MarkerRecordTuple",MetagenomeDatabase.MarkersFields)
-SequenceRecordTuple = collections.namedtuple("SequenceRecordTuple",MetagenomeDatabase.SequenceFields)
-
+            @param fn file with the coverage information. It is expected to be a
+             csv file with the first column naming the scaffold and the second
+             one containing the coverage. The firs line of the file (the title) is discarded
+        """
+        tnames = self.get_tables_names()
+        if self.ScaffoldsTable not in tnames:
+            raise ValueError("Cannot add scaffold coverage. The table with the scaffolds does "\
+                "not exist")
+        cnames = self.get_table_column_names(self.ScaffoldsTable)
+        if not "coverage" in cnames:
+            self.add_column(self.ScaffoldsTable, "coverage",float)
+        log.debug("Adding the coverage column to the table %s",self.ScaffoldsTable)
+        fhandle = open(fn, "rU")
+        reader = csv.reader(fhandle, delimiter=",")
+        reader.next()
+        data = [(float(r[1]), "sg4i_" + r[0] ) for r in reader]
+        sql_command = """ UPDATE {0} SET coverage=? WHERE scaffold=? """.format(self.ScaffoldsTable)
+        self.executemany(sql_command, data)
+        self.commit()
+        fhandle.close()
