@@ -22,13 +22,6 @@ class TestMetagenomeDatabase(unittest.TestCase):
         log.debug("Test creating a database with the metagenome data")
         fn_database = os.path.join(self.datadir,"tmp_database.db")
         db = MetagenomeDatabase.MetagenomeDatabase(fn_database,overwrite=True)
-        # test the phylogenetic markers table
-        fn_markers = os.path.join(self.datadir, "2061766001_marker_cogs.csv")
-        db.create_markers_table(fn_markers)
-        sql_command = "SELECT * FROM {0}".format(db.MarkersTable)
-        cog_markers = db.retrieve_data(sql_command)
-        self.assertEqual(len(cog_markers),70)
-
         # test the gene table
         fn_genes = os.path.join(self.datadir, "gene_info_test_file.xls")
         db.create_genes_table(fn_genes)

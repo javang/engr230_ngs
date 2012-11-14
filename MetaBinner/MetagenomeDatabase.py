@@ -186,3 +186,27 @@ class MetagenomeDatabase(Database.Database3):
         if len(data) > 0:
             self.store_data(self.ScaffoldsTable, data)
 
+
+    def add_scaffold_coverage(self, fn):
+        """ Add the coverage values to the table containing the Scaffolds
+
+            @param fn file with the coverage information. It is expected to be a
+             csv file with the first column naming the scaffold and the second
+             one containing the coverage. The firs line of the file (the title) is discarded
+        """
+        tnames = self.get_tables_names()
+        if self.ScaffoldsTable not in tnames:
+            raise ValueError("Cannot add scaffold coverage. The table with the scaffolds does "\
+                "not exist")
+        cnames = self.get_table_column_names(self.ScaffoldsTable)
+        if not "coverage" in cnames:
+            self.add_column(self.ScaffoldsTable, "coverage",float)
+        log.debug("Adding the coverage column to the table %s",self.ScaffoldsTable)
+        fhandle = open(fn, "rU")
+        reader = csv.reader(fhandle, delimiter=",")
+        reader.next()
+        data = [(float(r[1]), "sg4i_" + r[0] ) for r in reader]
+        sql_command = """ UPDATE {0} SET coverage=? WHERE scaffold=? """.format(self.ScaffoldsTable)
+        self.executemany(sql_command, data)
+        self.commit()
+        fhandle.close()

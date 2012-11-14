@@ -15,6 +15,9 @@ def create_database(args):
         db.create_protein_sequences_table(args.fn_protein_sequences)
     if args.fn_scaffolds:
         db.fill_scaffolds_table(args.fn_scaffolds)
+    if args.fn_scaffold_coverage:
+        db.add_scaffold_coverage(args.fn_scaffold_coverage)
+
     db.close()
 
 if __name__ == "__main__":
@@ -34,6 +37,9 @@ if __name__ == "__main__":
                         dest="fn_protein_sequences",
                     help="File with the sequences of all proteins in the " \
                          "metagenome")
+    parser.add_argument("--scaff_cov",
+                        dest="fn_scaffold_coverage",
+                    help="File with information of the coverage for each of the scaffolds")
     parser.add_argument("fn_database",
                     help="Output file containing the database for the" \
                          "metagenome")
