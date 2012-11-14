@@ -20,8 +20,8 @@ class GeneRecord:
     fields_names = ["gene_id","locus_tag", "cog_id","cog_description", "cog_Evalue",
                 "scaffold", "pfam", "pfam_description", "pfam_Evalue",
                 "dna_length", "protein_length", "start", "end",
-                "strand"]
-    fields_types = [str,str,str,str,float,str,str,str,float,int,int,int,int,str]
+                "strand","gc"]
+    fields_types = [str,str,str,str,float,str,str,str,float,int,int,int,int,str,float]
 
     def set_default_values(self):
         """
@@ -39,7 +39,7 @@ class GeneRecord:
 
     def show(self, ):
         print self.gene_id, self.locus_tag, self.cog, self.cog_Evalue,self.start, \
-                self.end,self.strand,self.dna_length,self.protein_length
+                self.end,self.strand,self.dna_length,self.protein_length,self.gc
 
     def read(self, reader, first_fields):
         """
@@ -90,7 +90,14 @@ class GeneRecord:
                 self.end = int(m.group(2))
                 self.strand = m.group(3)
                 continue
+            if self.is_gc(fields):
+                log.debug("GC content: %s", fields[4])
+                self.gc = float(fields[4])
+                continue
+
+
     def sanity_check(self):
+        """ Check that the COG and scaffold have been parsed """
         if self.cog_id == defs.NULL_ST:
             log.warning("The gene %s does not have a COG annotation", self.gene_id)
         if not hasattr(self,"scaffold"):
@@ -115,7 +122,6 @@ class GeneRecord:
         log.debug("is scaffold %s",fields)
         if fields[2].lower() == "scaffold":
             return True
-        log.debug("** %s %s",self.gene_id, fields[2].lower())
         return False
 
     def is_coordinates(self, fields):
@@ -135,7 +141,7 @@ class GeneRecord:
 
     def is_protein_length(self, fields):
         """
-            Check if the fileds correspond
+            Check if the fields correspond
             @param
         """
         if fields[2].lower() == "protein_length":
@@ -143,6 +149,12 @@ class GeneRecord:
         return False
 
 
+    def is_gc(self, fields):
+        """ Check if the fields store the GC content information
+        """
+        if fields[2].lower() == "gc":
+            return True
+        return False
 
     def get_values(self):
         """
@@ -163,7 +175,8 @@ class GeneRecord:
                 self.protein_length,
                 self.start,
                 self.end,
-                self.strand
+                self.strand,
+                self.gc
                 ]
 
 GeneRecordTuple = collections.namedtuple("GeneRecordTuple",GeneRecord.fields_names)
