@@ -39,9 +39,12 @@ def go(args):
     cgs = [r["CG"] for r in data]
     lengths = [r["length"] for r in data]
     # read the assignments from ClaMS
-    assignments_dict = read_clams_results(args.clams_file)
-    scaffolds = [r["scaffold"] for r in data]
-    assignments = [assignments_dict[s][0] for s in scaffolds] # genus
+    if args.clams_file:
+        assignments_dict = read_clams_results(args.clams_file)
+        scaffolds = [r["scaffold"] for r in data]
+        assignments = [assignments_dict[s][0] for s in scaffolds] # genus
+    else:
+        assignments = None
     Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
 
 
@@ -56,8 +59,9 @@ if __name__ == "__main__":
     parser.add_argument("fn_database",
                     help="Datbabase formed by the files provided by the IMG/M for a metagenome. " \
                     "This database needs to be created with teh create_database.py script")
-    parser.add_argument("clams_file",
-                    help="Ouput file from ClaMS with the assignments for each contig.")
+    parser.add_argument("--clams_file",
+                    help="Ouput file from ClaMS with the assignments for each contig. If this file is "
+                    "not given, the plot will not have assignments")
     parser.add_argument("fn_plot",
                     help="Plot file")
     parser.add_argument("--log",
