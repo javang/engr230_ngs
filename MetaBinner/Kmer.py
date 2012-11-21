@@ -15,7 +15,6 @@ class KmerCounter:
 
     def __init__(self,k):
         """
-           @sequence string with the genomic sequence (A C G T)
            @param k Length of the kmers
         """
         self.k = k
@@ -78,7 +77,16 @@ class KmerCounter:
         tga = 320  M[3][2] + M[2][1] + M[0][0]
                      -         -         -
 
-        k-mers containing unknown letters (not in the alphabet are ignored
+        k-mers containing unknown letters (not in the alphabet) are ignored
+
+        The order of the possible kmers in the output spectrum is given by the
+        order in the alphabet. For example, for the ACGT alphabet and 2-mers
+        the order will be: AA AC AG AT CA CC CG ..... TG TT
+        For 3-mers:
+
+        AAA AAC AAG AAT ACA ACG ACT ... TTG TTT
+
+
         """
         k = self.k
         L = len(sequence)
