@@ -1,9 +1,10 @@
 
 import MetaBinner.Plots as Plots
 import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
+import MetaBinner.ClaMSUtilities as ClaMSUtilities
+
 import sys
 import os
-import re
 import time
 import operator
 import csv
@@ -13,15 +14,6 @@ import MetaBinner.paranoid_log as paranoid_log
 log = logging.getLogger("assign_genus")
 
 
-def read_clams_results(fn):
-    pattern = re.compile(".*?\:\s+(.*?)\s+(.*?)\s+([0-9\.]+)")
-    assignments = dict()
-    for line in open(fn):
-        m = re.match(pattern,line)
-        if m:
-            # store (genus, ClaMS distance) indexed by scaffold
-            assignments[m.group(1)] = (m.group(2), m.group(3))
-    return assignments
 
 
 def go(args):
@@ -31,21 +23,35 @@ def go(args):
                   """.format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
     db.close()
-    coverages = np.array([r["coverage"] for r in data])
-    cgs = np.array([r["CG"] for r in data])
-    lengths = np.array([r["length"] for r in data])
+#    coverages = np.array([r["coverage"] for r in data])
+#    cgs = np.array([r["CG"] for r in data])
+#    lengths = np.array([r["length"] for r in data])
 
-    coverages = [r["coverage"] for r in data]
-    cgs = [r["CG"] for r in data]
-    lengths = [r["length"] for r in data]
-    # read the assignments from ClaMS
-    if args.clams_file:
-        assignments_dict = read_clams_results(args.clams_file)
-        scaffolds = [r["scaffold"] for r in data]
-        assignments = [assignments_dict[s][0] for s in scaffolds] # genus
-    else:
+
+    if not args.clams_file:
+        coverages = [r["coverage"] for r in data]
+        cgs = [r["CG"] for r in data]
+        lengths = [r["length"] for r in data]
         assignments = None
-    Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
+        Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
+    else:
+        assignments_dict = ClaMSUtilities.read_clams_results(args.clams_file)
+        scaffolds = []
+        coverages = []
+        cgs = []
+        lengths = []
+        assignments = []
+        for r in data:
+            genus, clams_distance = assignments_dict[r["scaffold"]]
+            if genus == "uncultured":
+                continue
+            if clams_distance > args.clams_thr:
+                continue
+            coverages.append(r["coverage"])
+            cgs.append(r["CG"])
+            lengths.append(r["length"])
+            assignments.append(genus)
+        Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
 
 
 if __name__ == "__main__":
@@ -57,11 +63,16 @@ if __name__ == "__main__":
                     """)
 
     parser.add_argument("fn_database",
-                    help="Datbabase formed by the files provided by the IMG/M for a metagenome. " \
-                    "This database needs to be created with teh create_database.py script")
+                    help="Datbabase formed by the files provided by the IMG/M for a metagenome. ")
     parser.add_argument("--clams_file",
                     help="Ouput file from ClaMS with the assignments for each contig. If this file is "
                     "not given, the plot will not have assignments")
+
+    parser.add_argument("--clams_thr",
+                    default=0.05,
+                    help="Clams distance used as threshold for plotting. Scaffolds with distances " \
+                    "greater that this threshold will appear unasigned",
+                    )
     parser.add_argument("fn_plot",
                     help="Plot file")
     parser.add_argument("--log",
@@ -73,6 +84,6 @@ if __name__ == "__main__":
         logging.basicConfig(filename=args.log, filemode="w")
     else:
         logging.basicConfig(stream=sys.stdout)
-    logging.root.setLevel(logging.INFO)
+    logging.root.setLevel(logging.DEBUG)
 #    logging.root.setLevel(paranoid_log.PARANOID)
     go(args)

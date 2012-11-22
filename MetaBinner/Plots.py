@@ -45,7 +45,7 @@ def fig2(coverages, gc_contents, lengths, genuses, fn_output):
     total_pixels = dpi**2 * fig_height * fig_width
     scatter_scale = 1e-5 * total_pixels / max(lengths)
 
-    # if not assigned
+    # if there is no data for the assignments, plot the raw figure
     if not genuses:
         sizes = np.array(lengths) * scatter_scale
         sc = ax.scatter(coverages, gc_contents, s=sizes, c='gray',
@@ -82,10 +82,10 @@ def fig2(coverages, gc_contents, lengths, genuses, fn_output):
         labels.append(ug)
         scatter_plots.append(sc)
 
-    plt.figlegend(scatter_plots,labels,
-                  #bbox_to_anchor=(1.05, 1), # put slightly to the rigth of the plot
-                  loc="upper right",
-                  ncol=2,
-                  prop={"size":legend_fontsize})
+#    plt.figlegend(scatter_plots,labels,
+#                  #bbox_to_anchor=(1.05, 1), # put slightly to the rigth of the plot
+#                  loc="upper right",
+#                  ncol=2,
+#                  prop={"size":legend_fontsize})
     plt.savefig(fn_output,dpi=dpi)
 

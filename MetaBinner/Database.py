@@ -181,6 +181,14 @@ class Database3(sqlite.Connection):
         self.execute(sql_command)
 
 
+    def show(self):
+        """ Show the names of the tables and columns in the database in a friendly format
+        """
+        for t in self.get_tables_names():
+            print t
+            for c in self.get_table_column_names(t):
+                print "   |_ {0}".format(c)
+
 class Database2:
 
 

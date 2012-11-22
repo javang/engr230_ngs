@@ -17,7 +17,6 @@ def create_database(args):
         db.fill_scaffolds_table(args.fn_scaffolds)
     if args.fn_scaffold_coverage:
         db.add_scaffold_coverage(args.fn_scaffold_coverage)
-
     db.close()
 
 if __name__ == "__main__":
