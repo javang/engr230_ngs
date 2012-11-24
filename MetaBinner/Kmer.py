@@ -110,15 +110,24 @@ class KmerCounter:
                 kmers_count[index] += 1
         return kmers_count
 
+    def get_spectrum(self, sequence):
+        counts = self.count(sequence)
+        spectrum = 1.0 * counts / counts.sum()
+        return spectrum
+
 
 
 class KmerComparer:
     """ Class to compare a set of sequences to a reference set of sequences based on
         k-mer comparison
-
     """
 
-    def __init__(self):
+    def __init__(self, kcounter):
+        """ 
+            @param kcounter A KmerCounter. It will be used to calculate all the
+            kmer spectrums in this class
+        """
+            
         self.sequences = []
         self.identifiers = []
         self.databases = []
@@ -128,7 +137,11 @@ class KmerComparer:
         self.reference_lengths = []
         self.reference_kmer_spectrums = []
         self.reference_identifiers = []
-        self.ref_spectrums_done = False
+        self.reference_spectrums_done = False
+         
+        self.kcounter = kcounter
+        self.kmer_distance_threshold = -1 
+        self.fraction_threshold = 1
 
     def add_reference_sequence(self, sequence, identifier):
         """ Add a new sequence to the set of reference sequences
@@ -147,68 +160,98 @@ class KmerComparer:
                 aminoacids so far)
             @param identifier A identifier for the sequence. It must be unique.
         """
-        log.debug("Adding sequence to compare %s", identifier)
+        log.paranoid("Adding sequence to compare %s", identifier)
         self.sequences.append(sequence)
+
         self.identifiers.append(identifier)
 
     def get_number_of_sequences(self):
         return len(self.sequences)
 
-    def use_kmer_length(self,k):
-        self.k = k
+    def set_kmer_distance_threshold(self, dist):
+        """
+            distance threshold to consider that 2 spectrums are similar.
+            See the function select_kmer_distance() for the meaning of this value
+        """
+        log.info("Setting kmer distance threshold %s", dist)
+        self.kmer_distance_threshold = dist
+
+    def set_first_to_second_distance_ratio(self, fraction):
+        """
+            See the function select_kmer_distance() for the meaning of this value
+        """
+        log.info("Setting first-to-second kmer distance fraction %s", fraction)
+        self.fraction_threshold = fraction
+
 
     def compute_reference_spectrums(self):
-        """ Compute the spectrums of all reference sequences """
+        """
+            Calculate the kmer_spectrums for the reference sequences
+            @param    
+        """
+        
         log.info("Computing the spectrums of the reference sequences")
+        self.reference_spectrums = self.compute_spectrums(self.reference_sequences, self.reference_identifiers)        
+        self.reference_spectrums_done = True
+
+    def compute_spectrums(self, sequences, identifiers):
+        """ Compute the spectrums of sequences
+            @param sequences A list of sequences (They must have the same alphabet )        
+
+        """
+        log.info("Computing the kmer spectrum for %s sequences",len(sequences))
         results = []
         pool = mpr.Pool(mpr.cpu_count()-1)
-        kcounter = KmerCounter(self.k)
-        for seq in self.reference_sequences:
-            result = pool.apply_async(get_kmer_spectrum,args = (kcounter, seq))
+        for seq in sequences:
+            result = pool.apply_async(get_kmer_spectrum,args = (self.kcounter, seq))
             results.append(result)
         pool.close()
         pool.join()
-        for r, i in zip(results, self.reference_identifiers):
+        spectrums = []
+        for r, i in zip(results, identifiers):
             try:
-                log.debug("%s",r)
                 s = r.get()
-                self.reference_kmer_spectrums.append(s)
+                spectrums.append(s)
             except:
                 log.error("Problem calculating spectrum of reference sequence %s",i)
                 self.failed_processes.add(i)
                 raise
-        self.ref_spectrums_done = True
+        return spectrums
 
     def run(self):
         """
             The function sends a kmer-comparison task per sequence.
         """
-        if not self.ref_spectrums_done:
+        if not self.reference_spectrums_done:
             self.compute_reference_spectrums()
         log.info("Comparing kmers for the sequences of %s scaffolds",self.get_number_of_sequences())
         pool = mpr.Pool(mpr.cpu_count()-1)
 
         results = []
         for seq, i in zip(self.sequences, self.identifiers):
-            log.debug("Sending Kmer comparison for %s",i)
+            log.paranoid("Sending Kmer comparison for %s",i)
             result = pool.apply_async(compare_kmers, args = (seq,
-                                                self.reference_kmer_spectrums,
-                                                self.reference_identifiers,
-                                                self.reference_lengths,
-                                                self.k))
+                                                self.reference_spectrums,
+                                                self.kcounter))
             results.append(result)
         pool.close()
         pool.join()
         best_matches = []
         for r, i in zip(results, self.identifiers):
             try:
-                most_similar_id, distance = r.get()
-                best_matches.append((i, most_similar_id, distance))
+                kmer_distances = r.get()
+                log.paranoid("kmer_distances for %s: kmer_distances %s", i, kmer_distances)
+                index, distance = select_kmer_distance(kmer_distances, 
+                        self.kmer_distance_threshold, self.fraction_threshold)                
+                if index < 0:
+                    most_similar_identifier = False 
+                else:
+                    most_similar_identifier = self.reference_identifiers[index]
+                best_matches.append((i, most_similar_identifier, distance))
             except:
                 log.error("Problem with sequence %s",i)
                 self.failed_processes.add(i)
                 raise
-        # Empty the lists
         self.sequences = []
         self.identifiers = []
         self.lengths = []
@@ -218,42 +261,27 @@ class KmerComparer:
 
 def get_kmer_spectrum(kmer_counter, sequence):
     """ Simple function so I can send parallel jobs for calculating kmer spectrums """
-    return kmer_counter.count(sequence)
+    return kmer_counter.get_spectrum(sequence)
 
-def compare_kmers(seq, ref_spectrums, identifiers, lenghts, k):
+def compare_kmers(seq, reference_spectrums, kmer_counter):
     """ Compare the sequences with all the reference sequences
 
         Calculates the spectrum of the sequence and its distance to
         all the reference spectrums
 
         @param seq A Sequence
-        @param ref_spectrums kmer spectrums of a set of reference sequences
-        @param identifiers Identifiers of the reference Sequence
-        @param lenghts LEnghts of the reference sequences
-        @return The identifier of the reference sequence that is closest to
-        the input sequence
+        @param reference_spectrums kmer spectrums of a set of reference sequences
+        @return All the distances
     """
-    if len(ref_spectrums) == 0:
+    if len(reference_spectrums) == 0:
         raise ValueError("No reference spectrums provided")
-    if len(ref_spectrums) != len(identifiers):
-        raise ValueError("The number of reference spectrums does not match " \
-                "the number of identifiers")
-    if len(ref_spectrums) != len(lenghts):
-        raise ValueError("The number of reference spectrums does not match " \
-                "the number of lenghts")
-    kc = KmerCounter(k)
-    spectrum = kc.count(seq)
-    minimum_distance = 1e10
-    for s, i, l in zip(ref_spectrums, identifiers, lenghts):
-        d = Edgar_kmer_distance(spectrum, len(seq), s, l, k)
-        if d < minimum_distance:
-            best_match = i
-            minimum_distance = d
-    log.debug("Returning best match %s",best_match)
-    return best_match, minimum_distance
+    spectrum = kmer_counter.get_spectrum(seq)
+    kmer_distances = [L1_kmer_distance(spectrum, s) for s in reference_spectrums]
+    return np.array(kmer_distances)
 
 
 
+# DEPRECATED
 def Edgar_kmer_distance(kmer_spectrum1, length1, kmer_spectrum2, length2, k):
     """ Distance between two sequences based on the k-mer spectrums
 
@@ -268,6 +296,44 @@ def Edgar_kmer_distance(kmer_spectrum1, length1, kmer_spectrum2, length2, k):
     F = 1.0 * np.minimum(kmer_spectrum1, kmer_spectrum2).sum()
     distance = np.log10(0.1 + F/L)
     return distance
+
+def L1_kmer_distance(kmer_spectrum1, kmer_spectrum2):
+    """ L1-norm of the difference between 2 k-mer spectrums
+        @param kmer_spectrum1 First spectrum (a numpy vector)
+        @param kmer_spectrum2 Second spectrum (a numpy vector)
+    """
+    L1 = np.abs(kmer_spectrum1 - kmer_spectrum2).sum()
+    return L1
+
+
+def select_kmer_distance(distances, absolute_distance_threshold,
+                                    fraction_threshold):
+    """ Decide if the smallest distance in a vector of distances is a good match
+
+        The function sorts the distances and accepts the smallest one as good
+        only if:
+            - Its value is smaller than absolute_distance_threshold
+            - the fraction (smallest distance)(second smallest distance) is
+                lower than the fraction threshold
+            
+        
+        @param absolute_distance_threshold
+        @param fraction_treshold. A value of 0.8 means that the smallest distance
+                must be at least 20% smaller than the second smallest   
+        @return The index of the best distance. If the smallest distance cannot
+        be accepted, because is too large or is too similar to the second, the
+        function returns -1.
+    """
+    indices = np.argsort(distances)
+    best_ind = indices[0]
+    if distances[best_ind]  > absolute_distance_threshold:
+#        print "distance",distances[best_ind], "threshold", absolute_distance_threshold
+        return -1, -1
+    if (distances[best_ind] / distances[indices[1]]) > fraction_threshold:
+#        print "fraction", (distances[best_ind] / distances[indices[1]]), "threshold",fraction_threshold
+        return -1, -1
+    return best_ind, distances[best_ind]
+
 
 
 

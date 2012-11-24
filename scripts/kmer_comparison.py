@@ -7,58 +7,59 @@ import time
 import numpy as np
 import logging
 import MetaBinner.paranoid_log as paranoid_log
-log = logging.getLogger("kmer comparison")
+log = logging.getLogger("kmer_comparison")
 
 
 def go(args):
-    db = MetagenomeDatabase.MetagenomeDatabase()
-    db.connect(args.fn_database)
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     names = db.get_tables_names()
     if db.ScaffoldKmerComparisonTable in names:
        db.drop_table(db.ScaffoldKmerComparisonTable)
     db.create_scaffold_kmer_comparison_table()
-    # select distinct scaffolds (a scaffold can have more than one assignment)
+    # Get the assignments for the  scaffolds
     sql_command = """SELECT DISTINCT {0}.scaffold, {1}.sequence
                      FROM {0}
                      INNER JOIN {1}
                      WHERE {0}.scaffold={1}.scaffold
-                  """.format(db.ScaffoldAssignmentsTable, db.ScaffoldsTable)
+                  """.format(db.ScaffoldsAssignmentsTable, db.ScaffoldsTable)
     assigned_scaffolds = set()
-    kcomparer = Kmer.KmerComparer()
-    kcomparer.use_kmer_length(5)
-    db.execute_sql_command(sql_command)
-    record = db.fetchone()
+    kcounter = Kmer.KmerCounter(2)
+    kcomparer = Kmer.KmerComparer(kcounter)
+    threshold = 4**2 * 0.005 # tolerate 0.01 difference for each of the values of the 3-mer spectrum
+    kcomparer.set_kmer_distance_threshold(threshold)
+    # request the best distance to be 80% or lesser than second distance
+    kcomparer.set_first_to_second_distance_ratio(1)
+    cursor = db.execute(sql_command)
+    record = cursor.fetchone()
     i = 0
     while record:
         i += 1
-        log.debug("Adding scaffold %s as a reference", record[0])
-        kcomparer.add_reference_sequence(record[1],record[0])
-        assigned_scaffolds.add(record[0])
-        record = db.fetchone()
+        log.debug("Adding scaffold %s as a reference", record["scaffold"])
+        kcomparer.add_reference_sequence(record["sequence"],record["scaffold"])
+        assigned_scaffolds.add(record["scaffold"])
+        record = cursor.fetchone()
     log.info("Reference scaffolds: %s",i)
     sql_command = """ SELECT {0}.scaffold,{0}.sequence
                       FROM {0}
                   """.format(db.ScaffoldsTable)
-    db.execute_sql_command(sql_command)
+    cursor = db.execute(sql_command)
     batch_size = 500
     all_matches = []
-    record = db.fetchone()
+    record = cursor.fetchone()
     while record:
         scaffold = record[0]
         if scaffold not in assigned_scaffolds:
             kcomparer.add_sequence(record[1], scaffold)
         if kcomparer.get_number_of_sequences() == batch_size:
             matches = kcomparer.run()
-            all_matches.extend(matches)
-        record = db.fetchone()
+            # kcomparer will return False if a reliable match has not been found
+            all_matches.extend([m for m in matches if m[1] != False])
+        record = cursor.fetchone()
     if kcomparer.get_number_of_sequences() > 0:
         matches = kcomparer.run()
-        all_matches.extend(matches)
-
+        all_matches.extend([m for m in matches if m[1] != False])
     db.store_data(db.ScaffoldKmerComparisonTable, all_matches)
     db.close()
-
-
 
 
 if __name__ == "__main__":
@@ -81,6 +82,6 @@ if __name__ == "__main__":
         logging.basicConfig(filename=args.log, filemode="w")
     else:
         logging.basicConfig(stream=sys.stdout)
-    logging.root.setLevel(logging.INFO)
+    logging.root.setLevel(logging.DEBUG)
 #    logging.root.setLevel(paranoid_log.PARANOID)
     go(args)

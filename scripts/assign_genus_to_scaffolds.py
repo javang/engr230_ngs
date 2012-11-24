@@ -86,7 +86,7 @@ def assign_genus_to_scaffolds(args):
     for scaffold in scaffolds_dict:
         genus, bit_score = max(scaffolds_dict[scaffold].iteritems(), key=operator.itemgetter(1))
         data.append((scaffold, genus, bit_score))
-    data = BiologyBasedRules.filter_genus_assignments(data,  n_appearances=5, bit_score_threshold=50)
+    data = BiologyBasedRules.filter_genus_assignments(data,  n_appearances=2, bit_score_threshold=30)
     db.store_data(db.ScaffoldsAssignmentsTable,data)
     db.close()
 

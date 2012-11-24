@@ -8,9 +8,9 @@ from math import pi
 
 
 class MyColors:
-    colors_list = ['red', 'blue', 'green', 'orange', 'purple', 'gray',
-               'orange', 'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
-               'LightCoral', 'gold', 'DarkSlateGray', 'fuchsia', 'forestgreen', 'yellow','pink']
+    colors_list = ['red', 'blue', 'green', 'orange', 'purple',
+                'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
+               'LightCoral', 'gold', 'forestgreen', 'yellow','pink']
     def __init__(self):
         self.i = 0
 
@@ -82,10 +82,10 @@ def fig2(coverages, gc_contents, lengths, genuses, fn_output):
         labels.append(ug)
         scatter_plots.append(sc)
 
-#    plt.figlegend(scatter_plots,labels,
-#                  #bbox_to_anchor=(1.05, 1), # put slightly to the rigth of the plot
-#                  loc="upper right",
-#                  ncol=2,
-#                  prop={"size":legend_fontsize})
+    plt.figlegend(scatter_plots,labels,
+                  #bbox_to_anchor=(1.05, 1), # put slightly to the rigth of the plot
+                  loc="upper right",
+                  ncol=2,
+                  prop={"size":legend_fontsize})
     plt.savefig(fn_output,dpi=dpi)
 

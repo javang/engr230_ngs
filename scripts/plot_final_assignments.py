@@ -14,9 +14,49 @@ import MetaBinner.paranoid_log as paranoid_log
 log = logging.getLogger("assign_genus")
 
 
-
-
 def go(args):
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {1}.scaffold, {0}.length, {0}.GC, {0}.coverage
+                     FROM {1}
+                     INNER JOIN {0}
+                     WHERE {1}.scaffold = {0}.scaffold 
+                                        
+                  """.format(db.ScaffoldsTable, 
+                             db.ScaffoldKmerComparisonTable,
+                             db.ScaffoldsAssignmentsTable)
+#                  """
+#                     {2}.genus     
+#                     INNER JOIN {2}
+#                     WHERE {1}.scaffold_ref = {2}.scaffold
+#                  """
+    data = db.retrieve_data(sql_command)
+    sql_command = """SELECT {2}.genus
+                     FROM {2}
+                     INNER JOIN {1}
+                     WHERE {1}.ref_scaffold = {2}.scaffold 
+                                        
+                  """.format(db.ScaffoldsTable, 
+                             db.ScaffoldKmerComparisonTable,
+                             db.ScaffoldsAssignmentsTable)
+
+    genus_data = db.retrieve_data(sql_command)
+    coverages = []
+    gcs = []
+    lengths = []
+    genera = []
+    new = []
+    for r,g in zip(data, genus_data):
+        if g["genus"] == "uncultured":
+            continue
+        else:
+            coverages.append(r["coverage"])
+            gcs.append(r["GC"])
+            lengths.append(r["length"])
+            genera.append(g["genus"])
+    Plots.fig2(coverages, gcs, lengths, genera, args.fn_plot)
+
+
+def go_for_clams(args):
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.CG, {0}.length
                      FROM {0}
