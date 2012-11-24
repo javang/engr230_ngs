@@ -35,7 +35,7 @@ class MetagenomeDatabase(Database.Database3):
 
 
     ScaffoldsTable = "Scaffolds"
-    ScaffoldsFields = ["scaffold_id", "scaffold", "sequence", "length", "CG"]
+    ScaffoldsFields = ["scaffold_id", "scaffold", "sequence", "length", "GC"]
     ScaffoldsTypes = [str, str, str, int, float]
 
     ScaffoldKmerComparisonTable = "ScaffoldKmerComparison"
@@ -53,7 +53,7 @@ class MetagenomeDatabase(Database.Database3):
             Creates the genes table and reads the genes from the file
             @param fn_genes File with the information for the Genes
         """
-        log.info("Creating genes table ...")
+        log.info("Creating table with information about the genes ...")
         gene_record = GeneParser.GeneRecord()
         names = gene_record.fields_names
         types = gene_record.fields_types
@@ -103,8 +103,9 @@ class MetagenomeDatabase(Database.Database3):
                 data = [] # empty data to avoid using a lot of memory
         # store last chunk
         if len(data) > 0:
+            n_stored += len(data)            
             self.store_data(self.SequenceTable,data)
-
+            log.info("Stored %20d sequences\r",n_stored)
 
     def create_blast_results_table(self):
         """
@@ -184,8 +185,9 @@ class MetagenomeDatabase(Database.Database3):
                 data = [] # empty data to avoid using a lot of memory
         # store last batch
         if len(data) > 0:
+            n_stored += len(data)            
             self.store_data(self.ScaffoldsTable, data)
-
+            log.info("Stored %20d sequences\r", n_stored)
 
     def add_scaffold_coverage(self, fn):
         """ Add the coverage values to the table containing the Scaffolds
@@ -201,7 +203,7 @@ class MetagenomeDatabase(Database.Database3):
         cnames = self.get_table_column_names(self.ScaffoldsTable)
         if not "coverage" in cnames:
             self.add_column(self.ScaffoldsTable, "coverage",float)
-        log.debug("Adding the coverage column to the table %s",self.ScaffoldsTable)
+        log.info("Adding the coverage column to the table %s",self.ScaffoldsTable)
         fhandle = open(fn, "rU")
         reader = csv.reader(fhandle, delimiter=",")
         reader.next()
