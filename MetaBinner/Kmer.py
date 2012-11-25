@@ -343,5 +343,56 @@ def select_kmer_distance(distances, absolute_distance_threshold,
     return best_ind, distances[best_ind]
 
 
+def generate_kmers(k, alphabet):
+    """ Generate a matrix of the kmers from the alphabet
+        @param k size of the kmers
+        @alphabet The alphabet to use for the kmers. An example ACGT.
+        @return A matrix with the indices in the alphabet (not the letters)
+    """
+    alphabet_size = len(alphabet)
+    n_kmers = alphabet_size**k
+    log.debug("Generating kmers. Kmer size %s, alphabet %s (size %s) n_kmers %s)",
+                k, alphabet, alphabet_size, n_kmers)
+    mat = np.zeros((n_kmers, k))
+    for col in range(0,k):
+        step = alphabet_size** (k - col - 1)
+        log.debug("Step %s column %s",step, col)
+        s = 0
+        symbol = 0
+        for row in range(n_kmers):
+            if s == step:
+                s = 0
+                symbol += 1
+            if symbol == len(alphabet):
+                symbol = 0
+#            print "s = ",s, "symbol", symbol
+            mat[row][col] = symbol
+            s += 1
+#            print "mat (%d,%d) = %d" % (row,col,symbol)
+    return mat
+
+
+def remove_reversed(kmers):
+    """ Creates the list of unique kmers in a list by discarding the kmers that,
+        when reversed, are equal to another one
+        @param kmers A Numpy matrix. The Kmers are each of the rows of the matrix   
+    """
+    unique = []
+    print kmers.shape[1]
+    for i in range(kmers.shape[0]):
+        m = kmers[i,:]
+        s = [int(m[i]) for i in range(kmers.shape[1])]
+        rev = [int(m[i]) for i in range(kmers.shape[1]-1,-1,-1)]
+        if s not in unique and rev not in unique:
+            unique.append(s)
+    return unique
+
+        
+             
+
+
+
+        
+
 
 
