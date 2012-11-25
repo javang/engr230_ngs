@@ -111,6 +111,14 @@ class KmerCounter:
         return kmers_count
 
     def get_spectrum(self, sequence):
+        """
+            Calculate the kmer spectrum of a sequence. The spectrum is defined
+            as the frequency of each of the kmers in the sequence. Is calculated
+            by counting the appearances of each kmer and dividing by the number of
+            kmers. It is thus the histrogram
+            @param sequence The sequence whose spectrum is calculated.
+            @return A numpy vector with the frequencies of the kmers
+        """
         counts = self.count(sequence)
         spectrum = 1.0 * counts / counts.sum()
         return spectrum
@@ -123,11 +131,11 @@ class KmerComparer:
     """
 
     def __init__(self, kcounter):
-        """ 
+        """
             @param kcounter A KmerCounter. It will be used to calculate all the
             kmer spectrums in this class
         """
-            
+
         self.sequences = []
         self.identifiers = []
         self.databases = []
@@ -138,9 +146,9 @@ class KmerComparer:
         self.reference_kmer_spectrums = []
         self.reference_identifiers = []
         self.reference_spectrums_done = False
-         
+
         self.kcounter = kcounter
-        self.kmer_distance_threshold = -1 
+        self.kmer_distance_threshold = -1
         self.fraction_threshold = 1
 
     def add_reference_sequence(self, sequence, identifier):
@@ -187,16 +195,16 @@ class KmerComparer:
     def compute_reference_spectrums(self):
         """
             Calculate the kmer_spectrums for the reference sequences
-            @param    
+            @param
         """
-        
+
         log.info("Computing the spectrums of the reference sequences")
-        self.reference_spectrums = self.compute_spectrums(self.reference_sequences, self.reference_identifiers)        
+        self.reference_spectrums = self.compute_spectrums(self.reference_sequences, self.reference_identifiers)
         self.reference_spectrums_done = True
 
     def compute_spectrums(self, sequences, identifiers):
         """ Compute the spectrums of sequences
-            @param sequences A list of sequences (They must have the same alphabet )        
+            @param sequences A list of sequences (They must have the same alphabet )
 
         """
         log.info("Computing the kmer spectrum for %s sequences",len(sequences))
@@ -241,10 +249,10 @@ class KmerComparer:
             try:
                 kmer_distances = r.get()
                 log.paranoid("kmer_distances for %s: kmer_distances %s", i, kmer_distances)
-                index, distance = select_kmer_distance(kmer_distances, 
-                        self.kmer_distance_threshold, self.fraction_threshold)                
+                index, distance = select_kmer_distance(kmer_distances,
+                        self.kmer_distance_threshold, self.fraction_threshold)
                 if index < 0:
-                    most_similar_identifier = False 
+                    most_similar_identifier = False
                 else:
                     most_similar_identifier = self.reference_identifiers[index]
                 best_matches.append((i, most_similar_identifier, distance))
@@ -315,11 +323,11 @@ def select_kmer_distance(distances, absolute_distance_threshold,
             - Its value is smaller than absolute_distance_threshold
             - the fraction (smallest distance)(second smallest distance) is
                 lower than the fraction threshold
-            
-        
+
+
         @param absolute_distance_threshold
         @param fraction_treshold. A value of 0.8 means that the smallest distance
-                must be at least 20% smaller than the second smallest   
+                must be at least 20% smaller than the second smallest
         @return The index of the best distance. If the smallest distance cannot
         be accepted, because is too large or is too similar to the second, the
         function returns -1.
