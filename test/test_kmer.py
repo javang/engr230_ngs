@@ -48,6 +48,7 @@ class TestKmer(unittest.TestCase):
             self.assertEqual(r,e,
                 "{0} is not equal to {1}".format(str(result),str(expected)))
 
+    @unittest.skip("Testing the Edgar distance is not important. I will probably delete it")
     def test_Edgard_distance(self):
         """ test the Edgar distance function """
         ks = [2,3,4]

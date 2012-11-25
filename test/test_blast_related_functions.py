@@ -1,5 +1,6 @@
 
 import unittest
+import pdb
 import os
 import csv
 import utility
@@ -23,7 +24,6 @@ class TestBLAST(unittest.TestCase):
 
         parser = SeqIO.parse(fn_sequence, "fasta")
         S = parser.next()
-        S.seq.tostring()
         identifier = "nothing"
         fn_output= BLASTUtilities.do_blast(S.seq.tostring(),identifier, fn_database)
         self.assertTrue(os.path.exists(fn_output),"BLAST did not produce the output file")

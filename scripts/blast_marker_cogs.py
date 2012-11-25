@@ -34,8 +34,7 @@ def blast(seqs):
 
 
 def blast_marker_cogs(args):
-    db = MetagenomeDatabase.MetagenomeDatabase()
-    db.connect(args.fn_database)
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     names = db.get_tables_names()
     if not db.GenesTable in names:
         raise ValueError("The database does not have a table of genes")
@@ -75,7 +74,7 @@ def blast_marker_cogs(args):
             db.close()
             if len(records) != 1:
                 # Report but do not raise, continue processing other genes
-                log.error("Problem with gene_id %s. There are no sequences is the database or "
+                log.error("Problem with gene_id %s. There are no sequences in the database or "
                 "there are more than one", gene_id)
                 continue
             blast_database = os.path.join(args.cogsdbdir, cog_id)

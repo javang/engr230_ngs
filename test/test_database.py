@@ -46,8 +46,7 @@ class TestMetagenomeDatabase(unittest.TestCase):
                           WHERE gene_id="2061973757" """.format(db.SequenceTable)
         sequences = db.retrieve_data(sql_command)
         self.assertEqual(len(sequences),1)
-        seq_t = MetagenomeDatabase.SequenceRecordTuple._make(sequences[0])
-        self.assertEqual(gene_t.protein_length,len(seq_t.sequence))
+        self.assertEqual(gene_t.protein_length,len(sequences[0]["sequence"]))
         db.close()
         os.remove(fn_database)
 
