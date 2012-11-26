@@ -23,7 +23,7 @@ def go(args):
     l = kcounter.get_spectrum_length()
     fhandle.write("% {0}\n".format(l+ 2))
     ones = "\t".join(["1" for i in range(0,l)])
-    variables_line = "% {0}\t{1}\t{2}\n".format(9,1,ones)    
+    variables_line = "% {0}\t{1}\t{2}\n".format(9,0,ones)    
     fhandle.write(variables_line)
 
     names = "\t".join(["freq" for i in range(0,l)])
@@ -36,9 +36,6 @@ def go(args):
         fhandle.write(values_line)
     fhandle.close()
                                     
-
-
-
 
 if __name__ == "__main__":
 

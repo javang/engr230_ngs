@@ -4,6 +4,7 @@ import os
 import MetaBinner.Kmer as Kmer
 import MetaBinner.paranoid_log as paranoid_log
 import sys
+import utility
 import numpy as np
 import math
 import logging
@@ -13,10 +14,11 @@ class TestKmer(unittest.TestCase):
 
     def setUp(self):
         """
-            Prepare the test file
+            Prepare the test 
         """
         self.sequence = "attgtaggcctgcatgaact"
         self.seq_with_unknown = "atnntagnnngcatgaact"
+        self.datadir = utility.get_data_directory(__file__)
 
     def test_kmer_counter2(self):
         """ Test counting kmers of size 2
@@ -85,10 +87,28 @@ class TestKmer(unittest.TestCase):
             self.assertAlmostEqual(d, expected_distance,delta=1e-5,
                msg="L1 distance: {0}. Expected: {1}  k = {2}".format(d, expected_distance, k))
 
+    def test_spectrum_of_unique_kmers(self):
+        """ Test the spectrums of unique kmers """
+        fn = os.path.join(self.datadir, "thermus.fasta")
+        f = open(fn, 'r')
+        f.readline() # discard first line (header)
+        sequence = f.readline()
+        f.close()
+        for kmersize in [2,3,4]:
+            kmercounter = Kmer.KmerCounter(kmersize)
+            spectrum = kmercounter.get_spectrum(sequence)
+            uspectrum = kmercounter.get_unique_kmers_spectrum(sequence)
+            self.assertGreater(len(spectrum), len(uspectrum))
+            self.assertAlmostEqual(spectrum.sum(),1,delta=0.001, msg="problem with spectrum")
+            self.assertAlmostEqual(uspectrum.sum(),1,delta=0.001,
+                            msg="problem with spectrum of unique kmers")
+            counts = kmercounter.count(sequence)
+            ucounts = kmercounter.get_unique_kmers_counts(sequence)
+            self.assertEqual(counts.sum(), ucounts.sum(), "The kmer counts must be the same")
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout)
-    logging.root.setLevel(logging.DEBUG)
+#    logging.root.setLevel(logging.INFO)
     unittest.main()
 
 """

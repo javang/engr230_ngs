@@ -69,24 +69,13 @@ class KmerCounter:
     def count(self, sequence):
         """ Calculate the spectrum (vector of ocurrences) of kmers in the sequence
 
-        The counts are stored in a vector. The index for a kmer in the vector
-        is calculated using the number associated with a letter in the alphabet
-        and the indexing matrix. An example with 3-mers and 4 letters:
-        gtg = 232  M[2][2] + M[3][1] + M[2][0]
-                     -         -         -
-        tga = 320  M[3][2] + M[2][1] + M[0][0]
-                     -         -         -
-
-        k-mers containing unknown letters (not in the alphabet) are ignored
-
+        The counts are stored in a vector. 
         The order of the possible kmers in the output spectrum is given by the
         order in the alphabet. For example, for the ACGT alphabet and 2-mers
         the order will be: AA AC AG AT CA CC CG ..... TG TT
         For 3-mers:
 
         AAA AAC AAG AAT ACA ACG ACT ... TTG TTT
-
-
         """
         k = self.k
         L = len(sequence)
@@ -97,18 +86,50 @@ class KmerCounter:
         A = range(k-1,-1,-1) # k-1, k-2, ..., 0
         kmers_count = np.zeros(self.spectrum_length, dtype=int)
         for i in range(L - k + 1):
-            index = 0
-            count = True
-            for j in range(k):
-                letter = sequence[i + j]
-                if letter not in self.LetterToNumber:
-                    count = False
-                    break # Ignore the kmer if an unknown character appears
-                #log.paranoid("(i,j) = (%s,%s) i+j %s k-j %s",i,j,i+j,k-j)
-                index += self.IM[ self.LetterToNumber[sequence[i + j]] ][k - j - 1]
+            index, count = self.get_kmer_index(sequence[i:i+k])
             if count:
                 kmers_count[index] += 1
         return kmers_count
+        
+    def get_kmer_index(self, kmer_sequence):
+        """
+        The index for a kmer in the vector
+                is calculated using the number associated with a letter in the alphabet
+                and the indexing matrix. An example with 3-mers and 4 letters:
+                gtg = 232  M[2][2] + M[3][1] + M[2][0]
+                             -         -         -
+                tga = 320  M[3][2] + M[2][1] + M[0][0]
+                             -         -         -
+
+                k-mers containing unknown letters (not in the alphabet) are ignored
+        """
+        k = len(kmer_sequence)
+        if k != self.k:
+            raise ValueError("The kmer sequence does not have the size of the " \
+               "kmers considered")
+        index = 0
+        count = True
+        for j, letter in enumerate(kmer_sequence):
+            if letter not in self.LetterToNumber:
+                count = False
+                return -1, count # Ignore the kmer if an unknown character appears
+            index += self.IM[ self.LetterToNumber[letter]][k - j - 1]
+        return index, count
+
+
+    def get_kmer_index_from_vector(self, vector):
+        """
+            Calculate the index for a kmer using a vector. The vector is a list
+            of numbers representing the symbols of the alphabet.
+            E.g., using the alphabet ACGT the vector [3,2,0,1,3] is TGACT
+            @param a vector The numbers are the identifiers for the letters of
+            the alphabet    
+        """
+        index = 0
+        for j,ind in enumerate(vector):
+            index += self.IM[ind][self.k - j - 1]
+        return index
+
 
     def get_spectrum(self, sequence):
         """
@@ -120,9 +141,48 @@ class KmerCounter:
             @return A numpy vector with the frequencies of the kmers
         """
         counts = self.count(sequence)
+        log.debug("number of counts %s", counts.sum())
         spectrum = 1.0 * counts / counts.sum()
         return spectrum
 
+
+    def get_unique_kmers_spectrum(self, sequence):
+        """
+            Calculate the kmer spectrum of a sequence considering only the 
+            unique kmers.
+            @param sequence The sequence whose spectrum is calculated.
+            @return A numpy vector with the frequencies of the kmers
+        """
+        unique_counts = self.get_unique_kmers_counts(sequence)
+        spectrum = 1.0 * unique_counts / unique_counts.sum()
+        return spectrum
+
+    def get_unique_kmers_counts(self, sequence):
+        """
+            Calculate the kmer spectrum of a sequence considering only the 
+            unique kmers.
+            @param sequence The sequence whose spectrum is calculated.
+            @return A numpy vector with the frequencies of the kmers
+        """
+        counts = self.count(sequence)    
+        kmers = generate_kmers(self.k, self.alphabet)
+        unique_kmers = set()
+        unique_counts = []
+        for kmer in kmers:
+            kmer_string = "".join(map(str,map(int,kmer)))
+            rev = kmer_string[::-1]
+            if kmer_string not in unique_kmers and rev not in unique_kmers:
+                ind = self.get_kmer_index_from_vector(kmer)
+                krev = kmer[::-1]
+                ind_rev = self.get_kmer_index_from_vector(krev)
+                log.debug("Kmer %s (index %s) Reversed %s (index %s) ",kmer, ind,krev, ind_rev)
+                # if the index is the same it is the same kmer reversed. add only once
+                if ind == ind_rev:
+                    unique_counts.append(counts[ind])
+                else:
+                    unique_counts.append(counts[ind] + counts[ind_rev])
+                unique_kmers.add(kmer_string)
+        return np.array(unique_counts)
 
 
 class KmerComparer:
@@ -374,18 +434,18 @@ def generate_kmers(k, alphabet):
 
 def remove_reversed(kmers):
     """ Creates the list of unique kmers in a list by discarding the kmers that,
-        when reversed, are equal to another one
+        when reversed, are equal to another one.
         @param kmers A Numpy matrix. The Kmers are each of the rows of the matrix   
     """
     unique = []
-    print kmers.shape[1]
-    for i in range(kmers.shape[0]):
-        m = kmers[i,:]
-        s = [int(m[i]) for i in range(kmers.shape[1])]
-        rev = [int(m[i]) for i in range(kmers.shape[1]-1,-1,-1)]
+    for kmer in kmers:
+        s = map(int,kmer)
+        rev = map(int,kmer)
+        rev.reverse()
         if s not in unique and rev not in unique:
             unique.append(s)
     return unique
+
 
         
              
