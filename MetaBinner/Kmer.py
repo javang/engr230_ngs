@@ -46,6 +46,20 @@ class KmerCounter:
     def get_spectrum_length(self):
         return self.spectrum_length
 
+
+    def get_number_of_unique_kmers(self):
+        
+        kmers = generate_kmers(self.k, self.alphabet)
+        unique_kmers = set()
+        n_unique = 0
+        for kmer in kmers:
+            kmer_string = "".join(map(str,map(int,kmer)))
+            rev = kmer_string[::-1]
+            if kmer_string not in unique_kmers and rev not in unique_kmers:
+                unique_kmers.add(kmer_string)
+                n_unique += 1
+        return n_unique
+
     def create_indexing_matrix(self):
         """ create the indexing matrix
 
@@ -141,7 +155,6 @@ class KmerCounter:
             @return A numpy vector with the frequencies of the kmers
         """
         counts = self.count(sequence)
-        log.debug("number of counts %s", counts.sum())
         spectrum = 1.0 * counts / counts.sum()
         return spectrum
 
@@ -149,7 +162,7 @@ class KmerCounter:
     def get_unique_kmers_spectrum(self, sequence):
         """
             Calculate the kmer spectrum of a sequence considering only the 
-            unique kmers.
+            unique kmers (their reverse is not present).
             @param sequence The sequence whose spectrum is calculated.
             @return A numpy vector with the frequencies of the kmers
         """
@@ -175,7 +188,7 @@ class KmerCounter:
                 ind = self.get_kmer_index_from_vector(kmer)
                 krev = kmer[::-1]
                 ind_rev = self.get_kmer_index_from_vector(krev)
-                log.debug("Kmer %s (index %s) Reversed %s (index %s) ",kmer, ind,krev, ind_rev)
+                #log.debug("Kmer %s (index %s) Reversed %s (index %s) ",kmer, ind,krev, ind_rev)
                 # if the index is the same it is the same kmer reversed. add only once
                 if ind == ind_rev:
                     unique_counts.append(counts[ind])
@@ -411,12 +424,11 @@ def generate_kmers(k, alphabet):
     """
     alphabet_size = len(alphabet)
     n_kmers = alphabet_size**k
-    log.debug("Generating kmers. Kmer size %s, alphabet %s (size %s) n_kmers %s)",
+    log.debug("Generating kmers. Kmer size %s, alphabet %s (size %s) n_kmers %s",
                 k, alphabet, alphabet_size, n_kmers)
     mat = np.zeros((n_kmers, k))
     for col in range(0,k):
         step = alphabet_size** (k - col - 1)
-        log.debug("Step %s column %s",step, col)
         s = 0
         symbol = 0
         for row in range(n_kmers):

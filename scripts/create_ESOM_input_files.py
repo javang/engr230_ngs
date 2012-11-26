@@ -20,7 +20,8 @@ def go(args):
     fhandle.write("% {0}\n".format(len(data))) # number of datapoints
     # the number of columns is the spectrum length plus the name of the scaffold, and 
     # the numeric key required by ESOM
-    l = kcounter.get_spectrum_length()
+#    l = kcounter.get_spectrum_length()
+    l = kcounter.get_number_of_unique_kmers()
     fhandle.write("% {0}\n".format(l+ 2))
     ones = "\t".join(["1" for i in range(0,l)])
     variables_line = "% {0}\t{1}\t{2}\n".format(9,0,ones)    
@@ -30,7 +31,8 @@ def go(args):
     names_line ="% {0}\t{1}\t{2}\n".format("key","scaffold_name",names)    
     fhandle.write(names_line)
     for i,r in enumerate(data):
-        spectrum = kcounter.get_spectrum(r["sequence"])
+#        spectrum = kcounter.get_spectrum(r["sequence"])
+        spectrum = kcounter.get_unique_kmers_spectrum(r["sequence"])
         values = "\t".join(map(str,spectrum))
         values_line = "{0}\t{1}\t{2}\n".format(i,r["scaffold"],values)
         fhandle.write(values_line)
@@ -59,6 +61,6 @@ if __name__ == "__main__":
         logging.basicConfig(filename=args.log, filemode="w")
     else:
         logging.basicConfig(stream=sys.stdout)
-    logging.root.setLevel(logging.DEBUG)
+    logging.root.setLevel(logging.INFO)
 #    logging.root.setLevel(paranoid_log.PARANOID)
     go(args)
