@@ -41,7 +41,7 @@ class MetagenomeDatabase(Database.Database3):
     ScaffoldKmerComparisonTable = "ScaffoldKmerComparison"
     # Scaffold, Scaffold that matches best according to the kmers, and distance
     # between the sequences according to the kmers.
-    ScaffoldKmerComparisonFields = ["scaffold", "ref_scaffold", "distance"]
+    ScaffoldKmerComparisonFields = ["scaffold", "genus", "distance"]
     ScaffoldKmerComparisonTypes = [str, str, float]
 
 
@@ -103,7 +103,7 @@ class MetagenomeDatabase(Database.Database3):
                 data = [] # empty data to avoid using a lot of memory
         # store last chunk
         if len(data) > 0:
-            n_stored += len(data)            
+            n_stored += len(data)
             self.store_data(self.SequenceTable,data)
             log.info("Stored %20d sequences\r",n_stored)
 
@@ -185,7 +185,7 @@ class MetagenomeDatabase(Database.Database3):
                 data = [] # empty data to avoid using a lot of memory
         # store last batch
         if len(data) > 0:
-            n_stored += len(data)            
+            n_stored += len(data)
             self.store_data(self.ScaffoldsTable, data)
             log.info("Stored %20d sequences\r", n_stored)
 
