@@ -64,44 +64,19 @@ def write_genera_sequences(fn_database, fn_output, directory="genera_sequences")
                second is the file containing it sequence
         @param directory Directory used to store the files with the sequences of the genera_sequences
     """
+
     db = MetagenomeDatabase.MetagenomeDatabase(fn_database)
-    names = db.get_tables_names()
-    if db.ScaffoldsAssignmentsTable not in names:
-        raise ValueError("The database does not have table {0}".format(db.ScaffoldsAssignmentsTable))
-    fh = open(fn_output, "w")
-    curdir = os.getcwd()
+    genus2sequence_dict, assigned_scaffolds = db.get_genera_sequences()
     # directory for storing the sequences of each of the genera
+    curdir = os.getcwd()
     if not os.path.exists(directory):
         os.mkdir(directory)
     os.chdir(os.path.join(curdir,directory))
-
-    # Get all the scaffolds assigned
-    # It is assumed that each scaffold has already been assigned to one genus only
-    sql_command = """SELECT {0}.scaffold, {0}.genus, {1}.sequence
-                     FROM {0}
-                     INNER JOIN {1}
-                     WHERE {0}.scaffold={1}.scaffold
-                  """.format(db.ScaffoldsAssignmentsTable, db.ScaffoldsTable)
-    sequences_dict = dict() # dictionary of sequences indexed by genus
-    assigned_scaffolds = set()
-    cursor = db.execute(sql_command)
-    record = cursor.fetchone()
-    while record:
-        scaffold = record["scaffold"]
-        genus = record["genus"]
-        if not genus in sequences_dict:
-            sequences_dict[genus] = record["sequence"]
-        else:
-            sequences_dict[genus] += record["sequence"]
-        assigned_scaffolds.add(scaffold)
-        record = cursor.fetchone()
-
-    # write one fasta file for the sequence of each genus
-    for genus, sequence in sequences_dict.iteritems():
+    for genus in genus2sequence_dict:
         fn = os.path.join(directory, "{0}.fasta".format(genus))
         fh.write("{0}\t{1}\n".format(genus,fn))
         log.debug("Writting %s", fn)
-        BLASTUtilities.write_fasta_file(genus, sequence, fn)
+        BLASTUtilities.write_fasta_file(genus, genus2sequence_dict[genus], fn)
     fh.close()
     os.chdir(curdir)
 

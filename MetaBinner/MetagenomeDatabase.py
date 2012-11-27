@@ -212,3 +212,36 @@ class MetagenomeDatabase(Database.Database3):
         self.executemany(sql_command, data)
         self.commit()
         fhandle.close()
+
+
+    def get_genera_sequences(self):
+        """ Puts all the scaffolds assigned to a genus together and retunrs a dictionary of
+            sequences.
+
+            The function reads the database to recover the genus given each of the assigned
+            scaffolds. Scaffolds having the same genus are concatenated. The concatenated
+            frankenstein sequences can be used to calculate k-mer signatures for each of the
+            genusus.
+        """
+        names = self.get_tables_names()
+        if self.ScaffoldsAssignmentsTable not in names:
+            raise ValueError("The database does not have table {0}".format(self.ScaffoldsAssignmentsTable))
+        # Get all the scaffolds assigned
+        sql_command = """SELECT {0}.scaffold, {0}.genus, {1}.sequence
+                         FROM {0}
+                         INNER JOIN {1}
+                         WHERE {0}.scaffold={1}.scaffold
+                      """.format(self.ScaffoldsAssignmentsTable, self.ScaffoldsTable)
+        genus2sequence_dict = dict() # dictionary of sequences indexed by genus
+        assigned_scaffolds = set()
+        cursor = self.execute(sql_command)
+        record = cursor.fetchone()
+        while record:
+            genus = record["genus"]
+            if not genus in genus2sequence_dict:
+                genus2sequence_dict[genus] = record["sequence"]
+            else:
+                genus2sequence_dict[genus] += record["sequence"]
+            assigned_scaffolds.add(record["scaffold"])
+            record = cursor.fetchone()
+        return genus2sequence_dict, assigned_scaffolds
