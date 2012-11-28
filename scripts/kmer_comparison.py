@@ -13,18 +13,21 @@ log = logging.getLogger("kmer_comparison")
 
 
 def go(args):
+
+
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     names = db.get_tables_names()
     if db.ScaffoldKmerComparisonTable in names:
        db.drop_table(db.ScaffoldKmerComparisonTable)
     db.create_scaffold_kmer_comparison_table()
-    kmer_size = 2
-    kcounter = Kmer.KmerCounter(kmer_size)
+
+    import MetaBinner.config
+    parameters = MetaBinner.config.KmerComparisonParameters
+    kcounter = Kmer.KmerCounter(parameters.kmer_size)
     kcomparer = Kmer.KmerComparer(kcounter)
-    threshold = 4**kmer_size * 0.005 # tolerate 0.01 difference for each of the values of the 3-mer spectrum
-    kcomparer.set_kmer_distance_threshold(threshold)
-    # request the best distance to be 80% or lesser than second distance
-    kcomparer.set_first_to_second_distance_ratio(0.8)
+    kcomparer.set_kmer_distance_threshold(parameters.threshold)
+    kcomparer.set_first_to_second_distance_ratio(
+                        parameters.first_to_second_distance_ratio)
 
     # add the combined sequences of the scaffolds belonging to the same genera
     genus2sequence_dict, assigned_scaffolds = db.get_genera_sequences()
@@ -33,7 +36,7 @@ def go(args):
 
     sql_command = "SELECT scaffold, sequence FROM {0}".format(db.ScaffoldsTable)
     cursor = db.execute(sql_command)
-    batch_size = 500
+    batch_size = 1000
     all_matches = []
     record = cursor.fetchone()
     while record:

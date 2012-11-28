@@ -10,7 +10,9 @@ from math import pi
 class MyColors:
     colors_list = ['red', 'blue', 'green', 'orange', 'purple',
                 'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
-               'LightCoral', 'gold', 'forestgreen', 'yellow','pink']
+               'LightCoral', 'gold', 'yellow','pink', 'BurlyWood',
+               'chocolate', 'crimson','deeppink', 'indianred', 'acqua', 'aquamarine',
+               'Darkorange','darmagenta','lightgreen']
     def __init__(self):
         self.i = 0
 
@@ -43,7 +45,7 @@ def fig2(coverages, gc_contents, lengths, genuses, fn_output):
     plt.setp(ax.get_xticklabels(), fontsize=fontsize)
     # set the scale so the longest scaffold uses 1/100000 of the pixels in the figure
     total_pixels = dpi**2 * fig_height * fig_width
-    scatter_scale = 1e-5 * total_pixels / max(lengths)
+    scatter_scale = 5e-6 * total_pixels / max(lengths)
 
     # if there is no data for the assignments, plot the raw figure
     if not genuses:
@@ -55,13 +57,16 @@ def fig2(coverages, gc_contents, lengths, genuses, fn_output):
 
     # dictionary of indices with the name of the genus as key
     unique_genuses = set(genuses)
-    nomatch = "No match"
+    nomatch = "not assigned"
+    if nomatch in unique_genuses:
+        unique_genuses.remove(nomatch)
+    unique_genuses = [nomatch] + [g for g in unique_genuses]
     mycolors = MyColors()
     scatter_plots = []
     labels = []
     for ug in unique_genuses:
         if ug == nomatch:
-            color = 'gray'
+            color = 'gainsboro'
         else:
             color = mycolors.get_next_color()
         coverages_to_plot = []

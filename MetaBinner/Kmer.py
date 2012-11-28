@@ -48,7 +48,7 @@ class KmerCounter:
 
 
     def get_number_of_unique_kmers(self):
-        
+
         kmers = generate_kmers(self.k, self.alphabet)
         unique_kmers = set()
         n_unique = 0
@@ -83,7 +83,7 @@ class KmerCounter:
     def count(self, sequence):
         """ Calculate the spectrum (vector of ocurrences) of kmers in the sequence
 
-        The counts are stored in a vector. 
+        The counts are stored in a vector.
         The order of the possible kmers in the output spectrum is given by the
         order in the alphabet. For example, for the ACGT alphabet and 2-mers
         the order will be: AA AC AG AT CA CC CG ..... TG TT
@@ -104,7 +104,7 @@ class KmerCounter:
             if count:
                 kmers_count[index] += 1
         return kmers_count
-        
+
     def get_kmer_index(self, kmer_sequence):
         """
         The index for a kmer in the vector
@@ -137,7 +137,7 @@ class KmerCounter:
             of numbers representing the symbols of the alphabet.
             E.g., using the alphabet ACGT the vector [3,2,0,1,3] is TGACT
             @param a vector The numbers are the identifiers for the letters of
-            the alphabet    
+            the alphabet
         """
         index = 0
         for j,ind in enumerate(vector):
@@ -161,7 +161,7 @@ class KmerCounter:
 
     def get_unique_kmers_spectrum(self, sequence):
         """
-            Calculate the kmer spectrum of a sequence considering only the 
+            Calculate the kmer spectrum of a sequence considering only the
             unique kmers (their reverse is not present).
             @param sequence The sequence whose spectrum is calculated.
             @return A numpy vector with the frequencies of the kmers
@@ -172,12 +172,12 @@ class KmerCounter:
 
     def get_unique_kmers_counts(self, sequence):
         """
-            Calculate the kmer spectrum of a sequence considering only the 
+            Calculate the kmer spectrum of a sequence considering only the
             unique kmers.
             @param sequence The sequence whose spectrum is calculated.
             @return A numpy vector with the frequencies of the kmers
         """
-        counts = self.count(sequence)    
+        counts = self.count(sequence)
         kmers = generate_kmers(self.k, self.alphabet)
         unique_kmers = set()
         unique_counts = []
@@ -325,7 +325,7 @@ class KmerComparer:
                 index, distance = select_kmer_distance(kmer_distances,
                         self.kmer_distance_threshold, self.fraction_threshold)
                 if index < 0:
-                    most_similar_identifier = False
+                    most_similar_identifier = "not assigned"
                 else:
                     most_similar_identifier = self.reference_identifiers[index]
                 best_matches.append((i, most_similar_identifier, distance))
@@ -447,7 +447,7 @@ def generate_kmers(k, alphabet):
 def remove_reversed(kmers):
     """ Creates the list of unique kmers in a list by discarding the kmers that,
         when reversed, are equal to another one.
-        @param kmers A Numpy matrix. The Kmers are each of the rows of the matrix   
+        @param kmers A Numpy matrix. The Kmers are each of the rows of the matrix
     """
     unique = []
     for kmer in kmers:
@@ -459,12 +459,12 @@ def remove_reversed(kmers):
     return unique
 
 
-        
-             
 
 
 
-        
+
+
+
 
 
 

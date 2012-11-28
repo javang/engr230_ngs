@@ -13,47 +13,40 @@ import numpy as np
 import MetaBinner.paranoid_log as paranoid_log
 log = logging.getLogger("assign_genus")
 
-
 def go(args):
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    sql_command = """SELECT {1}.scaffold, {0}.length, {0}.GC, {0}.coverage
+    sql_command = """SELECT {1}.scaffold, {1}.genus, {0}.length, {0}.GC, {0}.coverage
                      FROM {1}
                      INNER JOIN {0}
-                     WHERE {1}.scaffold = {0}.scaffold 
-                                        
-                  """.format(db.ScaffoldsTable, 
-                             db.ScaffoldKmerComparisonTable,
-                             db.ScaffoldsAssignmentsTable)
-#                  """
-#                     {2}.genus     
-#                     INNER JOIN {2}
-#                     WHERE {1}.scaffold_ref = {2}.scaffold
-#                  """
-    data = db.retrieve_data(sql_command)
-    sql_command = """SELECT {2}.genus
-                     FROM {2}
-                     INNER JOIN {1}
-                     WHERE {1}.ref_scaffold = {2}.scaffold 
-                                        
-                  """.format(db.ScaffoldsTable, 
-                             db.ScaffoldKmerComparisonTable,
-                             db.ScaffoldsAssignmentsTable)
+                     WHERE {1}.scaffold = {0}.scaffold
 
-    genus_data = db.retrieve_data(sql_command)
+                  """.format(db.ScaffoldsTable,
+                             db.ScaffoldsAssignmentsTable)
+    data = db.retrieve_data(sql_command) # scaffolds assigned with BLAST
+
+    sql_command = """SELECT {1}.scaffold, {1}.genus, {0}.length, {0}.GC, {0}.coverage
+                     FROM {1}
+                     INNER JOIN {0}
+                     WHERE {1}.scaffold = {0}.scaffold
+
+                  """.format(db.ScaffoldsTable,
+                             db.ScaffoldKmerComparisonTable)
+    data_scaffolds_assigne_with_kmers = db.retrieve_data(sql_command)
+    data.extend(data_scaffolds_assigne_with_kmers)
     coverages = []
     gcs = []
     lengths = []
     genera = []
-    new = []
-    for r,g in zip(data, genus_data):
-        if g["genus"] == "uncultured":
+    for r in data:
+        if r["genus"] == "uncultured":
             continue
         else:
             coverages.append(r["coverage"])
             gcs.append(r["GC"])
             lengths.append(r["length"])
-            genera.append(g["genus"])
+            genera.append(r["genus"])
     Plots.fig2(coverages, gcs, lengths, genera, args.fn_plot)
+
 
 
 def go_for_clams(args):
@@ -63,11 +56,6 @@ def go_for_clams(args):
                   """.format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
     db.close()
-#    coverages = np.array([r["coverage"] for r in data])
-#    cgs = np.array([r["CG"] for r in data])
-#    lengths = np.array([r["length"] for r in data])
-
-
     if not args.clams_file:
         coverages = [r["coverage"] for r in data]
         cgs = [r["CG"] for r in data]
