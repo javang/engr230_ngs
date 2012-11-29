@@ -2,11 +2,16 @@
 
 class KmerComparisonParameters:
     alphabet_size = 4
-    kmer_size = 2
+#    kmer_size = 2
     # tolerate 0.005 difference for each of the values of the 3-mer spectrum
-    threshold = alphabet_size **kmer_size * 0.005
+#    threshold = alphabet_size **kmer_size * 0.005
     # request the best distance to be 80% or lesser than second distance
-    first_to_second_distance_ratio = 0.8
+#    first_to_second_distance_ratio = 0.8
+
+    # Test of values for the the iterativce kmer comparison method
+    kmer_size = 3
+    threshold = alphabet_size **kmer_size * 0.003
+    first_to_second_distance_ratio = 0.9
 
 
 class ConfigVariables:

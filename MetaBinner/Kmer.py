@@ -302,6 +302,8 @@ class KmerComparer:
     def run(self):
         """
             The function sends a kmer-comparison task per sequence.
+            If an assignment could not be done due to kmer distance below the
+            threshold the identifier for a scaffold is set to "not assigned"
         """
         if not self.reference_spectrums_done:
             self.compute_reference_spectrums()
