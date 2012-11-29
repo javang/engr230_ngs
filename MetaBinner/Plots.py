@@ -1,11 +1,15 @@
-
-import sys
+import matplotlib
+# set a backend that does not require interactive mode. Useful for remote figure generation
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import numpy as np
+#if plt.isinteractive():
+#    plt.ioff()
 import matplotlib.cm as cm
 import matplotlib as mpl
+import numpy as np
 from math import pi
-
+import csv
+import sys
 
 class MyColors:
     colors_list = ['red', 'blue', 'green', 'orange', 'purple',
@@ -103,3 +107,12 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
                   prop={"size":legend_fontsize})
     plt.savefig(fn_output,dpi=dpi)
 
+
+
+def read_kmeans_file(fn):
+    f = open(fn, "r")
+    reader = csv.reader(f, delimiter=" ")
+    reader.next() # discard header
+    pairs_scaffold_cluster = [(r[0].strip("\""),r[1]) for r in reader]
+    f.close()
+    return pairs_scaffold_cluster

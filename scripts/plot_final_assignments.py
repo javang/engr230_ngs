@@ -1,4 +1,5 @@
 
+
 import MetaBinner.Plots as Plots
 import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.ClaMSUtilities as ClaMSUtilities
@@ -130,7 +131,7 @@ def go_for_clams(args):
         output file from ClaMS
     """
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.CG, {0}.length
+    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length
                      FROM {0}
                   """.format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
@@ -162,6 +163,38 @@ def go_for_clams(args):
         Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
 
 
+
+
+def plot_kmeans_assignments(args):
+    """ PLot of the genus assignments for each of the scaffolds
+        after performing k-means clustering
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length
+                     FROM {0} ORDER BY scaffold
+                  """.format(db.ScaffoldsTable)
+    data = db.retrieve_data(sql_command)
+    db.close()
+    pairs_scaffold_cluster = Plots.read_kmeans_file(args.fn_kmeans)
+    pairs_scaffold_cluster.sort()
+    if len(data) != len(pairs_scaffold_cluster):
+        raise ValueError("The number of scaffolds in the database is not the " \
+         "same as the number of scaffolds in the kmeans file")
+    scaffolds = []
+    coverages = []
+    cgs = []
+    lengths = []
+    assignments = []
+    for r,pair in zip(data, pairs_scaffold_cluster):
+        coverages.append(r["coverage"])
+        cgs.append(r["CG"])
+        lengths.append(r["length"])
+        assignments.append(pairs[1])
+    Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
+
+
+
+
 if __name__ == "__main__":
 
     import argparse
@@ -181,6 +214,11 @@ if __name__ == "__main__":
                     help="Clams distance used as threshold for plotting. Scaffolds with distances " \
                     "greater that this threshold will appear unasigned",
                     )
+    parser.add_argument("--fn_kmeans",
+                    default=False,
+                    help="File with the results of running k-means on the scaffolds kmers",
+                    )
+
     parser.add_argument("fn_plot",
                     help="Plot file")
     parser.add_argument("--log",
@@ -196,4 +234,8 @@ if __name__ == "__main__":
 #    logging.root.setLevel(paranoid_log.PARANOID)
     #plot_genus_assignments(args)
 #    plot_genus_assignments_1_mers(args)
-    plot_genus_assignments(args)
+
+    if args.fn_kmeans:
+        plot_kmeans_assignments(args)
+    else:
+        plot_genus_assignments(args)
