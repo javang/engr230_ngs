@@ -40,14 +40,15 @@ def do_kmer_comparison(args):
     Compares the scaffolds assigned using blast with the not assigned
     scaffolds
     """
+    log.info("Performing kmer comparison. Parameters: ")
+    log.info("kmer size: %s dist12: %s threshold: %s", args.kmer,
+                            args.dist12,args.threshold)
+
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    import MetaBinner.config
-    parameters = MetaBinner.config.KmerComparisonParameters
-    kcounter = Kmer.KmerCounter(parameters.kmer_size)
+    kcounter = Kmer.KmerCounter(args.kmer)
     kcomparer = Kmer.KmerComparer(kcounter)
-    kcomparer.set_kmer_distance_threshold(parameters.threshold)
-    kcomparer.set_first_to_second_distance_ratio(
-                        parameters.first_to_second_distance_ratio)
+    kcomparer.set_kmer_distance_threshold(args.threshold)
+    kcomparer.set_first_to_second_distance_ratio(args.dist12)
 
     # add the combined sequences of the scaffolds belonging to the same genera
     genus2sequence_dict, assigned_scaffolds = \
@@ -83,14 +84,10 @@ def kmer_comparison_one_iteration(args):
     if db.ScaffoldKmerComparisonTable in names:
        db.drop_table(db.ScaffoldKmerComparisonTable)
     db.create_scaffold_kmer_comparison_table()
-
-    import MetaBinner.config
-    parameters = MetaBinner.config.KmerComparisonParameters
-    kcounter = Kmer.KmerCounter(parameters.kmer_size)
+    kcounter = Kmer.KmerCounter(args.kmer)
     kcomparer = Kmer.KmerComparer(kcounter)
-    kcomparer.set_kmer_distance_threshold(parameters.threshold)
-    kcomparer.set_first_to_second_distance_ratio(
-                        parameters.first_to_second_distance_ratio)
+    kcomparer.set_kmer_distance_threshold(args.threshold)
+    kcomparer.set_first_to_second_distance_ratio(args.dist12)
 
     # add the combined sequences of the scaffolds belonging to the same genera
     genus2sequence_dict, assigned_scaffolds = db.get_genera_sequences_from(db.ScaffoldsAssignmentsTable)
@@ -133,8 +130,26 @@ if __name__ == "__main__":
                     help="Datbabase formed by the files provided by the IMG/M for a metagenome. " \
                     "This database needs to be created with teh create_database.py script")
     parser.add_argument("--iterative",
+                    action="store_true",
                     help="Use it to apply the iterative version of the kmer comparision algorithm",
                     default=False)
+    parser.add_argument("--kmer",
+                    type=int,
+                    default=4,
+                    help="Size of the kmers used for comparison")
+    parser.add_argument("--dist12",
+                    type=float,
+                    default=0.8,
+                    help="Ratio distance_first_assignment/distance_second_assignment " \
+                    "required to accept a genus assignment. If the value of the ratio "\
+                    "is greater than this threshold the scaffold is left unassigned")
+    parser.add_argument("--threshold",
+                        type=float,
+                        default=0.003,
+                        help="Average difference between the frequencies in the kmer " \
+                        "spectrum required to accept genus assignment. The lower this " \
+                        "value, the more stringent the requirement. Typical values are "\
+                        "0.001-0.01")
     parser.add_argument("--log",
                     dest="log",
                     default = False,

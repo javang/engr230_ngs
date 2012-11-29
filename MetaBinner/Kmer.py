@@ -254,8 +254,9 @@ class KmerComparer:
             distance threshold to consider that 2 spectrums are similar.
             See the function select_kmer_distance() for the meaning of this value
         """
-        log.info("Setting kmer distance threshold %s", dist)
-        self.kmer_distance_threshold = dist
+        self.kmer_distance_threshold = len(self.kcounter.alphabet) * \
+                self.kcounter.get_spectrum_length() * dist
+        log.info("Setting kmer distance threshold %s", self.kmer_distance_threshold)
 
     def set_first_to_second_distance_ratio(self, fraction):
         """

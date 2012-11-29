@@ -64,7 +64,6 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
     scatter_plots = []
     labels = []
     for ug in unique_genera:
-        print "checking ",ug
         if ug == nomatch:
             color = 'gainsboro'
         else:

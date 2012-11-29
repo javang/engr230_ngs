@@ -74,8 +74,6 @@ def plot_genus_assignments(args):
     for r in data:
         coverages.append(r["coverage"])
         gcs.append(r["GC"])
-        if r["GC"] < 0.4:
-            print [x for x in r]
         lengths.append(r["length"])
         genera.append(r["genus"])
     print "coverages",len(coverages),"gcs",len(gcs),"lengths",len(lengths),"genera",len(genera)

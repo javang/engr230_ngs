@@ -240,12 +240,8 @@ class MetagenomeDatabase(Database.Database3):
         assigned_scaffolds = set()
         cursor = self.execute(sql_command)
         record = cursor.fetchone()
-        i = 0
         while record:
             genus = record["genus"]
-            i += 1
-            if i%200 == 0:
-                log.debug("Processed scaffolds: %s",i)
             if not genus in genus2sequence_dict:
                 genus2sequence_dict[genus] = [record["sequence"]]
             else:
