@@ -52,8 +52,6 @@ def assign_genus_to_scaffolds(args):
         raise ValueError("The database does not have a table of genes")
     if not db.BlastResultsTable in names:
         raise ValueError("The database does not have a table of BLAST results")
-    print names
-    quit()
     # Read file marker cogs
     fhandle = open(args.fn_marker_cogs, "rU")
     reader = csv.reader(fhandle, delimiter=" ")
@@ -88,6 +86,7 @@ def assign_genus_to_scaffolds(args):
     for scaffold in scaffolds_dict:
         genus, bit_score = max(scaffolds_dict[scaffold].iteritems(), key=operator.itemgetter(1))
         data.append((scaffold, genus, bit_score))
+    data = BiologyBasedRules.filter_genus_assignments(data,  n_appearances=2, bit_score_threshold=30)
     db.store_data(db.ScaffoldsAssignmentsTable,data)
     db.close()
 
@@ -108,8 +107,6 @@ if __name__ == "__main__":
                     "This database needs to be created with teh create_database.py script")
     parser.add_argument("fn_marker_cogs",
                     help="File of COG ids that are going to be used as markers.")
-    parser.add_argument("fn_output",
-                    help="File with the final assignments of genus for each of the scaffolds")
     parser.add_argument("--log",
                     dest="log",
                     default = False,
@@ -119,7 +116,7 @@ if __name__ == "__main__":
         logging.basicConfig(filename=args.log, filemode="w")
     else:
         logging.basicConfig(stream=sys.stdout)
-    logging.root.setLevel(logging.INFO)
+    logging.root.setLevel(logging.DEBUG)
 #    logging.root.setLevel(paranoid_log.PARANOID)
     assign_genus_to_scaffolds(args)
 #    select_genus_for_scaffolds(args)

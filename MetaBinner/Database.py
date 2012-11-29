@@ -117,7 +117,14 @@ class Database3(sqlite.Connection):
             for name, dtype in zip(names, types):
                 self.add_column(table, name, dtype)
 
-
+    def count(self, table):
+        """ Count the number of records in the table
+        @param table The name of a table
+        @return the number of records
+        """
+        sql_command = "SELECT COUNT(*) FROM {0}".format(table)
+        data = self.retrieve_data(sql_command)
+        return data[0][0]
 
     def drop_view(self,view_name):
         """ Removes a view from the database """

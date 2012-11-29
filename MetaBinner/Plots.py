@@ -1,16 +1,22 @@
-
-import sys
+import matplotlib
+# set a backend that does not require interactive mode. Useful for remote figure generation
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import numpy as np
+#if plt.isinteractive():
+#    plt.ioff()
 import matplotlib.cm as cm
 import matplotlib as mpl
+import numpy as np
 from math import pi
-
+import csv
+import sys
 
 class MyColors:
-    colors_list = ['red', 'blue', 'green', 'orange', 'purple', 'gray',
-               'orange', 'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
-               'LightCoral', 'gold', 'DarkSlateGray', 'fuchsia', 'forestgreen', 'yellow','pink']
+    colors_list = ['red', 'blue', 'green', 'orange', 'purple',
+                'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
+               'LightCoral', 'gold', 'yellow','pink', 'BurlyWood',
+               'chocolate', 'crimson','deeppink', 'indianred', 'acqua', 'aquamarine',
+               'Darkorange','darmagenta','lightgreen']
     def __init__(self):
         self.i = 0
 
@@ -20,7 +26,7 @@ class MyColors:
             self.i = 0
         return self.colors_list[self.i]
 
-def fig2(coverages, gc_contents, lengths, genuses, fn_output):
+def fig2(coverages, gc_contents, lengths, genera, fn_output):
 
     ############# SETUP FIGURE ####################
     plt.rcParams["axes.linewidth"] = 1
@@ -43,49 +49,70 @@ def fig2(coverages, gc_contents, lengths, genuses, fn_output):
     plt.setp(ax.get_xticklabels(), fontsize=fontsize)
     # set the scale so the longest scaffold uses 1/100000 of the pixels in the figure
     total_pixels = dpi**2 * fig_height * fig_width
-    scatter_scale = 1e-5 * total_pixels / max(lengths)
+    scatter_scale = 8e-6 * total_pixels / max(lengths)
 
     # if there is no data for the assignments, plot the raw figure
-    if not genuses:
+    if not genera:
         sizes = np.array(lengths) * scatter_scale
         sc = ax.scatter(coverages, gc_contents, s=sizes, c='gray',
                         marker='o', lw=None, edgecolor="none")
         plt.savefig(fn_output,dpi=dpi)
         return
 
-    # dictionary of indices with the name of the genus as key
-    unique_genuses = set(genuses)
-    nomatch = "No match"
+    unique_genera = set(genera)
+    nomatch = "not assigned"
+    if nomatch in unique_genera:
+        unique_genera.remove(nomatch)
+    unique_genera = [nomatch] + [g for g in unique_genera]
     mycolors = MyColors()
     scatter_plots = []
     labels = []
-    for ug in unique_genuses:
+    for ug in unique_genera:
         if ug == nomatch:
-            color = 'gray'
+            color = 'gainsboro'
         else:
             color = mycolors.get_next_color()
         coverages_to_plot = []
         gc_contents_to_plot = []
         lengths_to_plot = []
-        for i, g in enumerate(genuses):
+        indices_to_pop = []
+        for i, g in enumerate(genera):
             if ug == g:
                 coverages_to_plot.append(coverages[i])
-                coverages.pop(i)
                 gc_contents_to_plot.append(gc_contents[i])
-                gc_contents.pop(i)
-                genuses.pop(i)
                 lengths_to_plot.append(lengths[i])
-                lengths.pop(i)
+                indices_to_pop.append(i)
+
+        # pop after finishing adding elements to avoid messing with the indices:
+        indices_to_pop.sort()
+        indices_to_pop.reverse()
+        for i in indices_to_pop:
+            coverages.pop(i)
+            gc_contents.pop(i)
+            genera.pop(i)
+            lengths.pop(i)
+        # if there is nothing to plot, continue
+        if len(coverages_to_plot) == 0:
+            continue
         sizes = np.array(lengths_to_plot) * scatter_scale
         sc = ax.scatter(coverages_to_plot, gc_contents_to_plot, s=sizes, c=color,
                         marker='o', lw=None, edgecolor="none")
         labels.append(ug)
         scatter_plots.append(sc)
 
-#    plt.figlegend(scatter_plots,labels,
-#                  #bbox_to_anchor=(1.05, 1), # put slightly to the rigth of the plot
-#                  loc="upper right",
-#                  ncol=2,
-#                  prop={"size":legend_fontsize})
+    plt.figlegend(scatter_plots,labels,
+                  #bbox_to_anchor=(1.05, 1), # put slightly to the rigth of the plot
+                  loc="upper right",
+                  ncol=2,
+                  prop={"size":legend_fontsize})
     plt.savefig(fn_output,dpi=dpi)
 
+
+
+def read_kmeans_file(fn):
+    f = open(fn, "r")
+    reader = csv.reader(f, delimiter=" ")
+    reader.next() # discard header
+    pairs_scaffold_cluster = [(r[0].strip("\""),r[1]) for r in reader]
+    f.close()
+    return pairs_scaffold_cluster

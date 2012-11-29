@@ -1,7 +1,9 @@
 
+
 import MetaBinner.Plots as Plots
 import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.ClaMSUtilities as ClaMSUtilities
+import MetaBinner.Kmer as Kmer
 
 import sys
 import os
@@ -13,22 +15,129 @@ import numpy as np
 import MetaBinner.paranoid_log as paranoid_log
 log = logging.getLogger("assign_genus")
 
+def plot_genus_assignmnetsV1(args):
+    """ Draws a plot of the read coverage for the scaffolds vs their GC content
 
-
-
-def go(args):
+        Each of the genera is assigned a color
+    """
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.CG, {0}.length
+    sql_command = """SELECT {1}.scaffold, {1}.genus, {0}.length, {0}.GC, {0}.coverage
+                     FROM {1}
+                     INNER JOIN {0}
+                     WHERE {1}.scaffold = {0}.scaffold
+                  """.format(db.ScaffoldsTable,
+                             db.ScaffoldsAssignmentsTable)
+    data = db.retrieve_data(sql_command) # scaffolds assigned with BLAST
+
+    sql_command = """SELECT {1}.scaffold, {1}.genus, {0}.length, {0}.GC, {0}.coverage
+                     FROM {1}
+                     INNER JOIN {0}
+                     WHERE {1}.scaffold = {0}.scaffold
+
+                  """.format(db.ScaffoldsTable,
+                             db.ScaffoldKmerComparisonTable)
+    data_scaffolds_assigne_with_kmers = db.retrieve_data(sql_command)
+    data.extend(data_scaffolds_assigne_with_kmers)
+    coverages = []
+    gcs = []
+    lengths = []
+    genera = []
+    for r in data:
+        coverages.append(r["coverage"])
+        gcs.append(r["GC"])
+        lengths.append(r["length"])
+        genera.append(r["genus"])
+    Plots.fig2(coverages, gcs, lengths, genera, args.fn_plot)
+
+
+def plot_genus_assignments(args):
+    """ Draws a plot of the read coverage for the scaffolds vs their GC content
+
+        Each of the genera is assigned a color.
+        This new version assumes that the ScaffoldKmerComparisonTable
+        of final assignments has merged the results from ScaffoldsAssignmentsTable
+        (the scaffolds assigned with BLAST)
+
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {1}.scaffold, {1}.genus, {0}.length, {0}.GC, {0}.coverage
+                     FROM {1}
+                     INNER JOIN {0}
+                     WHERE {1}.scaffold = {0}.scaffold
+
+                  """.format(db.ScaffoldsTable,
+                             db.ScaffoldKmerComparisonTable)
+    data = db.retrieve_data(sql_command)
+    coverages = []
+    gcs = []
+    lengths = []
+    genera = []
+    for r in data:
+        coverages.append(r["coverage"])
+        gcs.append(r["GC"])
+        lengths.append(r["length"])
+        genera.append(r["genus"])
+    print "coverages",len(coverages),"gcs",len(gcs),"lengths",len(lengths),"genera",len(genera)
+    Plots.fig2(coverages, gcs, lengths, genera, args.fn_plot)
+
+
+def plot_genus_assignments_1_mers(args):
+    """ Draws 4 plots of the read coverage for the scaffolds vs their percentage of
+        each of the nucleotides in the scaffolds. It is an extension of the plot
+        created with plot_genus_assignments().
+
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {1}.scaffold, {1}.genus, {0}.length, {0}.sequence, {0}.coverage
+                     FROM {1}
+                     INNER JOIN {0}
+                     WHERE {1}.scaffold = {0}.scaffold
+
+                  """.format(db.ScaffoldsTable,
+                             db.ScaffoldKmerComparisonTable)
+    data = db.retrieve_data(sql_command)
+    coverages = []
+    As = []
+    Cs = []
+    Gs = []
+    Ts = []
+    lengths = []
+    genera = []
+    kcounter = Kmer.KmerCounter(1)
+    for r in data:
+        coverages.append(r["coverage"])
+        spectrum = kcounter.get_spectrum(r["sequence"])
+        As.append(spectrum[0])
+        Cs.append(spectrum[1])
+        Gs.append(spectrum[2])
+        Ts.append(spectrum[3])
+        lengths.append(r["length"])
+        genera.append(r["genus"])
+
+    import copy
+    for values,label in zip([As,Cs,Gs,Ts],["A", "C", "G", "T"]):
+        Plots.fig2(copy.deepcopy(coverages),
+                   values,
+                   copy.deepcopy(lengths),
+                   copy.deepcopy(genera),
+                   args.fn_plot+label+".png")
+
+
+
+def go_for_clams(args):
+    """ PLot of the genus assignments for each of the scaffolds
+        The function reads the information for each of the scaffolds from the
+        database, and the results of applying the programs ClaMS from the
+        output file from ClaMS
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length
                      FROM {0}
                   """.format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
     db.close()
-#    coverages = np.array([r["coverage"] for r in data])
-#    cgs = np.array([r["CG"] for r in data])
-#    lengths = np.array([r["length"] for r in data])
-
-
     if not args.clams_file:
+
         coverages = [r["coverage"] for r in data]
         cgs = [r["CG"] for r in data]
         lengths = [r["length"] for r in data]
@@ -54,6 +163,38 @@ def go(args):
         Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
 
 
+
+
+def plot_kmeans_assignments(args):
+    """ PLot of the genus assignments for each of the scaffolds
+        after performing k-means clustering
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length
+                     FROM {0} ORDER BY scaffold
+                  """.format(db.ScaffoldsTable)
+    data = db.retrieve_data(sql_command)
+    db.close()
+    pairs_scaffold_cluster = Plots.read_kmeans_file(args.fn_kmeans)
+    pairs_scaffold_cluster.sort()
+    if len(data) != len(pairs_scaffold_cluster):
+        raise ValueError("The number of scaffolds in the database is not the " \
+         "same as the number of scaffolds in the kmeans file")
+    scaffolds = []
+    coverages = []
+    cgs = []
+    lengths = []
+    assignments = []
+    for r,pair in zip(data, pairs_scaffold_cluster):
+        coverages.append(r["coverage"])
+        cgs.append(r["CG"])
+        lengths.append(r["length"])
+        assignments.append(pairs[1])
+    Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
+
+
+
+
 if __name__ == "__main__":
 
     import argparse
@@ -73,6 +214,11 @@ if __name__ == "__main__":
                     help="Clams distance used as threshold for plotting. Scaffolds with distances " \
                     "greater that this threshold will appear unasigned",
                     )
+    parser.add_argument("--fn_kmeans",
+                    default=False,
+                    help="File with the results of running k-means on the scaffolds kmers",
+                    )
+
     parser.add_argument("fn_plot",
                     help="Plot file")
     parser.add_argument("--log",
@@ -86,4 +232,10 @@ if __name__ == "__main__":
         logging.basicConfig(stream=sys.stdout)
     logging.root.setLevel(logging.DEBUG)
 #    logging.root.setLevel(paranoid_log.PARANOID)
-    go(args)
+    #plot_genus_assignments(args)
+#    plot_genus_assignments_1_mers(args)
+
+    if args.fn_kmeans:
+        plot_kmeans_assignments(args)
+    else:
+        plot_genus_assignments(args)

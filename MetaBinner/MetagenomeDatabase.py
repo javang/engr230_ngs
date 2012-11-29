@@ -35,13 +35,13 @@ class MetagenomeDatabase(Database.Database3):
 
 
     ScaffoldsTable = "Scaffolds"
-    ScaffoldsFields = ["scaffold_id", "scaffold", "sequence", "length", "CG"]
+    ScaffoldsFields = ["scaffold_id", "scaffold", "sequence", "length", "GC"]
     ScaffoldsTypes = [str, str, str, int, float]
 
     ScaffoldKmerComparisonTable = "ScaffoldKmerComparison"
     # Scaffold, Scaffold that matches best according to the kmers, and distance
     # between the sequences according to the kmers.
-    ScaffoldKmerComparisonFields = ["scaffold", "ref_scaffold", "distance"]
+    ScaffoldKmerComparisonFields = ["scaffold", "genus", "distance"]
     ScaffoldKmerComparisonTypes = [str, str, float]
 
 
@@ -53,7 +53,7 @@ class MetagenomeDatabase(Database.Database3):
             Creates the genes table and reads the genes from the file
             @param fn_genes File with the information for the Genes
         """
-        log.info("Creating genes table ...")
+        log.info("Creating table with information about the genes ...")
         gene_record = GeneParser.GeneRecord()
         names = gene_record.fields_names
         types = gene_record.fields_types
@@ -103,8 +103,9 @@ class MetagenomeDatabase(Database.Database3):
                 data = [] # empty data to avoid using a lot of memory
         # store last chunk
         if len(data) > 0:
+            n_stored += len(data)
             self.store_data(self.SequenceTable,data)
-
+            log.info("Stored %20d sequences\r",n_stored)
 
     def create_blast_results_table(self):
         """
@@ -184,8 +185,9 @@ class MetagenomeDatabase(Database.Database3):
                 data = [] # empty data to avoid using a lot of memory
         # store last batch
         if len(data) > 0:
+            n_stored += len(data)
             self.store_data(self.ScaffoldsTable, data)
-
+            log.info("Stored %20d sequences\r", n_stored)
 
     def add_scaffold_coverage(self, fn):
         """ Add the coverage values to the table containing the Scaffolds
@@ -201,7 +203,7 @@ class MetagenomeDatabase(Database.Database3):
         cnames = self.get_table_column_names(self.ScaffoldsTable)
         if not "coverage" in cnames:
             self.add_column(self.ScaffoldsTable, "coverage",float)
-        log.debug("Adding the coverage column to the table %s",self.ScaffoldsTable)
+        log.info("Adding the coverage column to the table %s",self.ScaffoldsTable)
         fhandle = open(fn, "rU")
         reader = csv.reader(fhandle, delimiter=",")
         reader.next()
@@ -210,3 +212,91 @@ class MetagenomeDatabase(Database.Database3):
         self.executemany(sql_command, data)
         self.commit()
         fhandle.close()
+
+
+    def get_genera_sequences_from(self, table):
+        """ Puts all the scaffolds assigned to a genus together and retunrs a dictionary of
+            sequences.
+
+            The function reads the database to recover the genus given each of the assigned
+            scaffolds. Scaffolds having the same genus are concatenated. The concatenated
+            frankenstein sequences can be used to calculate k-mer signatures for each of the
+            genera.
+            @param table The table used to build the sequences. It must have at least 2
+            columns: scaffold and genus
+
+        """
+        log.info("Joining the sequences of all the scaffolds with the same genus")
+        names = self.get_tables_names()
+        if table not in names:
+            raise ValueError("The database does not have table {0}".format(table))
+        # Get all the scaffolds assigned
+        sql_command = """SELECT {0}.scaffold, {0}.genus, {1}.sequence
+                         FROM {0}
+                         INNER JOIN {1}
+                         WHERE {0}.scaffold={1}.scaffold
+                      """.format(table, self.ScaffoldsTable)
+        genus2sequence_dict = dict() # dictionary of sequences indexed by genus
+        assigned_scaffolds = set()
+        cursor = self.execute(sql_command)
+        record = cursor.fetchone()
+        while record:
+            genus = record["genus"]
+            if not genus in genus2sequence_dict:
+                genus2sequence_dict[genus] = [record["sequence"]]
+            else:
+                genus2sequence_dict[genus].append(record["sequence"])
+            assigned_scaffolds.add(record["scaffold"])
+            record = cursor.fetchone()
+        # join all sequences
+        for genus in genus2sequence_dict:
+            genus2sequence_dict[genus] = "".join(genus2sequence_dict[genus])
+        return genus2sequence_dict, assigned_scaffolds
+
+    def get_genera_sequences_fromV1(self, table):
+        """ Puts all the scaffolds assigned to a genus together and retunrs a dictionary of
+            sequences.
+
+            The function reads the database to recover the genus given each of the assigned
+            scaffolds. Scaffolds having the same genus are concatenated. The concatenated
+            frankenstein sequences can be used to calculate k-mer signatures for each of the
+            genera.
+            @param table The table used to build the sequences. It must have at least 2
+            columns: scaffold and genus
+
+        """
+        log.info("Joining the sequences of all the scaffolds with the same genus")
+        names = self.get_tables_names()
+        if table not in names:
+            raise ValueError("The database does not have table {0}".format(table))
+        # Get all the scaffolds assigned
+        sql_command = """SELECT {0}.scaffold, {0}.genus, {1}.sequence
+                         FROM {0}
+                         INNER JOIN {1}
+                         WHERE {0}.scaffold={1}.scaffold
+                      """.format(table, self.ScaffoldsTable)
+        genus2sequence_dict = dict() # dictionary of sequences indexed by genus
+        assigned_scaffolds = set()
+        cursor = self.execute(sql_command)
+        record = cursor.fetchone()
+        i = 0
+        while record:
+            genus = record["genus"]
+            i += 1
+            if i%1000 == 0:
+                log.debug("Processed scaffolds: %s",i)
+            if not genus in genus2sequence_dict:
+                genus2sequence_dict[genus] = record["sequence"]
+            else:
+                genus2sequence_dict[genus] += record["sequence"]
+            assigned_scaffolds.add(record["scaffold"])
+            record = cursor.fetchone()
+        return genus2sequence_dict, assigned_scaffolds
+
+    def pass_blast_assigned_scaffolds_to_kmer_table(self):
+
+        sql_command = "SELECT * FROM {0}".format(self.ScaffoldsAssignmentsTable)
+        data = self.retrieve_data(sql_command)
+        for i in range(len(data)):
+            data[i] = (data[i]["scaffold"], data[i]["genus"], 0)
+        self.store_data(self.ScaffoldKmerComparisonTable, data)

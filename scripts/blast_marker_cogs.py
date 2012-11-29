@@ -60,18 +60,15 @@ def blast_marker_cogs(args):
     if db.BlastResultsTable in names:
         db.drop_table(db.BlastResultsTable)
     db.create_blast_results_table()
-    db.close()
 
     log.info("Running BLAST for %s marker COGS",len(markercogs))
     n_batch_sequences = 100 # sequences to blast per batch
     sequence_tuples = []
     for gene_id,cog_id in data:
         if cog_id in markercogs:
-            db.connect(args.fn_database)
             sql_command = """SELECT sequence FROM {0}
                         WHERE gene_id="{1}" """.format(db.SequenceTable, gene_id)
             records = db.retrieve_data(sql_command)
-            db.close()
             if len(records) != 1:
                 # Report but do not raise, continue processing other genes
                 log.error("Problem with gene_id %s. There are no sequences in the database or "
@@ -81,18 +78,14 @@ def blast_marker_cogs(args):
             sequence_tuples.append((records[0][0], gene_id, blast_database))
             if len(sequence_tuples) == n_batch_sequences:
                 batch_results = blast(sequence_tuples)
-                db.connect(args.fn_database)
                 db.store_blast_results(batch_results)
-                db.close()
                 sequence_tuples = []
     # Final run
     if len(sequence_tuples):
         batch_results = blast(sequence_tuples)
         batch_genes_ids = [tup[1] for tup in sequence_tuples]
-        db.connect(args.fn_database)
         db.store_blast_results(batch_results)
-        db.close()
-
+    db.close()
 
 
 if __name__ == "__main__":
@@ -111,7 +104,7 @@ if __name__ == "__main__":
     parser.add_argument("--cogsdbdir",
                         default=".",
                         help="Directory where to locate the BLAST databases of the COGs. These " \
-                        "databases nweed to be generated using makeblastdb from BLAST.")
+                        "databases need to be generated using makeblastdb from BLAST.")
     parser.add_argument("--log",
                     dest="log",
                     default = False,
