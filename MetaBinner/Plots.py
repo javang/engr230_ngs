@@ -116,3 +116,10 @@ def read_kmeans_file(fn):
     pairs_scaffold_cluster = [(r[0].strip("\""),r[1]) for r in reader]
     f.close()
     return pairs_scaffold_cluster
+
+def read_label_propagation_file(fn):
+    f = open(fn, "r")
+    reader = csv.reader(f, delimiter=" ")
+    pairs_scaffold_genus = [(r[0].strip("\""),r[2]) for r in reader]
+    f.close()
+    return pairs_scaffold_genus

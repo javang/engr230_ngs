@@ -187,11 +187,35 @@ def plot_kmeans_assignments(args):
     assignments = []
     for r,pair in zip(data, pairs_scaffold_cluster):
         coverages.append(r["coverage"])
-        cgs.append(r["CG"])
+        cgs.append(r["GC"])
         lengths.append(r["length"])
         assignments.append(pairs[1])
     Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
 
+
+def plot_label_propagation(args):
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length
+                     FROM {0} ORDER BY scaffold
+                  """.format(db.ScaffoldsTable)
+    data = db.retrieve_data(sql_command)
+    db.close()
+    pairs_scaffold_genus = Plots.read_label_propagation_file(args.fn_kmeans)
+    pairs_scaffold_genus.sort()
+    if len(data) != len(pairs_scaffold_genus):
+        raise ValueError("The number of scaffolds in the database %d is not the " \
+         "same as the number of scaffolds %d in the kmeans file" % (len(data), len(pairs_scaffold_genus)))
+    scaffolds = []
+    coverages = []
+    cgs = []
+    lengths = []
+    assignments = []
+    for r,pair in zip(data, pairs_scaffold_genus):
+        coverages.append(r["coverage"])
+        cgs.append(r["GC"])
+        lengths.append(r["length"])
+        assignments.append(pair[1])
+    Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
 
 
 
@@ -236,6 +260,7 @@ if __name__ == "__main__":
 #    plot_genus_assignments_1_mers(args)
 
     if args.fn_kmeans:
-        plot_kmeans_assignments(args)
+        #plot_kmeans_assignments(args)
+        plot_label_propagation(args)
     else:
         plot_genus_assignments(args)
