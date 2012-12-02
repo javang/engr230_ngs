@@ -169,12 +169,14 @@ def plot_kmeans_assignments(args):
     """ PLot of the genus assignments for each of the scaffolds
         after performing k-means clustering
     """
+    log.info("Plotting the K-means file %s", args.fn_kmeans)
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length
                      FROM {0} ORDER BY scaffold
                   """.format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
     db.close()
+    log.info("Plotting the K-means file %s", args.fn_kmeans)
     pairs_scaffold_cluster = Plots.read_kmeans_file(args.fn_kmeans)
     pairs_scaffold_cluster.sort()
     if len(data) != len(pairs_scaffold_cluster):
@@ -189,7 +191,7 @@ def plot_kmeans_assignments(args):
         coverages.append(r["coverage"])
         cgs.append(r["GC"])
         lengths.append(r["length"])
-        assignments.append(pairs[1])
+        assignments.append(pair[1])
     Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
 
 
@@ -200,7 +202,7 @@ def plot_label_propagation(args):
                   """.format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
     db.close()
-    pairs_scaffold_genus = Plots.read_label_propagation_file(args.fn_kmeans)
+    pairs_scaffold_genus = Plots.read_label_propagation_file(args.lbl_propagation)
     pairs_scaffold_genus.sort()
     if len(data) != len(pairs_scaffold_genus):
         raise ValueError("The number of scaffolds in the database %d is not the " \
@@ -228,7 +230,7 @@ if __name__ == "__main__":
                     """)
 
     parser.add_argument("fn_database",
-                    help="Datbabase formed by the files provided by the IMG/M for a metagenome. ")
+                    help="Database formed by the files provided by the IMG/M for a metagenome. ")
     parser.add_argument("--clams_file",
                     help="Ouput file from ClaMS with the assignments for each contig. If this file is "
                     "not given, the plot will not have assignments")
@@ -243,8 +245,14 @@ if __name__ == "__main__":
                     help="File with the results of running k-means on the scaffolds kmers",
                     )
 
+    parser.add_argument("--fn_lblp",
+                    dest="lbl_propagation",
+                    default=False,
+                    help="File with the results of running the label propagation algorithm from scikit-learn",
+                    )
+
     parser.add_argument("fn_plot",
-                    help="Plot file")
+                    help="Output file with the figure")
     parser.add_argument("--log",
                     dest="log",
                     default = False,
@@ -260,7 +268,10 @@ if __name__ == "__main__":
 #    plot_genus_assignments_1_mers(args)
 
     if args.fn_kmeans:
-        #plot_kmeans_assignments(args)
+        plot_kmeans_assignments(args)
+        quit()
+    if args.lbl_propagation:
         plot_label_propagation(args)
-    else:
-        plot_genus_assignments(args)
+        quit()
+
+    plot_genus_assignments(args)

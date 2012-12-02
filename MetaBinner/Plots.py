@@ -15,8 +15,9 @@ class MyColors:
     colors_list = ['red', 'blue', 'green', 'orange', 'purple',
                 'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
                'LightCoral', 'gold', 'yellow','pink', 'BurlyWood',
-               'chocolate', 'crimson','deeppink', 'indianred', 'acqua', 'aquamarine',
-               'Darkorange','darmagenta','lightgreen']
+               'chocolate', 'crimson','deeppink', 'indianred',  'aquamarine','aqua',
+               'Darkorange','darkmagenta','lightgreen', 'greenyellow', "indigo", "lime",
+               "MidnightBlue", "SaddleBrown"]
     def __init__(self):
         self.i = 0
 
@@ -40,11 +41,16 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
     ax = figure.add_subplot(111)
     figure.sca(ax)
     ax.grid()
+
     ax.set_xlabel("Coverage", fontsize=fontsize)
     ax.set_xscale("log")
     ax.set_xlim(left=1,right=max(coverages))
     ax.set_ylabel("% CG", fontsize=fontsize)
-    ax.set_position([0.05,0.1,0.65,0.8])
+
+#    ax.set_xlabel("PCA1", fontsize=fontsize) # change the labels for PCA Plots
+#    ax.set_ylabel("PCA2", fontsize=fontsize)
+
+    ax.set_position([0.07,0.1,0.65,0.8])
     plt.setp(ax.get_yticklabels(), fontsize=fontsize)
     plt.setp(ax.get_xticklabels(), fontsize=fontsize)
     # set the scale so the longest scaffold uses 1/100000 of the pixels in the figure
@@ -95,6 +101,7 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
         if len(coverages_to_plot) == 0:
             continue
         sizes = np.array(lengths_to_plot) * scatter_scale
+        print color
         sc = ax.scatter(coverages_to_plot, gc_contents_to_plot, s=sizes, c=color,
                         marker='o', lw=None, edgecolor="none")
         labels.append(ug)
@@ -110,6 +117,14 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
 
 
 def read_kmeans_file(fn):
+    """ Reads the results from label propagation clustering. The format of the
+        file is assumed to be:
+
+        header line
+        "scaffold" cluster_number genus assigned
+
+        @param fn name of the input file    
+    """
     f = open(fn, "r")
     reader = csv.reader(f, delimiter=" ")
     reader.next() # discard header
@@ -118,6 +133,15 @@ def read_kmeans_file(fn):
     return pairs_scaffold_cluster
 
 def read_label_propagation_file(fn):
+    """ Reads the results from label propagation clustering. The format of the
+        file is assumed to be:
+
+        header line
+        scaffold cluster_number genus assigned
+
+        @param fn name of the input file    
+    """
+    
     f = open(fn, "r")
     reader = csv.reader(f, delimiter=" ")
     pairs_scaffold_genus = [(r[0].strip("\""),r[2]) for r in reader]
