@@ -144,7 +144,6 @@ def do_kmeans(args, n_clusters):
         TODO: Needs refactoring to merge it with do_pca()
         
         @param     n_clusters The number of clusters to use
-    """
     
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     kcounter = Kmer.KmerCounter(args.kmer)
@@ -164,7 +163,7 @@ def do_kmeans(args, n_clusters):
             f.close()
     kmeans = cluster.KMeans(init='k-means++', n_clusters=n_clusters, n_init=10),
               name="k-means++", data=)
-
+    """
 
 
 
