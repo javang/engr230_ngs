@@ -101,7 +101,6 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
         if len(coverages_to_plot) == 0:
             continue
         sizes = np.array(lengths_to_plot) * scatter_scale
-        print color
         sc = ax.scatter(coverages_to_plot, gc_contents_to_plot, s=sizes, c=color,
                         marker='o', lw=None, edgecolor="none")
         labels.append(ug)
