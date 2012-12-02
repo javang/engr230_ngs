@@ -58,7 +58,7 @@ def filter_genus_assignments(assignments, n_appearances=3, bit_score_threshold=5
 
 
 
-def join_sequences_by_genus()
+def join_sequences_by_genus():
     db = MetagenomeDatabase.MetagenomeDatabase(fn_database)
     names = db.get_tables_names()
     if db.ScaffoldsAssignmentsTable not in names:
