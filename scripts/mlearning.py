@@ -59,7 +59,7 @@ def do_label_propagation(args, mat):
     label_spread = label_propagation.LabelSpreading(kernel='knn', alpha=1.0)
     label_spread.fit(mat, all_labels)
     output_labels = label_spread.transduction_
-    fhandle = open(args.fn_learn, "w")
+    #fhandle = open(args.fn_learn, "w")
     #for sc, lab in zip(all_scaffolds, output_labels):
     #    text = "{0} {1} {2}\n".format(sc,lab, encoder.inverse_transform(lab))
     #    fhandle.write(text)
