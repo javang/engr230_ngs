@@ -14,13 +14,14 @@ import MetaBinner.definitions as defs
 import csv
 import sys
 
+#,'LightSteelBlue'
 class MyColors:
-    colors_list = ['red', 'blue', 'green', 'orange', 'purple',
-                'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
-               'LightCoral', 'gold', 'yellow','pink', 'BurlyWood',
-               'chocolate', 'crimson','deeppink', 'indianred',  'aquamarine','aqua',
+    colors_list = ['red', 'blue', 'green', 'orange', 'yellow', 'purple',
+                'DarkOrchid', 'olive', 'salmon','brown','MediumPurple',
+               'LightCoral', 'gold', 'pink','cyan', 'BurlyWood',
+               'chocolate', 'crimson','deeppink', 'black','aquamarine','aqua',
                'Darkorange','darkmagenta','lightgreen', 'greenyellow', "indigo", "lime",
-               "MidnightBlue", "SaddleBrown"]
+               "MidnightBlue", "SaddleBrown",'indianred','khaki']
     def __init__(self):
         self.i = 0
 
@@ -71,7 +72,10 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
     unique_genera = set(genera)
     if defs.not_assigned in unique_genera:
         unique_genera.remove(defs.not_assigned)
-    unique_genera = [defs.not_assigned] + [g for g in unique_genera]
+
+    unique_genera = [g for g in unique_genera]
+    unique_genera.sort()
+    unique_genera = [defs.not_assigned] + unique_genera
     mycolors = MyColors()
     scatter_plots = []
     labels = []
