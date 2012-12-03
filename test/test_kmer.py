@@ -1,8 +1,9 @@
-
-import unittest
-import os
 import MetaBinner.Kmer as Kmer
 import MetaBinner.paranoid_log as paranoid_log
+
+import itertools
+import unittest
+import os
 import sys
 import utility
 import numpy as np
@@ -14,7 +15,7 @@ class TestKmer(unittest.TestCase):
 
     def setUp(self):
         """
-            Prepare the test 
+            Prepare the test
         """
         self.sequence = "attgtaggcctgcatgaact"
         self.seq_with_unknown = "atnntagnnngcatgaact"
@@ -105,6 +106,23 @@ class TestKmer(unittest.TestCase):
             counts = kmercounter.count(sequence)
             ucounts = kmercounter.get_unique_kmers_counts(sequence)
             self.assertEqual(counts.sum(), ucounts.sum(), "The kmer counts must be the same")
+
+
+    def test_read_write_kmers(self):
+        """ test read/write kmers """
+        sequence = "ACTGGGTATCGATGACGTATATGCATTGAGAGTACGTATGNNNACTG"
+        kcounter = Kmer.KmerCounter(2)
+        kcomparer = Kmer.KmerComparer(kcounter)
+        spectrums = kcomparer.compute_spectrums([sequence,sequence],["A","B"])
+        spectrums = np.array(spectrums)
+        fn = os.path.join(self.datadir, "temp.x")
+        Kmer.write_spectrums(spectrums, fn)
+        specs = Kmer.read_spectrums(fn)
+        for i,j in itertools.product(range(specs.shape[0]),range(specs.shape[1])):
+            self.assertAlmostEqual(specs[i][j],spectrums[i][j], delta=0.005,
+              msg="Problem reading/writing k-mer spectrums")
+        os.remove(fn)
+
 
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout)
