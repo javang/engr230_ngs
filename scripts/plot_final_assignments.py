@@ -3,6 +3,7 @@
 import MetaBinner.Plots as Plots
 import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.Kmer as Kmer
+import MetaBinner.definitions as defs
 
 import sys
 import os
@@ -119,27 +120,27 @@ def plot_kmeans_assignments(args):
 
 def plot_label_propagation(args):
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length
-                     FROM {0} ORDER BY scaffold
-                  """.format(db.ScaffoldsTable)
+    sql_command = """SELECT {0}.coverage, {0}.GC, {0}.length, {1}.genus, {1}.probability
+                     FROM {0}
+                     INNER JOIN {1}
+                     WHERE {0}.scaffold = {1}.scaffold
+                  """.format(db.ScaffoldsTable, db.LabelPropagationResultsTable)
     data = db.retrieve_data(sql_command)
     db.close()
-    pairs_scaffold_genus = Plots.read_label_propagation_file(args.lbl_propagation)
-    pairs_scaffold_genus.sort()
-    if len(data) != len(pairs_scaffold_genus):
-        raise ValueError("The number of scaffolds in the database %d is not the " \
-         "same as the number of scaffolds %d in the kmeans file" % (len(data), len(pairs_scaffold_genus)))
-    scaffolds = []
     coverages = []
     cgs = []
     lengths = []
-    assignments = []
-    for r,pair in zip(data, pairs_scaffold_genus):
+    genera = []
+    for r in data:
+        if r["probability"] > args.lbl_prob:
+            genera.append(r["genus"])
+        else:
+            genera.append(defs.not_assigned)
         coverages.append(r["coverage"])
         cgs.append(r["GC"])
         lengths.append(r["length"])
-        assignments.append(pair[1])
-    Plots.fig2(coverages, cgs, lengths, assignments, args.fn_plot)
+
+    Plots.fig2(coverages, cgs, lengths, genera, args.fn_plot)
 
 
 
@@ -157,11 +158,12 @@ if __name__ == "__main__":
                     default=False,
                     help="File with the results of running k-means on the scaffolds kmers",
                     )
-    parser.add_argument("--fn_lblp",
-                    dest="lbl_propagation",
+    parser.add_argument("--lbl",
+                    dest="lbl_prob",
+                    type=float,
                     default=False,
-                    help="File with the results of running the label propagation algorithm from scikit-learn",
-                    )
+                    help="Probability required to accept a result from the " \
+                    "propagation algorithm from scikit-learn")
     parser.add_argument("fn_plot",
                     help="Output file with the figure")
     parser.add_argument("--log",
@@ -178,7 +180,7 @@ if __name__ == "__main__":
     if args.fn_kmeans:
         plot_kmeans_assignments(args)
         quit()
-    if args.lbl_propagation:
+    if args.lbl_prob:
         plot_label_propagation(args)
         quit()
 

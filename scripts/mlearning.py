@@ -3,6 +3,7 @@ import MetaBinner.paranoid_log as paranoid_log
 import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.Kmer as Kmer
 import MetaBinner.Plots as Plots
+import MetaBinner.definitions as defs
 import numpy as np
 
 import sklearn
@@ -41,11 +42,11 @@ def do_label_propagation(args, mat):
     sql_command = """SELECT length, coverage, GC, scaffold
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
-    db.close()
     all_labels = []
     lengths = []
     coverages = []
     gcs = []
+    scaffolds = []
     for r in data:
         s = r["scaffold"]
         if s not in scaffold2label_dict:
@@ -55,18 +56,32 @@ def do_label_propagation(args, mat):
         coverages.append(r["coverage"])
         lengths.append(r["length"])
         gcs.append(r["GC"])
+        scaffolds.append(s)
 
-    label_spread = label_propagation.LabelSpreading(kernel='knn', alpha=1.0)
+    label_spread = label_propagation.LabelSpreading(kernel='knn', n_neighbors=7, alpha=1.0)
     label_spread.fit(mat, all_labels)
-    output_labels = label_spread.transduction_
-    #fhandle = open(args.fn_learn, "w")
-    #for sc, lab in zip(all_scaffolds, output_labels):
-    #    text = "{0} {1} {2}\n".format(sc,lab, encoder.inverse_transform(lab))
-    #    fhandle.write(text)
-    #fhandle.close()
-    Plots.fig2(coverage,gcs, lengths,
-        [encoder.inverse_transform(lab) for lab in output_labels],
-        args.fn_figure)
+    output_labels = label_spread.predict(mat)
+    probabilities = label_spread.predict_proba(mat)
+
+
+#    label_spread.fit(mat[0:1000], all_labels[0:1000])
+#    output_labels = label_spread.predict(mat[0:1000])
+#    probabilities = label_spread.predict_proba(mat[0:1000])
+
+    names = db.get_tables_names()
+    if db.LabelPropagationResultsTable in names:
+        db.drop_table(db.LabelPropagationResultsTable)
+    db.create_label_propagation_results_table()
+    data = []
+    for s, lab, probs in zip(scaffolds, output_labels, probabilities):
+        p = probs.max()
+        if np.isnan(p) :
+            data.append((s, defs.not_assigned, 0))
+        else:
+            data.append((s, encoder.inverse_transform(lab), p))
+    db.store_data(db.LabelPropagationResultsTable, data)
+
+#    Plots.fig2(coverages,gcs, lengths, genera, args.fn_figure)
     db.close()
 
 

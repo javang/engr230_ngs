@@ -1,4 +1,5 @@
 
+import MetaBinner.definitions as defs
 
 import multiprocessing as mpr
 import subprocess
@@ -328,7 +329,7 @@ class KmerComparer:
                 index, distance = select_kmer_distance(kmer_distances,
                         self.kmer_distance_threshold, self.fraction_threshold)
                 if index < 0:
-                    most_similar_identifier = "not assigned"
+                    most_similar_identifier = defs.not_assigned
                 else:
                     most_similar_identifier = self.reference_identifiers[index]
                 best_matches.append((i, most_similar_identifier, distance))

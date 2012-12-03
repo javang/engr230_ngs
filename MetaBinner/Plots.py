@@ -8,6 +8,9 @@ import matplotlib.cm as cm
 import matplotlib as mpl
 import numpy as np
 from math import pi
+
+import MetaBinner.definitions as defs
+
 import csv
 import sys
 
@@ -66,15 +69,14 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
         return
 
     unique_genera = set(genera)
-    nomatch = "not assigned"
-    if nomatch in unique_genera:
-        unique_genera.remove(nomatch)
-    unique_genera = [nomatch] + [g for g in unique_genera]
+    if defs.not_assigned in unique_genera:
+        unique_genera.remove(defs.not_assigned)
+    unique_genera = [defs.not_assigned] + [g for g in unique_genera]
     mycolors = MyColors()
     scatter_plots = []
     labels = []
     for ug in unique_genera:
-        if ug == nomatch:
+        if ug == defs.not_assigned:
             color = 'gainsboro'
         else:
             color = mycolors.get_next_color()
@@ -122,7 +124,7 @@ def read_kmeans_file(fn):
         header line
         "scaffold" cluster_number genus assigned
 
-        @param fn name of the input file    
+        @param fn name of the input file
     """
     f = open(fn, "r")
     reader = csv.reader(f, delimiter=" ")
@@ -138,9 +140,9 @@ def read_label_propagation_file(fn):
         header line
         scaffold cluster_number genus assigned
 
-        @param fn name of the input file    
+        @param fn name of the input file
     """
-    
+
     f = open(fn, "r")
     reader = csv.reader(f, delimiter=" ")
     pairs_scaffold_genus = [(r[0].strip("\""),r[2]) for r in reader]

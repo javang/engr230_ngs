@@ -47,6 +47,10 @@ class MetagenomeDatabase(Database.Database3):
 
     protein_record_pattern = re.compile("([0-9]+)\s+(sg4i_[0-9]+)\s+(.*)\s+(\[.*\])")
 
+    LabelPropagationResultsTable = "LabelPropagationResults"
+    LabelPropagationResultsFields = ["scaffold", "genus", "probability"]
+    LabelPropagationResultsTypes = [str, str, float]
+
 
     def create_genes_table(self, fn_genes):
         """
@@ -300,3 +304,8 @@ class MetagenomeDatabase(Database.Database3):
         for i in range(len(data)):
             data[i] = (data[i]["scaffold"], data[i]["genus"], 0)
         self.store_data(self.ScaffoldKmerComparisonTable, data)
+
+    def create_label_propagation_results_table(self):
+        self.create_table(self.LabelPropagationResultsTable,
+                  self.LabelPropagationResultsFields,
+                  self.LabelPropagationResultsTypes)
