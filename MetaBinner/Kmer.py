@@ -462,9 +462,27 @@ def remove_reversed(kmers):
     return unique
 
 
+def read_spectrums(fn):
+    """ Read spectrums from file
 
+        @param fn The name of the file to read
+    """
+    lines = open(fn,"r").readlines()
+    for i,line in enumerate(lines):
+        lines[i] = map(float, line.split(" "))
+    mat = np.array(lines)
+    return mat
 
+def write_spectrums(mat, fn_output_spectrums):
+    """ Write spectrums to file
 
+        @param fn The name of the file to Write
+    """
+    f = open(fn_output_spectrums, "w")
+    for i in range(0,mat.shape[0]):
+        line = " ".join(map(str,mat[i,:]))
+        f.write(line+'\n')
+    f.close()
 
 
 
