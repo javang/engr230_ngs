@@ -274,7 +274,8 @@ class KmerComparer:
         """
 
         log.info("Computing the spectrums of the reference sequences")
-        self.reference_spectrums = self.compute_spectrums(self.reference_sequences, self.reference_identifiers)
+        self.reference_spectrums = self.compute_spectrums(self.reference_sequences,
+                                                     self.reference_identifiers)
         self.reference_spectrums_done = True
 
     def compute_spectrums(self, sequences, identifiers):
@@ -361,7 +362,7 @@ def compare_kmers(seq, reference_spectrums, kmer_counter):
     if len(reference_spectrums) == 0:
         raise ValueError("No reference spectrums provided")
     spectrum = kmer_counter.get_spectrum(seq)
-    kmer_distances = [L1_kmer_distance(spectrum, s) for s in reference_spectrums]
+    kmer_distances = [L1_distance(spectrum, s) for s in reference_spectrums]
     return np.array(kmer_distances)
 
 
@@ -382,12 +383,17 @@ def Edgar_kmer_distance(kmer_spectrum1, length1, kmer_spectrum2, length2, k):
     distance = np.log10(0.1 + F/L)
     return distance
 
-def L1_kmer_distance(kmer_spectrum1, kmer_spectrum2):
-    """ L1-norm of the difference between 2 k-mer spectrums
-        @param kmer_spectrum1 First spectrum (a numpy vector)
-        @param kmer_spectrum2 Second spectrum (a numpy vector)
+def L1_distance(x, y):
+    """ L1-norm between vectors
     """
     L1 = np.abs(kmer_spectrum1 - kmer_spectrum2).sum()
+    return L1
+
+
+def L2_distance(x,y):
+    """ L2-norm between vectors
+    """
+    L1 = np.square(x,y).sum()
     return L1
 
 

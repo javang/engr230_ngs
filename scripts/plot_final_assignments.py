@@ -15,6 +15,36 @@ import numpy as np
 import MetaBinner.paranoid_log as paranoid_log
 log = logging.getLogger("assign_genus")
 
+def plot_genus_assignments_blast_results(args):
+    """ Draws a plot of the read coverage for the scaffolds vs their GC content
+
+        Each of the genera is assigned a color.
+        This new version assumes that the ScaffoldKmerComparisonTable
+        of final assignments has merged the results from ScaffoldsAssignmentsTable
+        (the scaffolds assigned with BLAST)
+
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {1}.scaffold, {1}.genus, {0}.length, {0}.GC, {0}.coverage
+                     FROM {1}
+                     INNER JOIN {0}
+                     WHERE {1}.scaffold = {0}.scaffold
+
+                  """.format(db.ScaffoldsTable,
+                             db.ScaffoldsAssignmentsTable)
+    data = db.retrieve_data(sql_command)
+    coverages = []
+    gcs = []
+    lengths = []
+    genera = []
+    for r in data:
+        coverages.append(r["coverage"])
+        gcs.append(r["GC"])
+        lengths.append(r["length"])
+        genera.append(r["genus"])
+    print "coverages",len(coverages),"gcs",len(gcs),"lengths",len(lengths),"genera",len(genera)
+    Plots.fig2(coverages, gcs, lengths, genera, args.fn_plot)
+
 def plot_genus_assignments(args):
     """ Draws a plot of the read coverage for the scaffolds vs their GC content
 
@@ -185,5 +215,6 @@ if __name__ == "__main__":
         quit()
 
     plot_genus_assignments(args)
+#    plot_genus_assignments_blast_results(args)
 #    plot_genus_assignments_1_mers(args)
 
