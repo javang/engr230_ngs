@@ -31,17 +31,13 @@ def do_label_propagation_with_coverage(args, mat):
     assigned_scaffolds = db.retrieve_data(sql_command)
     # calculate labels
     encoder  = sklearn.preprocessing.LabelEncoder()
-#    known_labels = encoder.fit_transform([r["genus"] for r in assigned_scaffolds])
-    known_labels = encoder.fit_transform([str(i) for i in range(len(assigned_scaffolds))])
+    known_labels = encoder.fit_transform([r["genus"] for r in assigned_scaffolds])
 
 
     log.debug("Labels %s",encoder.classes_)
     log.debug("Number of labels: %s", len(known_labels))
 
     scaffold2label_dict = dict()
-#    for r in assigned_scaffolds:
-#        scaffold2label_dict[r["scaffold"]] = encoder.transform([r["genus"]])[0]
-
     for i,r in enumerate(assigned_scaffolds):
         scaffold2label_dict[r["scaffold"]] = encoder.transform([str(i)])[0]
 

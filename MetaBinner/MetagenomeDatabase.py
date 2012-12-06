@@ -319,43 +319,37 @@ class MetagenomeDatabase(Database.Database3):
             their spectrums are stored as a new column
             @param k The size of the kmers
         """
-        tnames = self.get_tables_names()
-        if self.ScaffoldsTable not in tnames:
-            raise ValueError("Cannot add k-mer spectums. The table with the scaffolds does "\
-                "not exist")
-        cnames = self.get_table_column_names(self.ScaffoldsTable)
-        if not "spectrum" in cnames:
+        log.debug("Adding a column with the k-mer spectrums to the scaffolds table")
+        if not self.get_table_exists(self.ScaffoldsTable):
+            raise ValueError("Cannot add k-mer spectrums. Scaffolds table  does not exist")
+        if not "spectrum" in self.get_table_column_names(self.ScaffoldsTable):
             self.add_column(self.ScaffoldsTable, "spectrum",str)
 
         kcounter = Kmer.KmerCounter(kmer_size)
         kcomparer = Kmer.KmerComparer(kcounter)
-        sql_command = """SELECT scaffold, sequence 
-                         FROM {0} ORDER BY scaffold""".format(self.ScaffoldsTable)
+        sql_command = """SELECT scaffold, sequence FROM {0}""".format(self.ScaffoldsTable)
         cursor = self.execute(sql_command)
         record = cursor.fetchone()
         batch_size = 1000
         sequences = []
         scaffolds = []
+        update_command = """ UPDATE {0} SET spectrum=? WHERE scaffold=? """.format(self.ScaffoldsTable)
         while record:
             scaffold = record["scaffold"]
             scaffolds.append(scaffold)
             sequences.append(record["sequence"])
             if len(sequences) == batch_size:
                 spectrums = kcomparer.compute_spectrums(sequences, scaffolds)
-                
-                data = [(sc, "#".join(map(str,sp))) for sc, sp in zip(scaffolds,spectrums)]
-                sql_command = """ UPDATE {0} SET spectrum=? WHERE scaffold=? """.format(self.ScaffoldsTable)
-                self.executemany(sql_command, data)
+                data = [("#".join(map(str,sp)), sc) for sp, sc in zip(spectrums, scaffolds)]
+                self.executemany(update_command, data)
                 self.commit()
-                
                 sequences = []
                 scaffolds = []
             record = cursor.fetchone()
         if len(sequences) > 0:
             spectrums = kcomparer.compute_spectrums(sequences, scaffolds)
-            data = [(sc, "#".join(map(str,sp))) for sc, sp in zip(scaffolds,spectrums)]
-            sql_command = """ UPDATE {0} SET spectrum=? WHERE scaffold=? """.format(self.ScaffoldsTable)
-            self.executemany(sql_command, data)
+            data = [("#".join(map(str,sp)), sc) for sp, sc in zip(spectrums, scaffolds)]
+            self.executemany(update_command, data)
             self.commit()
             sequences = []
             scaffolds = []

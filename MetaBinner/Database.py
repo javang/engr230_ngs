@@ -196,6 +196,12 @@ class Database3(sqlite.Connection):
             for c in self.get_table_column_names(t):
                 print "   |_ {0}".format(c)
 
+    def get_table_exists(self, name):
+        if name not in self.get_tables_names():
+            return False
+        return True
+
+
 class Database2:
 
 

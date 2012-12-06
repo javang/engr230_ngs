@@ -15,9 +15,15 @@ log = logging.getLogger("label_propagation")
 
 
 def go(args):
-    binning = LabelPropagationBinning.LabelPropagationBinning(args.fn_database)
-    binning.try_to_join_initial_bins(2)
-    
+    params = LabelPropagationBinning.BinningParameters()
+    params.kmer_size =3
+    params.max_iterations = 1
+    binning = LabelPropagationBinning.LabelPropagationBinning(args.fn_database, params)
+#    binning.compute_scaffolds_spectrums()
+#    binning.write_scaffolds_spectrums("3mers_spectrums.txt")
+#    binning.read_scaffolds_spectrums("3mers_spectrums.txt")
+
+    binning.run()
 
 if __name__ == "__main__":
 
