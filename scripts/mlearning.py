@@ -24,74 +24,29 @@ log = logging.getLogger("mlearning")
 
 def do_label_propagation_with_coverage(args, mat):
     """ Same as label propagation but the coverage is part of the vector of features
+        @param Numpy Matrix with the spectrums of the scaffolds. Each column is one
+        spectrum. The last column for the coverage is added to it before running the
+        algorithm 
     """
-    log.info("Applying label propagataion to the k-mer spectrums and coverage")
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    sql_command = """SELECT scaffold, genus FROM {0}""".format(db.ScaffoldsAssignmentsTable)
-    assigned_scaffolds = db.retrieve_data(sql_command)
-    # calculate labels
-    encoder  = sklearn.preprocessing.LabelEncoder()
-    known_labels = encoder.fit_transform([r["genus"] for r in assigned_scaffolds])
-
-
-    log.debug("Labels %s",encoder.classes_)
-    log.debug("Number of labels: %s", len(known_labels))
-
-    scaffold2label_dict = dict()
-    for i,r in enumerate(assigned_scaffolds):
-        scaffold2label_dict[r["scaffold"]] = encoder.transform([str(i)])[0]
-
-    sql_command = """SELECT length, coverage, GC, scaffold
+    log.info("Applying label propagataion to the k-mer spectrums and coverage")
+    sql_command = """SELECT  coverage, scaffold
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
-    all_labels = []
-    lengths = []
     coverages = []
-    gcs = []
-    scaffolds = []
     for r in data:
-        s = r["scaffold"]
-        if s not in scaffold2label_dict:
-            all_labels.append(-1) # unknown label
-        else:
-            all_labels.append( scaffold2label_dict[s] )
         coverages.append(r["coverage"])
-        lengths.append(r["length"])
-        gcs.append(r["GC"])
-        scaffolds.append(s)
     n = len(coverages)
     covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
     mat = np.hstack([mat,covs])
-    log.debug("data matrix %s",mat.shape)
-    clamping_factor = 1
-    label_spread = label_propagation.LabelSpreading(kernel='knn', n_neighbors=7, alpha=clamping_factor)
-    label_spread.fit(mat, all_labels)
-    output_labels = label_spread.predict(mat)
-    probabilities = label_spread.predict_proba(mat)
-
-#    label_spread.fit(mat[0:5000], all_labels[0:5000])
-#    output_labels = label_spread.predict(mat[0:5000])
-#    probabilities = label_spread.predict_proba(mat[0:5000])
-
-    names = db.get_tables_names()
-    if db.LabelPropagationResultsTable in names:
-        db.drop_table(db.LabelPropagationResultsTable)
-    db.create_label_propagation_results_table()
-    data = []
-    for s, lab, probs in zip(scaffolds, output_labels, probabilities):
-        p = probs.max()
-        if np.isnan(p) :
-            data.append((s, defs.not_assigned, 0))
-        else:
-            data.append((s, encoder.inverse_transform(lab), p))
-    db.store_data(db.LabelPropagationResultsTable, data)
-
-#    Plots.fig2(coverages,gcs, lengths, genera, args.fn_figure)
-    db.close()
-
-
+    do_label_propagation(args, mat)
 
 def do_label_propagation(args, mat):
+    """ Applies label propagation to the k-mer spectrums of the scaffolds
+
+        @param Numpy Matrix with the spectrums of the scaffolds. Each column is one
+        spectrum
+    """
     log.info("Applying label propagataion to the k-mer spectrums")
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     sql_command = """SELECT scaffold, genus FROM {0} """.format(db.ScaffoldsAssignmentsTable)
@@ -296,8 +251,8 @@ if __name__ == "__main__":
     else:
         mat = get_scaffolds_spectrums_matrix(args)
     if args.lbl:
-#        do_label_propagation(args, mat)
-        do_label_propagation_with_coverage(args, mat)
+        do_label_propagation(args, mat)
+#        do_label_propagation_with_coverage(args, mat)
     if args.kmeans:
         do_kmeans(args, mat)
     if args.pca:
