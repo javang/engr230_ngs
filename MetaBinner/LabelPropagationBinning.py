@@ -75,7 +75,7 @@ class BinningParameters:
     # The lower the threshold, the more similar the scaffolds in a cluster but there
     # will be more clusters
     distance_threshold = 0.15
-    prob = 0.95 # threshold to consider a label assigment reliable
+    prob = 0.60 # threshold to consider a label assigment reliable
     max_iterations = 1
 
 class LabelPropagationBinning:
@@ -85,7 +85,7 @@ class LabelPropagationBinning:
         """
         self.db = MetagenomeDatabase.MetagenomeDatabase(fn_database)
         self.ids_generator = ClusterIdGenerator()
-        self.params = binning_parameters
+        self.params = binning_parameters 
         self.scaffolds2cluster_dict = dict()
 
     def run(self):
@@ -116,6 +116,18 @@ class LabelPropagationBinning:
                 converged = True
             it += 1
 
+    def store_labels(self, scaffolds, labels):
+        """
+            Store the labels in the self.db.LabelPropagationResultsTable
+            JUST FOR DEBUGGING
+        """
+        log.debug("Storing the raw labels in %s",self.db.LabelPropagationResultsTable)
+        if self.db.get_table_exists(self.db.LabelPropagationResultsTable):
+            self.db.drop_table(self.db.LabelPropagationResultsTable)
+        self.db.create_label_propagation_results_table()
+        data = [(s,l,1) for s,l in zip(scaffolds, labels)]
+        self.db.store_data(self.db.LabelPropagationResultsTable, data)
+                
 
     def join_initial_bins(self):
         """
@@ -146,15 +158,20 @@ class LabelPropagationBinning:
         sql_command = """SELECT scaffold
                          FROM {0} ORDER BY scaffold""".format(self.db.ScaffoldsTable)
         data = self.db.retrieve_data(sql_command)
-        labels = []
+        labels_label_propagation_format = []
         for r in data:
             scaffold = r["scaffold"]
             if scaffold in self.scaffold2cluster_dict:
                 # label the scaffold with the label of the cluster
-                labels.append(self.scaffold2cluster_dict[scaffold])
+                labels_label_propagation_format.append(self.scaffold2cluster_dict[scaffold])
             else:
-                labels.append(-1) # not assigned
-        return labels
+                labels_label_propagation_format.append(-1) # not assigned
+
+
+        self.store_labels([r["scaffold"] for r in data],labels_label_propagation_format)
+        raw_input("join_initial_bins. Labels stored. Press ENTER")
+
+        return labels_label_propagation_format
 
         """
         log.debug("Clusters:\n%s",element2cluster)
@@ -249,14 +266,17 @@ class LabelPropagationBinning:
                     for e in cluster_elements:
                         sc = reliable_scaffolds[e]
                         self.scaffold2cluster_dict[sc] = new_label
+
         log.debug("Did split %s",did_split)
 
         sql_command = """SELECT scaffold FROM {0}""".format(self.db.ScaffoldsTable)
         all_scaffolds = [r["scaffold"] for r in self.db.retrieve_data(sql_command)]
-        labels = []
+        labels_label_propagation_format = []
         for sc in all_scaffolds:
-            labels.append(self.scaffold2cluster_dict[sc])
-        return did_split, labels
+            labels_label_propagation_format.append(self.scaffold2cluster_dict[sc])
+        self.store_labels(all_scaffolds,labels_label_propagation_format)
+        raw_input("split_bins. Labels stored. Press ENTER")
+        return did_split, labels_label_propagation_format
 
     def do_label_propagation(self, input_labels):
         """ Same as label propagation but the coverage is part of the vector of features
@@ -270,16 +290,22 @@ class LabelPropagationBinning:
         scaffolds = [r["scaffold"] for r in data]
         mat = self.get_spectrums_coverage_matrix(data)
         encoder  = sklearn.preprocessing.LabelEncoder()
+
         known_labels = encoder.fit_transform(input_labels)
+
+        log.debug("Different labels to propagate: %s",set(input_labels))
+        log.debug("After fit transform: %s",set(known_labels))
+
         log.debug("data matrix %s",mat.shape)
         clamping_factor = 1
         label_spread = label_propagation.LabelSpreading(kernel='knn', n_neighbors=7, alpha=clamping_factor)
         label_spread.fit(mat, input_labels)
-        output_labels = label_spread.predict(mat)
+        output_cluster_labels = label_spread.predict(mat)
+        log.debug("Different output labels : %s",set(output_cluster_labels))
         probabilities = label_spread.predict_proba(mat)
 
 #        label_spread.fit(mat[0:5000], input_labels[0:5000])
-#        output_labels = label_spread.predict(mat[0:5000])
+#        output_cluster_labels = label_spread.predict(mat[0:5000])
 #        probabilities = label_spread.predict_proba(mat[0:5000])
 
         if self.db.get_table_exists(self.db.LabelPropagationResultsTable):
@@ -288,17 +314,19 @@ class LabelPropagationBinning:
 
         # store the assignments in the database
         data = []
-        for sc, lab, probs in zip(scaffolds, output_labels, probabilities):
+        for sc, lab, probs in zip(scaffolds, output_cluster_labels, probabilities):
 
             p = probs.max()
             if np.isnan(p) :
                 g = -1
             else:
-                g = encoder.inverse_transform(lab)
+                g = lab
+#                g = encoder.inverse_transform(lab)
             self.scaffold2cluster_dict[sc] = g
             # store as genus the cluster index
             data.append((sc, g, p))
         self.db.store_data(self.db.LabelPropagationResultsTable, data)
+        raw_input("label propagation. Data stored. Press ENTER")
 
 
     def read_scaffolds_spectrums(self, fn):
