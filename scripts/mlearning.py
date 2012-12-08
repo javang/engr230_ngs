@@ -4,6 +4,8 @@ import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.Kmer as Kmer
 import MetaBinner.Plots as Plots
 import MetaBinner.definitions as defs
+import MetaBinner.LabelPropagationBinning as LabelPropagationBinning
+
 import numpy as np
 
 import sklearn
@@ -21,25 +23,6 @@ import logging
 
 
 log = logging.getLogger("mlearning")
-
-def do_label_propagation_with_coverage(args, mat):
-    """ Same as label propagation but the coverage is part of the vector of features
-        @param Numpy Matrix with the spectrums of the scaffolds. Each column is one
-        spectrum. The last column for the coverage is added to it before running the
-        algorithm 
-    """
-    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    log.info("Applying label propagataion to the k-mer spectrums and coverage")
-    sql_command = """SELECT  coverage, scaffold
-                     FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
-    data = db.retrieve_data(sql_command)
-    coverages = []
-    for r in data:
-        coverages.append(r["coverage"])
-    n = len(coverages)
-    covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
-    mat = np.hstack([mat,covs])
-    do_label_propagation(args, mat)
 
 def do_label_propagation(args, mat):
     """ Applies label propagation to the k-mer spectrums of the scaffolds
@@ -142,19 +125,18 @@ def do_pca(args, mat, n_components=3):
     db.close()
 
 
-def do_kmeans(args, mat):
+def do_kmeans(args):
     """ Calculate kmeans on the kmer spectrums
 
         @param  mat Matrix with the spectrums (rows)
     """
-    log.info("Calculating k-means for the k-mer spectrums")
-    kmeans = cluster.KMeans(init='k-means++', n_clusters=args.kmeans, n_init=10)
-    kmeans.fit(mat)
-    clusters = kmeans.predict(mat)
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
     sql_command = """SELECT length, coverage, GC, scaffold
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
-    data = db.retrieve_data(sql_command)
+    data = self.db.retrieve_data(sql_command)
+    mat = Kmer.get_spectrums_coverage_matrix(data)
+    scaffolds = [r["scaffold"] for r in data]
+    clusters = LabelPropagationBinning.do_kmeans(mat, n_clusters)
     db.close()
     lengths = []
     coverages = []
@@ -246,14 +228,17 @@ if __name__ == "__main__":
         logging.basicConfig(stream=sys.stdout)
     logging.root.setLevel(logging.DEBUG)
 
-    if args.in_spect:
-        mat = Kmer.read_spectrums(args.in_spect)
-    else:
-        mat = get_scaffolds_spectrums_matrix(args)
+#    if args.in_spect:
+#        mat = Kmer.read_spectrums(args.in_spect)
+#    else:
+#        mat = get_scaffolds_spectrums_matrix(args)
     if args.lbl:
         do_label_propagation(args, mat)
-#        do_label_propagation_with_coverage(args, mat)
     if args.kmeans:
-        do_kmeans(args, mat)
+        x = LabelPropagationBinning.KMeansPlusLabelPropagation(args.fn_database, args.kmeans)
+        x.run()
+#        do_kmeans(args)
+
+
     if args.pca:
         do_pca(args, mat)

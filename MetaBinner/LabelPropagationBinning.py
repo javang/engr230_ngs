@@ -38,36 +38,6 @@ class ClusterIdGenerator:
         self.label = label
 
 
-def get_cluster_name(i):
-    return "cluster_" + i
-
-def do_hierarchical_clustering(mat, distance_threshold):
-    """ Do hierarchical clustering on a Matrix
-
-        @param mat The Matrix
-        @return A list  The value at each position in the list is
-         the cluster the row of the matrix belongs to. The numbers for
-         the clusters run from 1 to n_clusters. E.g.
-         A matrix with 10 rows. If the list returned is:
-         [ 1 2 3 3 2 1 1 2 3 1]
-         means that the cluster 1 is formed by the rows 0,5,6,9
-         cluster 2 by rows 1,5,7
-         cluster 3 by rows 2,3,8
-    """
-    log.info("Doing hierarchical clustering on a matrix %s",mat.shape)
-    distances = scipy.spatial.distance.pdist(mat, metric='euclidean')
-    linkage_mat = scipy.cluster.hierarchy.complete(distances)
-    log.debug("Linkage matrix:\n %s",linkage_mat.shape)
-    element2cluster = scipy.cluster.hierarchy.fcluster(linkage_mat,
-                                distance_threshold, criterion="distance")
-    n_clusters = len(set(element2cluster))
-    log.debug("Number of clusters: %s", n_clusters)
-    return element2cluster, n_clusters
-#    self.scaffolds2cluster = dict()
-#    for sc, cl in zip(scaffolds, element2cluster):
-#        self.scaffolds2cluster[sc] = cl
-
-
 class BinningParameters:
     kmer_size = 3
     # Maximum distance in the spectrum+coverage space
@@ -195,7 +165,10 @@ class LabelPropagationBinning:
         n = len(coverages)
         covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
         mat = np.hstack([spectrums, covs])
-        return mat
+        mat_scaled = sklearn.preprocessing.scale(mat)
+        Kmer.write_spectrums(mat_scaled, "mat.txt")
+        Kmer.write_spectrums(mat_scaled, "mat_scaled.txt")
+        return mat_scaled
 
     def get_current_assigned_labels(self):
         """ Return the distinct labels that are in the table of results from
@@ -329,18 +302,6 @@ class LabelPropagationBinning:
         raw_input("label propagation. Data stored. Press ENTER")
 
 
-    def read_scaffolds_spectrums(self, fn):
-        self.spectrums_mat = Kmer.read_spectrums(fn)
-        sql_command = """SELECT scaffold, sequence
-                         FROM {0}
-                         ORDER BY scaffold""".format(self.db.ScaffoldsTable)
-
-    def write_scaffolds_spectrums(self, fn):
-        if not hasattr(self, "spectrums_mat"):
-            raise ValueError("There is no spectrum matrix to write")
-        Kmer.write_spectrums(self.spectrums_mat, fn)
-
-
     def compute_scaffolds_spectrums(self):
         """ Calculate the matrix with the k-mer spectrums for the scaffolds
 
@@ -373,5 +334,83 @@ class LabelPropagationBinning:
             sequences = []
             scaffolds = []
         self.spectrums_mat = mat
+
+
+
+def do_hierarchical_clustering(mat, distance_threshold):
+    """ Do hierarchical clustering on a Matrix
+
+        @param mat The Matrix
+        @return A list  The value at each position in the list is
+         the cluster the row of the matrix belongs to. The numbers for
+         the clusters run from 1 to n_clusters. E.g.
+         A matrix with 10 rows. If the list returned is:
+         [ 1 2 3 3 2 1 1 2 3 1]
+         means that the cluster 1 is formed by the rows 0,5,6,9
+         cluster 2 by rows 1,5,7
+         cluster 3 by rows 2,3,8
+    """
+    log.info("Doing hierarchical clustering on a matrix %s",mat.shape)
+    distances = scipy.spatial.distance.pdist(mat, metric='euclidean')
+    linkage_mat = scipy.cluster.hierarchy.complete(distances)
+    log.debug("Linkage matrix:\n %s",linkage_mat.shape)
+    element2cluster = scipy.cluster.hierarchy.fcluster(linkage_mat,
+                                distance_threshold, criterion="distance")
+    n_clusters = len(set(element2cluster))
+    log.debug("Number of clusters: %s", n_clusters)
+    return element2cluster, n_clusters
+#    self.scaffolds2cluster = dict()
+#    for sc, cl in zip(scaffolds, element2cluster):
+#        self.scaffolds2cluster[sc] = cl
+
+
+def do_kmeans(mat, n_clusters):
+    """ Calculate kmeans on the kmer spectrums
+
+        @param  mat Matrix with the spectrums (rows)
+    """
+    log.info("Calculating k-means for the k-mer spectrums")
+    kmeans = cluster.KMeans(init='k-means++', n_clusters=n_clusters, n_init=10)
+    kmeans.fit(mat)
+    clusters = kmeans.predict(mat)
+    return clusters # clusters are the labels
+
+def do_label_propagation(mat, input_labels):
+    log.info("Doing label propagation with kmer-spectrums and coverage values")
+
+    encoder  = sklearn.preprocessing.LabelEncoder()
+    known_labels = encoder.fit_transform(input_labels)
+    log.debug("Different labels to propagate: %s",set(input_labels))
+    log.debug("After fit transform: %s",set(known_labels))
+    log.debug("data matrix %s",mat.shape)
+    clamping_factor = 1
+    label_spread = label_propagation.LabelSpreading(kernel='knn', n_neighbors=7, alpha=clamping_factor)
+    label_spread.fit(mat, input_labels)
+    output_labels = label_spread.predict(mat)
+    probabilities = label_spread.predict_proba(mat)
+    return output_labels, probabilities
+
+class KMeansPlusLabelPropagation:
+    def __init__(self, fn_database, n_clusters):
+        self.db = MetagenomeDatabase.MetagenomeDatabase(fn_database)
+        self.n_clusters = n_clusters
+
+    def run(self):
+        sql_command = """SELECT scaffold, spectrum, coverage FROM {0} ORDER BY scaffold""".format(self.db.ScaffoldsTable)
+        data = self.db.retrieve_data(sql_command)
+        mat = Kmer.get_spectrums_coverage_matrix(data)
+        scaffolds = [r["scaffold"] for r in data]
+        labels = do_kmeans(mat, self.n_clusters)
+        output_labels, probabilities = do_label_propagation(mat, labels)
+       # store the assignments in the database
+        data = []
+        for sc, lab, probs in zip(scaffolds, output_labels, probabilities):
+            p = probs.max()
+            if np.isnan(p) :
+                g = -1
+            else:
+                g = lab
+            data.append((sc, g, p))
+        self.db.store_data(self.db.LabelPropagationResultsTable, data)
 
 

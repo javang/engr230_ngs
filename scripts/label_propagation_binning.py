@@ -18,8 +18,8 @@ def go(args):
     params = LabelPropagationBinning.BinningParameters()
     params.kmer_size = 3
     params.max_iterations = 3
-    params.distance_threshold = 0.1
-    params.prob = 0.6
+    params.distance_threshold = 0.15
+    params.prob = 0.01
     binning = LabelPropagationBinning.LabelPropagationBinning(args.fn_database, params)
 #    binning.compute_scaffolds_spectrums()
 #    binning.write_scaffolds_spectrums("3mers_spectrums.txt")

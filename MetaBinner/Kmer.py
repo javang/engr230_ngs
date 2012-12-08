@@ -8,6 +8,10 @@ import numpy as np
 import itertools
 import logging
 import paranoid_log
+
+import sklearn
+import sklearn.preprocessing
+ 
 log = logging.getLogger("Kmer")
 
 class KmerCounter:
@@ -493,6 +497,26 @@ def write_spectrums(mat, fn_output_spectrums):
 
 
 
+def get_spectrums_coverage_matrix(data):
+    """
+        Build a matrix using the k-mer spectrums and the coverage of the scaffolds
+        @param    
+    """
+    spectrums = []
+    coverages = []
+    log.debug("Getting spectrum-coverage matrix for %s values",len(data))
+    for r in data:
+        #print [x for x in r]
+        spectrum = map(float, r["spectrum"].split("#"))
+        spectrums.append(spectrum)
+        coverages.append(r["coverage"])
+    n = len(coverages)
+    covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
+    mat = np.hstack([spectrums, covs])
+    mat_scaled = sklearn.preprocessing.scale(mat)
+    write_spectrums(mat_scaled, "mat.txt")
+    write_spectrums(mat_scaled, "mat_scaled.txt")
+    return mat_scaled
 
 
 
