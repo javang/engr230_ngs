@@ -11,7 +11,7 @@ import paranoid_log
 
 import sklearn
 import sklearn.preprocessing
- 
+
 log = logging.getLogger("Kmer")
 
 class KmerCounter:
@@ -498,9 +498,9 @@ def write_spectrums(mat, fn_output_spectrums):
 
 
 def get_spectrums_coverage_matrix(data):
-    """
-        Build a matrix using the k-mer spectrums and the coverage of the scaffolds
-        @param    
+    """ Read the matrix formed by the k-mer spectrums and the coverage of the scaffolds
+        @param data The data is obtained form a SQL query of the database and it must
+        contain the fields "spectrum" and "coverage"
     """
     spectrums = []
     coverages = []

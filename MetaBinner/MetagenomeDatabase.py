@@ -52,6 +52,10 @@ class MetagenomeDatabase(Database.Database3):
     LabelPropagationResultsFields = ["scaffold", "genus", "probability"]
     LabelPropagationResultsTypes = [str, str, float]
 
+    KmeansResultsTable = "KmeansResults"
+    KmeansResultsFields = ["scaffold", "cluster"]
+    KmeansResultsTypes = [str, int]
+
 
     def create_genes_table(self, fn_genes):
         """
@@ -311,6 +315,11 @@ class MetagenomeDatabase(Database.Database3):
                   self.LabelPropagationResultsFields,
                   self.LabelPropagationResultsTypes)
 
+
+    def create_kmeans_results_table(self):
+        self.create_table(self.KmeansResultsTable,
+                  self.KmeansResultsFields,
+                  self.KmeansResultsTypes)
 
     def add_scaffold_spectrums(self,kmer_size):
 

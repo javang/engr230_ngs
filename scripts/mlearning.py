@@ -24,11 +24,8 @@ import logging
 
 log = logging.getLogger("mlearning")
 
-def do_label_propagation(args, mat):
+def do_label_propagation(args):
     """ Applies label propagation to the k-mer spectrums of the scaffolds
-
-        @param Numpy Matrix with the spectrums of the scaffolds. Each column is one
-        spectrum
     """
     log.info("Applying label propagataion to the k-mer spectrums")
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
@@ -45,13 +42,11 @@ def do_label_propagation(args, mat):
     scaffold2label_dict = dict()
     for r in assigned_scaffolds:
         scaffold2label_dict[r["scaffold"]] = encoder.transform([r["genus"]])[0]
-    sql_command = """SELECT length, coverage, GC, scaffold
+    sql_command = """SELECT scaffold, coverage, spectrum
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
+    mat = Kmer.get_spectrums_coverage_matrix(data)
     all_labels = []
-    lengths = []
-    coverages = []
-    gcs = []
     scaffolds = []
     for r in data:
         s = r["scaffold"]
@@ -59,9 +54,6 @@ def do_label_propagation(args, mat):
             all_labels.append(-1) # unknown label
         else:
             all_labels.append( scaffold2label_dict[s] )
-        coverages.append(r["coverage"])
-        lengths.append(r["length"])
-        gcs.append(r["GC"])
         scaffolds.append(s)
 
     clamping_factor = 0.5
@@ -70,13 +62,11 @@ def do_label_propagation(args, mat):
     output_labels = label_spread.predict(mat)
     probabilities = label_spread.predict_proba(mat)
 
-
 #    label_spread.fit(mat[0:1000], all_labels[0:1000])
 #    output_labels = label_spread.predict(mat[0:1000])
 #    probabilities = label_spread.predict_proba(mat[0:1000])
 
-    names = db.get_tables_names()
-    if db.LabelPropagationResultsTable in names:
+    if db.table_exists(db.LabelPropagationResultsTable):
         db.drop_table(db.LabelPropagationResultsTable)
     db.create_label_propagation_results_table()
     data = []
@@ -87,8 +77,6 @@ def do_label_propagation(args, mat):
         else:
             data.append((s, encoder.inverse_transform(lab), p))
     db.store_data(db.LabelPropagationResultsTable, data)
-
-#    Plots.fig2(coverages,gcs, lengths, genera, args.fn_figure)
     db.close()
 
 
@@ -126,18 +114,14 @@ def do_pca(args, mat, n_components=3):
 
 
 def do_kmeans(args):
-    """ Calculate kmeans on the kmer spectrums
-
-        @param  mat Matrix with the spectrums (rows)
+    """ Calculate kmeans on the kmer spectrums and coverage of the scaffolds
     """
     db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    sql_command = """SELECT length, coverage, GC, scaffold
+    sql_command = """SELECT length, coverage, GC, scaffold, spectrum
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
-    data = self.db.retrieve_data(sql_command)
+    data = db.retrieve_data(sql_command)
     mat = Kmer.get_spectrums_coverage_matrix(data)
-    scaffolds = [r["scaffold"] for r in data]
-    clusters = LabelPropagationBinning.do_kmeans(mat, n_clusters)
-    db.close()
+    clusters = LabelPropagationBinning.do_kmeans(mat, args.kmeans)
     lengths = []
     coverages = []
     gcs = []
@@ -146,43 +130,14 @@ def do_kmeans(args):
         lengths.append(r["length"])
         gcs.append(r["GC"])
     Plots.fig2(coverages, gcs, lengths,[c for c in clusters], args.fn_figure)
-
-
-
-def get_scaffolds_spectrums_matrix(args):
-    """ Calculate the matrix with the k-mer spectrums for the scaffolds
-
-        The sequences of the scaffolds are read from the database
-    """
-    kcounter = Kmer.KmerCounter(args.kmer)
-    kcomparer = Kmer.KmerComparer(kcounter)
-    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
-    sql_command = """SELECT scaffold, sequence FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
-    cursor = db.execute(sql_command)
-    record = cursor.fetchone()
-    batch_size = 5000
-    sequences = []
-    scaffolds = []
-    mat = np.empty((0,kcounter.get_spectrum_length()))
-    while record:
-        scaffold = record["scaffold"]
-        scaffolds.append(scaffold)
-        sequences.append(record["sequence"])
-        if len(sequences) == batch_size:
-            spectrums = kcomparer.compute_spectrums(sequences, scaffolds)
-            mat = np.vstack([mat,spectrums])
-            sequences = []
-            scaffolds = []
-        record = cursor.fetchone()
-    if len(sequences) > 0:
-        spectrums = kcomparer.compute_spectrums(sequences, scaffolds)
-        mat = np.vstack([mat,spectrums])
-        sequences = []
-        scaffolds = []
-    if args.out_spect:
-        Kmer.write_spectrums(mat, args.out_spect)
-    return mat
-
+    if db.table_exists(db.KmeansResultsTable):
+        db.drop_table(db.KmeansResultsTable)
+    scaffolds = [r["scaffold"] for r in data]
+    clusters = [c for c in clusters]
+    to_store = [(s,c) for s,c in zip(scaffolds, clusters)]
+    db.create_kmeans_results_table()
+    db.store_data(db.KmeansResultsTable, to_store)
+    db.close()
 
 
 if __name__ == "__main__":
@@ -228,17 +183,14 @@ if __name__ == "__main__":
         logging.basicConfig(stream=sys.stdout)
     logging.root.setLevel(logging.DEBUG)
 
-#    if args.in_spect:
-#        mat = Kmer.read_spectrums(args.in_spect)
-#    else:
-#        mat = get_scaffolds_spectrums_matrix(args)
     if args.lbl:
-        do_label_propagation(args, mat)
+        do_label_propagation(args)
+        quit()
     if args.kmeans:
-        x = LabelPropagationBinning.KMeansPlusLabelPropagation(args.fn_database, args.kmeans)
-        x.run()
-#        do_kmeans(args)
-
-
+        #x = LabelPropagationBinning.KMeansPlusLabelPropagation(args.fn_database, args.kmeans)
+        #x.run()
+        do_kmeans(args)
+        quit()
     if args.pca:
         do_pca(args, mat)
+        quit()

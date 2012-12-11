@@ -55,7 +55,7 @@ class LabelPropagationBinning:
         """
         self.db = MetagenomeDatabase.MetagenomeDatabase(fn_database)
         self.ids_generator = ClusterIdGenerator()
-        self.params = binning_parameters 
+        self.params = binning_parameters
         self.scaffolds2cluster_dict = dict()
 
     def run(self):
@@ -97,7 +97,7 @@ class LabelPropagationBinning:
         self.db.create_label_propagation_results_table()
         data = [(s,l,1) for s,l in zip(scaffolds, labels)]
         self.db.store_data(self.db.LabelPropagationResultsTable, data)
-                
+
 
     def join_initial_bins(self):
         """
@@ -376,6 +376,15 @@ def do_kmeans(mat, n_clusters):
     return clusters # clusters are the labels
 
 def do_label_propagation(mat, input_labels):
+    """ do label propagation on a matrix of features
+
+    @param mat Input matrix. Each row is a datapoint and each column a feature
+    @param input_labels A list with the labels of the datapoints. If the Label
+    of a datapoint is not know, it must be -1
+    @return the labels proposed for each point and the matrix of probabilities
+    of each label for each datapoint
+
+    """
     log.info("Doing label propagation with kmer-spectrums and coverage values")
 
     encoder  = sklearn.preprocessing.LabelEncoder()
