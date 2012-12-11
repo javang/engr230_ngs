@@ -66,9 +66,6 @@ class BLASTMultiProcessing:
         self.databases = []
         self.failed_processes = set()
 
-    def set_databases_directory(self):
-        self.databases_dir = ""
-
     def add_sequence(self, sequence, identifier, database="nr"):
         """
             Adds a sequence to the list of sequences to blast
@@ -149,6 +146,7 @@ class BLASTMultiProcessingParser:
     def run(self):
         """
             Runs all the parsing jobs
+            @return Returs a list of pairs (parsed result, identifier)
         """
         pool = mpr.Pool(mpr.cpu_count()-1)
         handles = []

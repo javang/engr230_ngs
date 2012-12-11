@@ -119,4 +119,3 @@ if __name__ == "__main__":
     logging.root.setLevel(logging.DEBUG)
 #    logging.root.setLevel(paranoid_log.PARANOID)
     assign_genus_to_scaffolds(args)
-#    select_genus_for_scaffolds(args)

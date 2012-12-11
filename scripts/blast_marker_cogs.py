@@ -15,6 +15,7 @@ def blast(seqs):
         MultiProcessing versions
         @seqs A list of tuples of (sequence, identifier for the sequence, database to use
         for the blast procedure)
+        @return Returns a list of BLASTResult objects
     """
     if len(seqs) == 0:
        raise ValueError("No sequences provided")
