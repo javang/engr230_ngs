@@ -8,15 +8,20 @@ import matplotlib.cm as cm
 import matplotlib as mpl
 import numpy as np
 from math import pi
+
+import MetaBinner.definitions as defs
+
 import csv
 import sys
 
+#,'LightSteelBlue'
 class MyColors:
-    colors_list = ['red', 'blue', 'green', 'orange', 'purple',
-                'DarkOrchid', 'olive', 'salmon','MediumPurple','LightSteelBlue',
-               'LightCoral', 'gold', 'yellow','pink', 'BurlyWood',
-               'chocolate', 'crimson','deeppink', 'indianred', 'acqua', 'aquamarine',
-               'Darkorange','darmagenta','lightgreen']
+    colors_list = ['red', 'blue', 'green', 'orange', 'yellow', 'purple',
+                'DarkOrchid', 'olive', 'salmon','brown','MediumPurple',
+               'LightCoral', 'gold', 'pink','cyan', 'BurlyWood',
+               'chocolate', 'crimson','deeppink', 'black','aquamarine','aqua',
+               'Darkorange','darkmagenta','lightgreen', 'greenyellow', "indigo", "lime",
+               "MidnightBlue", "SaddleBrown",'indianred','khaki']
     def __init__(self):
         self.i = 0
 
@@ -40,11 +45,16 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
     ax = figure.add_subplot(111)
     figure.sca(ax)
     ax.grid()
+
     ax.set_xlabel("Coverage", fontsize=fontsize)
     ax.set_xscale("log")
     ax.set_xlim(left=1,right=max(coverages))
     ax.set_ylabel("% CG", fontsize=fontsize)
-    ax.set_position([0.05,0.1,0.65,0.8])
+
+#    ax.set_xlabel("PCA1", fontsize=fontsize) # change the labels for PCA Plots
+#    ax.set_ylabel("PCA2", fontsize=fontsize)
+
+    ax.set_position([0.07,0.1,0.65,0.8])
     plt.setp(ax.get_yticklabels(), fontsize=fontsize)
     plt.setp(ax.get_xticklabels(), fontsize=fontsize)
     # set the scale so the longest scaffold uses 1/100000 of the pixels in the figure
@@ -60,15 +70,17 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
         return
 
     unique_genera = set(genera)
-    nomatch = "not assigned"
-    if nomatch in unique_genera:
-        unique_genera.remove(nomatch)
-    unique_genera = [nomatch] + [g for g in unique_genera]
+    if defs.not_assigned in unique_genera:
+        unique_genera.remove(defs.not_assigned)
+
+    unique_genera = [g for g in unique_genera]
+    unique_genera.sort()
+    unique_genera = [defs.not_assigned] + unique_genera
     mycolors = MyColors()
     scatter_plots = []
     labels = []
     for ug in unique_genera:
-        if ug == nomatch:
+        if ug == defs.not_assigned:
             color = 'gainsboro'
         else:
             color = mycolors.get_next_color()
@@ -110,9 +122,33 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
 
 
 def read_kmeans_file(fn):
+    """ Reads the results from label propagation clustering. The format of the
+        file is assumed to be:
+
+        header line
+        "scaffold" cluster_number genus assigned
+
+        @param fn name of the input file
+    """
     f = open(fn, "r")
     reader = csv.reader(f, delimiter=" ")
     reader.next() # discard header
     pairs_scaffold_cluster = [(r[0].strip("\""),r[1]) for r in reader]
     f.close()
     return pairs_scaffold_cluster
+
+def read_label_propagation_file(fn):
+    """ Reads the results from label propagation clustering. The format of the
+        file is assumed to be:
+
+        header line
+        scaffold cluster_number genus assigned
+
+        @param fn name of the input file
+    """
+
+    f = open(fn, "r")
+    reader = csv.reader(f, delimiter=" ")
+    pairs_scaffold_genus = [(r[0].strip("\""),r[2]) for r in reader]
+    f.close()
+    return pairs_scaffold_genus

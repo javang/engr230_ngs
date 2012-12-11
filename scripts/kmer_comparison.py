@@ -143,6 +143,7 @@ if __name__ == "__main__":
                     help="Ratio distance_first_assignment/distance_second_assignment " \
                     "required to accept a genus assignment. If the value of the ratio "\
                     "is greater than this threshold the scaffold is left unassigned")
+
     parser.add_argument("--threshold",
                         type=float,
                         default=0.003,
@@ -166,3 +167,6 @@ if __name__ == "__main__":
         iterative_kmer_comparison(args)
     else:
         kmer_comparison_one_iteration(args)
+
+
+

@@ -10,6 +10,7 @@ import sys
 import logging
 import GeneParser
 import BLASTUtilities
+import MetaBinner.Kmer as Kmer
 log = logging.getLogger("MetagenomeDatabase")
 
 class MetagenomeDatabase(Database.Database3):
@@ -46,6 +47,10 @@ class MetagenomeDatabase(Database.Database3):
 
 
     protein_record_pattern = re.compile("([0-9]+)\s+(sg4i_[0-9]+)\s+(.*)\s+(\[.*\])")
+
+    LabelPropagationResultsTable = "LabelPropagationResults"
+    LabelPropagationResultsFields = ["scaffold", "genus", "probability"]
+    LabelPropagationResultsTypes = [str, str, float]
 
 
     def create_genes_table(self, fn_genes):
@@ -300,3 +305,54 @@ class MetagenomeDatabase(Database.Database3):
         for i in range(len(data)):
             data[i] = (data[i]["scaffold"], data[i]["genus"], 0)
         self.store_data(self.ScaffoldKmerComparisonTable, data)
+
+    def create_label_propagation_results_table(self):
+        self.create_table(self.LabelPropagationResultsTable,
+                  self.LabelPropagationResultsFields,
+                  self.LabelPropagationResultsTypes)
+
+
+    def add_scaffold_spectrums(self,kmer_size):
+
+        """ Calculate the k-mer spectrums for the scaffolds
+            The sequences of the scaffolds are read from the database and
+            their spectrums are stored as a new column
+            @param k The size of the kmers
+        """
+        log.debug("Adding a column with the k-mer spectrums to the scaffolds table")
+        if not self.get_table_exists(self.ScaffoldsTable):
+            raise ValueError("Cannot add k-mer spectrums. Scaffolds table  does not exist")
+        if not "spectrum" in self.get_table_column_names(self.ScaffoldsTable):
+            self.add_column(self.ScaffoldsTable, "spectrum",str)
+
+        kcounter = Kmer.KmerCounter(kmer_size)
+        kcomparer = Kmer.KmerComparer(kcounter)
+        sql_command = """SELECT scaffold, sequence FROM {0}""".format(self.ScaffoldsTable)
+        cursor = self.execute(sql_command)
+        record = cursor.fetchone()
+        batch_size = 1000
+        sequences = []
+        scaffolds = []
+        update_command = """ UPDATE {0} SET spectrum=? WHERE scaffold=? """.format(self.ScaffoldsTable)
+        while record:
+            scaffold = record["scaffold"]
+            scaffolds.append(scaffold)
+            sequences.append(record["sequence"])
+            if len(sequences) == batch_size:
+                spectrums = kcomparer.compute_spectrums(sequences, scaffolds)
+                data = [("#".join(map(str,sp)), sc) for sp, sc in zip(spectrums, scaffolds)]
+                self.executemany(update_command, data)
+                self.commit()
+                sequences = []
+                scaffolds = []
+            record = cursor.fetchone()
+        if len(sequences) > 0:
+            spectrums = kcomparer.compute_spectrums(sequences, scaffolds)
+            data = [("#".join(map(str,sp)), sc) for sp, sc in zip(spectrums, scaffolds)]
+            self.executemany(update_command, data)
+            self.commit()
+            sequences = []
+            scaffolds = []
+
+
+
