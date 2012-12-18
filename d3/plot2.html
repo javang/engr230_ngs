@@ -19,7 +19,6 @@ body {
 
 </style>
 <body>
-<script src="simpledebug.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
@@ -126,18 +125,25 @@ function draw(data) {
       .attr("cy", function(d) { return y(d.gc); }) // y coordinate
       .style("fill", function(d) { return color(d.genus); })
       .on("mouseover",function(d){d3.select(this).call(show_tag(this,d));})
-      .on("mouseout",function() {svg.select("my_tag").exit().remove()});
+      .on("mouseout",function() {
+
+        d3.selectAll(".my_tag").remove();
+        });
 }
 
 function show_tag(sel, d) {
     var my_tag = svg.selectAll(".text")
           .data(d.Scaffold)
           .enter().append("text")
+          .attr("class","my_tag")
           .attr("x",function() { return x(d.coverage); })
           .attr("y",function() { return y(d.gc); })
           .style("fill", "black")
           .attr("font-size",15)
           .text(d.Scaffold);
+}
+
+function remove_tag() {
 }
 
 function zoom() {
