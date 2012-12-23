@@ -4,7 +4,7 @@ import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.Kmer as Kmer
 import MetaBinner.Plots as Plots
 import MetaBinner.definitions as defs
-import MetaBinner.LabelPropagationBinning as LabelPropagationBinning
+import MetaBinner.mlearning as mlearning
 
 import numpy as np
 
@@ -174,7 +174,7 @@ def do_kmeans(args):
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
     mat = Kmer.get_spectrums_coverage_matrix(data)
-    clusters = LabelPropagationBinning.do_kmeans(mat, args.kmeans)
+    clusters = mlearning.do_kmeans(mat, args.kmeans)
     lengths = []
     coverages = []
     gcs = []
@@ -191,6 +191,33 @@ def do_kmeans(args):
     to_store = [(s,c) for s,c in zip(scaffolds, clusters)]
     db.create_kmeans_results_table()
     db.store_data(db.KmeansResultsTable, to_store)
+    db.close()
+
+def do_dirichlet_process_gaussian_mixture(args):
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT length, coverage, GC, scaffold, spectrum
+                     FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
+    data = db.retrieve_data(sql_command)
+    mat = Kmer.get_spectrums_coverage_matrix(data)
+#    mat = mat[0:500,:]
+    logprobs, responsibilities = mlearning.do_dpgmm(mat, args.dpgmm)
+    lengths = []
+    coverages = []
+    gcs = []
+    for r in data:
+        coverages.append(r["coverage"])
+        lengths.append(r["length"])
+        gcs.append(r["GC"])
+    scaffolds = [r["scaffold"] for r in data]
+    clusters = np.argmax(responsibilities, axis=1)
+    print "clusters" , len(set(clusters)),set(clusters)
+    if db.table_exists(db.DPGMMResultsTable):
+        db.drop_table(db.DPGMMResultsTable)
+    max_responsibilities = np.max(responsibilities, axis=1)
+    max_responsibilities = [x for x in max_responsibilities]
+    to_store = [(s,c, r) for s,c, r in zip(scaffolds, clusters, max_responsibilities)]
+    db.create_dpgmm_results_table()
+    db.store_data(db.DPGMMResultsTable, to_store)
     db.close()
 
 
@@ -229,6 +256,11 @@ if __name__ == "__main__":
                     type=int,
                     default=4,
                     help="size of the kmers (default=4)")
+    parser.add_argument("--dpgmm",
+                    type=int,
+                    default=None,
+                    help="Run Dirichlet Process Gaussian Mixture Model. The argument " \
+                       "is the number of components to use")
     parser.add_argument("--log",
                     dest="log",
                     default = False,
@@ -247,10 +279,13 @@ if __name__ == "__main__":
         do_label_propagation_after_kmeans(args)
         quit()
     if args.kmeans:
-        #x = LabelPropagationBinning.KMeansPlusLabelPropagation(args.fn_database, args.kmeans)
+        #x = mlearning.KMeansPlusLabelPropagation(args.fn_database, args.kmeans)
         #x.run()
         do_kmeans(args)
         quit()
     if args.pca:
         do_pca(args, mat)
+        quit()
+    if args.dpgmm:
+        do_dirichlet_process_gaussian_mixture(args)
         quit()

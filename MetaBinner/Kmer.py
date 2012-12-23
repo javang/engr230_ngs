@@ -495,8 +495,8 @@ def get_spectrums_coverage_matrix(data):
     covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
     mat = np.hstack([spectrums, covs])
     mat_scaled = sklearn.preprocessing.scale(mat)
-    write_spectrums(mat_scaled, "mat.txt")
-    write_spectrums(mat_scaled, "mat_scaled.txt")
+    # write_spectrums(mat_scaled, "mat.txt")
+    # write_spectrums(mat_scaled, "mat_scaled.txt")
     return mat_scaled
 
 

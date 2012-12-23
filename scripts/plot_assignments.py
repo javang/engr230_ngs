@@ -229,6 +229,30 @@ def plot_label_propagation(args):
     Plots.fig2(coverages, cgs, lengths, genera, args.fn_plot)
 
 
+def plot_dpgmm(args):
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {0}.coverage, {0}.GC, {0}.length, {1}.cluster, {1}.probability
+                     FROM {0}
+                     INNER JOIN {1}
+                     WHERE {0}.scaffold = {1}.scaffold
+                  """.format(db.ScaffoldsTable, db.DPGMMResultsTable)
+    data = db.retrieve_data(sql_command)
+    db.close()
+    coverages = []
+    cgs = []
+    lengths = []
+    genera = []
+    for r in data:
+        if r["probability"] > args.dpgmm:
+            genera.append(r["cluster"])
+        else:
+            genera.append(defs.not_assigned)
+        coverages.append(r["coverage"])
+        cgs.append(r["GC"])
+        lengths.append(r["length"])
+
+    Plots.fig2(coverages, cgs, lengths, genera, args.fn_plot)
+
 
 if __name__ == "__main__":
 
@@ -254,6 +278,10 @@ if __name__ == "__main__":
                     type=float,
                     default=False,
                     help="Probability for the combination of k-means and label propagation")
+    parser.add_argument("--dpgmm",
+                    type=float,
+                    default=False,
+                    help="Plot DPGMM results. Minimum probability required for a point to associate it to a cluster")
     parser.add_argument("--blast",
                     action="store_true",
                     default=False,
@@ -280,6 +308,9 @@ if __name__ == "__main__":
         quit()
     if args.lbl_prob:
         plot_label_propagation(args)
+        quit()
+    if args.dpgmm:
+        plot_dpgmm(args)
         quit()
     if args.km_lbl_prob:
         plot_kmeans_plus_label_propagation_assignments(args)
