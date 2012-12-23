@@ -56,6 +56,9 @@ class MetagenomeDatabase(Database.Database3):
     KmeansResultsFields = ["scaffold", "cluster"]
     KmeansResultsTypes = [str, int]
 
+    KmeansLPResultsTable = "KmeansLPResults"
+    KmeansLPResultsFields = ["scaffold", "cluster", "probability"]
+    KmeansLPResultsTypes = [str, int, float]
 
     def create_genes_table(self, fn_genes):
         """
