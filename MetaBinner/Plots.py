@@ -14,6 +14,29 @@ import MetaBinner.definitions as defs
 import csv
 import sys
 
+
+"""
+# dictionary of colors to make the figures uniform. For some reason matplotlib
+# does not respect the order
+Genus2Color ={ "thermobaculum": "red",
+               "thermomicrobium": "blue",
+               "sphaerobacter": "yellow",
+                "patulibacter": "indigo",
+                "nonomuraea": "salmon",
+                "conexibacter": "cyan",
+                "thermobacillus": "gold",
+                "paenibacillus": "orange",
+                "cohnella": "khaki",
+                "caldalkalibacillus": "lime",
+                "sulfurihydrogenibium": "lightcoral",
+                "rhodothermus": "darkorchid",
+                "hyphomicrobium": "green",
+                "gemmatimonas": "mediumpurple",
+                "thermus": "pink",
+                "thermobispora": "black"
+                }
+"""
+
 #,'LightSteelBlue'
 class MyColors:
     colors_list = ['red', 'blue', 'green', 'orange', 'yellow', 'purple',
@@ -40,7 +63,8 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
     legend_fontsize = 5
     fig_height = 4
     fig_width = 8
-    figure = plt.figure(figsize=(fig_width, fig_height), dpi=dpi, facecolor='w', edgecolor='k')
+    figure = plt.figure(figsize=(fig_width, fig_height),
+                                    dpi=dpi, facecolor='w', edgecolor='k')
     # axes
     ax = figure.add_subplot(111)
     figure.sca(ax)
@@ -49,7 +73,7 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
     ax.set_xlabel("Coverage", fontsize=fontsize)
     ax.set_xscale("log")
     ax.set_xlim(left=1,right=max(coverages))
-    ax.set_ylabel("% CG", fontsize=fontsize)
+    ax.set_ylabel("CG fraction", fontsize=fontsize)
 
 #    ax.set_xlabel("PCA1", fontsize=fontsize) # change the labels for PCA Plots
 #    ax.set_ylabel("PCA2", fontsize=fontsize)
@@ -83,7 +107,7 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
         if ug == defs.not_assigned:
             color = 'gainsboro'
         else:
-            color = mycolors.get_next_color()
+            color = mycolors.get_next_color() # Genus2Color[ug]
         coverages_to_plot = []
         gc_contents_to_plot = []
         lengths_to_plot = []
@@ -119,36 +143,3 @@ def fig2(coverages, gc_contents, lengths, genera, fn_output):
                   prop={"size":legend_fontsize})
     plt.savefig(fn_output,dpi=dpi)
 
-
-
-def read_kmeans_file(fn):
-    """ Reads the results from label propagation clustering. The format of the
-        file is assumed to be:
-
-        header line
-        "scaffold" cluster_number genus assigned
-
-        @param fn name of the input file
-    """
-    f = open(fn, "r")
-    reader = csv.reader(f, delimiter=" ")
-    reader.next() # discard header
-    pairs_scaffold_cluster = [(r[0].strip("\""),r[1]) for r in reader]
-    f.close()
-    return pairs_scaffold_cluster
-
-def read_label_propagation_file(fn):
-    """ Reads the results from label propagation clustering. The format of the
-        file is assumed to be:
-
-        header line
-        scaffold cluster_number genus assigned
-
-        @param fn name of the input file
-    """
-
-    f = open(fn, "r")
-    reader = csv.reader(f, delimiter=" ")
-    pairs_scaffold_genus = [(r[0].strip("\""),r[2]) for r in reader]
-    f.close()
-    return pairs_scaffold_genus
