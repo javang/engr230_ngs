@@ -370,35 +370,16 @@ def compare_kmers(seq, reference_spectrums, kmer_counter):
     return np.array(kmer_distances)
 
 
-
-# DEPRECATED
-def Edgar_kmer_distance(kmer_spectrum1, length1, kmer_spectrum2, length2, k):
-    """ Distance between two sequences based on the k-mer spectrums
-
-        The distance is calculated as defined in Edgar, Nucleic Acids Research, 2004
-        @param kmer_spectrum1 First spectrum (a numpy vector)
-        @param length1 The length of the sequence that produced the spectrum 1
-        @param kmer_spectrum2 Second spectrum (a numpy vector)
-        @param length1 The length of the sequence that produced the spectrum 2
-        @param k The size of the k-mers
-    """
-    L = min(length1, length2) - k + 1
-    F = 1.0 * np.minimum(kmer_spectrum1, kmer_spectrum2).sum()
-    distance = np.log10(0.1 + F/L)
-    return distance
-
 def L1_distance(x, y):
     """ L1-norm between vectors
     """
-    L1 = np.abs(kmer_spectrum1 - kmer_spectrum2).sum()
-    return L1
+    return np.abs(x-y).sum()
 
 
 def L2_distance(x,y):
     """ L2-norm between vectors
     """
-    L1 = np.square(x,y).sum()
-    return L1
+    return np.square(x-y).sum()
 
 
 def select_kmer_distance(distances, absolute_distance_threshold,
