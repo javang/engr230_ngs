@@ -2,6 +2,7 @@
 import MetaBinner.paranoid_log as paranoid_log
 import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.Kmer as Kmer
+import MetaBinner.design_matrices as design_matrices
 import MetaBinner.Plots as Plots
 import MetaBinner.definitions as defs
 import MetaBinner.mlearning as mlearning
@@ -45,7 +46,7 @@ def do_label_propagation(args):
     sql_command = """SELECT scaffold, coverage, spectrum
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
-    mat = Kmer.get_spectrums_coverage_matrix(data)
+    mat = design_matrices.get_spectrums_coverage_matrix(data)
     all_labels = []
     scaffolds = []
     for r in data:
@@ -100,7 +101,7 @@ def do_label_propagation_after_kmeans(args):
     sql_command = """SELECT scaffold, coverage, spectrum
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
-    mat = Kmer.get_spectrums_coverage_matrix(data)
+    mat = design_matrices.get_spectrums_coverage_matrix(data)
     all_labels = []
     scaffolds = []
     for r in data:
@@ -173,7 +174,7 @@ def do_kmeans(args):
     sql_command = """SELECT length, coverage, GC, scaffold, spectrum
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
-    mat = Kmer.get_spectrums_coverage_matrix(data)
+    mat = design_matrices.get_spectrums_coverage_matrix(data)
     clusters = mlearning.do_kmeans(mat, args.kmeans)
     lengths = []
     coverages = []
@@ -198,7 +199,7 @@ def do_dirichlet_process_gaussian_mixture(args):
     sql_command = """SELECT length, coverage, GC, scaffold, spectrum
                      FROM {0} ORDER BY scaffold""".format(db.ScaffoldsTable)
     data = db.retrieve_data(sql_command)
-    mat = Kmer.get_spectrums_coverage_matrix(data)
+    mat = design_matrices.get_spectrums_coverage_matrix(data)
 #    mat = mat[0:500,:]
     logprobs, responsibilities = mlearning.do_dpgmm(mat, args.dpgmm)
     lengths = []

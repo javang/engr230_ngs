@@ -8,6 +8,6 @@ import logging
 
 logging.basicConfig(stream=sys.stdout)
 logging.root.setLevel(logging.DEBUG)
-db = MetagenomeDatabase.MetagenomeDatabase("2061766001.db.sqlite")
-db.add_scaffold_spectrums(3)
+db = MetagenomeDatabase.MetagenomeDatabase("2061766001_4mers.db")
+db.add_scaffold_spectrums(4)
 db.close()

@@ -213,8 +213,7 @@ class MetagenomeDatabase(Database.Database3):
              csv file with the first column naming the scaffold and the second
              one containing the coverage. The firs line of the file (the title) is discarded
         """
-        tnames = self.get_tables_names()
-        if self.ScaffoldsTable not in tnames:
+        if not self.table_exists(self.ScaffoldsTable):
             raise ValueError("Cannot add scaffold coverage. The table with the scaffolds does "\
                 "not exist")
         cnames = self.get_table_column_names(self.ScaffoldsTable)
@@ -244,8 +243,7 @@ class MetagenomeDatabase(Database.Database3):
 
         """
         log.info("Joining the sequences of all the scaffolds with the same genus")
-        names = self.get_tables_names()
-        if table not in names:
+        if not self.table_exists(table):
             raise ValueError("The database does not have table {0}".format(table))
         # Get all the scaffolds assigned
         sql_command = """SELECT {0}.scaffold, {0}.genus, {1}.sequence
@@ -302,7 +300,7 @@ class MetagenomeDatabase(Database.Database3):
             @param k The size of the kmers
         """
         log.debug("Adding a column with the k-mer spectrums to the scaffolds table")
-        if not self.get_table_exists(self.ScaffoldsTable):
+        if not self.table_exists(self.ScaffoldsTable):
             raise ValueError("Cannot add k-mer spectrums. Scaffolds table  does not exist")
         if not "spectrum" in self.get_table_column_names(self.ScaffoldsTable):
             self.add_column(self.ScaffoldsTable, "spectrum",str)
