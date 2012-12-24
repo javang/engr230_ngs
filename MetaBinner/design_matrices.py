@@ -1,5 +1,5 @@
 
-
+import MetagenomeDatabase
 import os
 import numpy as np
 import itertools
@@ -33,5 +33,31 @@ def get_spectrums_coverage_matrix(data):
     # write_spectrums(mat_scaled, "mat_scaled.txt")
     return mat_scaled
 
+
+
+def get_kmer_distance_coverage_matrix(data):
+    """ Calculate the  matrix formed by the distances between the k-mers and the
+        sequences for each of detected genera. Additional, the coverage is added as the
+        last column. The coverage is scaled so it has as maximum the maximum possible
+        distance between spectrums(the distance between a spectrum with all zeros and
+        a spectrum with all ones)
+    """
+    db = MetagenomeDatabase.MetagenomeDatabase(fn)
+    distances = []
+    coverages = []
+    genus2sequence_dict, assigned_scaffolds = \
+                    db.get_genera_sequences_from(db.ScaffoldsAssignmentsTable)
+    sql_commnad = """ SELECT {0}.coverage {0}.spectrum
+                      FROM {0}
+                  """.format(db.ScaffoldsTable)
+    for r in data:
+        #print [x for x in r]
+        spectrum = map(float, r["spectrum"].split("#"))
+        spectrums.append(spectrum)
+        coverages.append(r["coverage"])
+    n = len(coverages)
+    covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
+    mat = np.hstack([spectrums, covs])
+    return mat_scaled
 
 
