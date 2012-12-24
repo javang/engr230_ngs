@@ -49,7 +49,6 @@ def do_label_propagation(mat, input_labels):
 
     """
     log.info("Doing label propagation with kmer-spectrums and coverage values")
-
     encoder  = sklearn.preprocessing.LabelEncoder()
     known_labels = encoder.fit_transform(input_labels)
     log.debug("Different labels to propagate: %s",set(input_labels))
@@ -58,8 +57,19 @@ def do_label_propagation(mat, input_labels):
     clamping_factor = 1
     label_spread = label_propagation.LabelSpreading(kernel='knn', n_neighbors=7, alpha=clamping_factor)
     label_spread.fit(mat, input_labels)
-    output_labels = label_spread.predict(mat)
-    probabilities = label_spread.predict_proba(mat)
+    labs = label_spread.predict(mat)
+    probs = label_spread.predict_proba(mat)
+    n_points = len(input_labels)
+    output_labels = []
+    probabilities = np.zeros(n_points, dtype=float )
+    for i in range(n_points):
+        p = probs[i,:].max()
+        if np.isnan(p) :
+            output_labels.append(defs.not_assigned)
+            probabilities[i] = 0
+        else:
+            output_labels.append(encoder.inverse_transform(labs[i]))
+            probabilities[i] = p
     return output_labels, probabilities
 
 

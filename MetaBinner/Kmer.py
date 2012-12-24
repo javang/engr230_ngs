@@ -203,56 +203,13 @@ class KmerCounter:
         return np.array(unique_counts)
 
 
-class KmerComparer:
+
+
+class KmerComparer(KmerDistances):
     """ Class to compare a set of sequences to a reference set of sequences based on
         k-mer comparison
     """
 
-    def __init__(self, kcounter):
-        """
-            @param kcounter A KmerCounter. It will be used to calculate all the
-            kmer spectrums in this class
-        """
-
-        self.sequences = []
-        self.identifiers = []
-        self.databases = []
-        self.failed_processes = set()
-
-        self.reference_sequences = []
-        self.reference_lengths = []
-        self.reference_kmer_spectrums = []
-        self.reference_identifiers = []
-        self.reference_spectrums_done = False
-
-        self.kcounter = kcounter
-        self.kmer_distance_threshold = -1
-        self.fraction_threshold = 1
-
-    def add_reference_sequence(self, sequence, identifier):
-        """ Add a new sequence to the set of reference sequences
-
-            @param sequence The sequence to add
-            @param identifier A unique identifier for the sequence
-        """
-        self.reference_sequences.append( sequence)
-        self.reference_identifiers.append( identifier)
-        self.reference_lengths.append(len(sequence))
-
-    def add_sequence(self, sequence, identifier):
-        """
-            Adds a sequence to the list of sequences to process
-            @param sequence A list of nucleotides/aminoacids (only tested with
-                aminoacids so far)
-            @param identifier A identifier for the sequence. It must be unique.
-        """
-        log.paranoid("Adding sequence to compare %s", identifier)
-        self.sequences.append(sequence)
-
-        self.identifiers.append(identifier)
-
-    def get_number_of_sequences(self):
-        return len(self.sequences)
 
     def set_kmer_distance_threshold(self, dist):
         """
@@ -271,40 +228,6 @@ class KmerComparer:
         self.fraction_threshold = fraction
 
 
-    def compute_reference_spectrums(self):
-        """
-            Calculate the kmer_spectrums for the reference sequences
-            @param
-        """
-
-        log.info("Computing the spectrums of the reference sequences")
-        self.reference_spectrums = self.compute_spectrums(self.reference_sequences,
-                                                     self.reference_identifiers)
-        self.reference_spectrums_done = True
-
-    def compute_spectrums(self, sequences, identifiers):
-        """ Compute the spectrums of sequences
-            @param sequences A list of sequences (They must have the same alphabet )
-
-        """
-        log.info("Computing the kmer spectrum for %s sequences",len(sequences))
-        results = []
-        pool = mpr.Pool(mpr.cpu_count()-1)
-        for seq in sequences:
-            result = pool.apply_async(get_kmer_spectrum,args = (self.kcounter, seq))
-            results.append(result)
-        pool.close()
-        pool.join()
-        spectrums = []
-        for r, i in zip(results, identifiers):
-            try:
-                s = r.get()
-                spectrums.append(s)
-            except:
-                log.error("Problem calculating spectrum of reference sequence %s",i)
-                self.failed_processes.add(i)
-                raise
-        return spectrums
 
     def run(self):
         """
@@ -347,6 +270,156 @@ class KmerComparer:
         self.lengths = []
         log.paranoid("Best matches %s",best_matches)
         return best_matches
+
+
+class KmerSpectrums:
+    def __init__(self, kcounter):
+        """
+            @param kcounter A KmerCounter. It will be used to calculate all the
+            kmer spectrums in this class
+        """
+        self.kcounter = kcounter
+
+
+    def compute_spectrums(self, sequences, identifiers):
+        """ Compute the spectrums of sequences
+            @param sequences A list of sequences (They must have the same alphabet )
+
+        """
+        log.info("Computing the kmer spectrum for %s sequences",len(sequences))
+        results = []
+        pool = mpr.Pool(mpr.cpu_count()-1)
+        for seq in sequences:
+            result = pool.apply_async(get_kmer_spectrum,args = (self.kcounter, seq))
+            results.append(result)
+        pool.close()
+        pool.join()
+        spectrums = []
+        for r, i in zip(results, identifiers):
+            try:
+                s = r.get()
+                spectrums.append(s)
+            except Exception as e:
+                log.error("Problem calculating spectrum of reference sequence %s: %s",i,e)
+                self.failed_processes.add((i,e))
+                raise
+        return spectrums
+
+
+    def get_failed_processes(self):
+        """ Returns the arguments used for the processes that failed
+
+            @return A list of tuples of the form: (arguments, failure message)
+        """
+        return self.failed_processes
+
+
+
+class KmerDistances(KmerSpectrums):
+    """ Class to compare a set of sequences to a reference set of sequences based on
+        k-mer comparison
+    """
+
+    def __init__(self, kcounter):
+        """
+            @param kcounter A KmerCounter. It will be used to calculate all the
+            kmer spectrums in this class
+        """
+        KmerSpectrums.__init__(self, kcounter)
+        self.sequences = []
+        self.identifiers = []
+        self.databases = []
+        self.failed_processes = set()
+
+        self.reference_sequences = []
+        self.reference_lengths = []
+        self.reference_kmer_spectrums = []
+        self.reference_identifiers = []
+        self.reference_spectrums_done = False
+
+        self.kmer_distance_threshold = -1
+        self.fraction_threshold = 1
+
+    def add_reference_sequence(self, sequence, identifier):
+        """ Add a new sequence to the set of reference sequences
+
+            @param sequence The sequence to add
+            @param identifier A unique identifier for the sequence
+        """
+        self.reference_sequences.append( sequence)
+        self.reference_identifiers.append( identifier)
+        self.reference_lengths.append(len(sequence))
+
+    def add_sequence(self, sequence, identifier):
+        """
+            Adds a sequence to the list of sequences to process
+            @param sequence A list of nucleotides/aminoacids (only tested with
+                aminoacids so far)
+            @param identifier A identifier for the sequence. It must be unique.
+        """
+        log.paranoid("Adding sequence to compare %s", identifier)
+        self.sequences.append(sequence)
+
+        self.identifiers.append(identifier)
+
+    def get_number_of_sequences(self):
+        return len(self.sequences)
+
+    def compute_reference_spectrums(self):
+        """
+            Calculate the kmer_spectrums for the reference sequences
+            @param
+        """
+
+        log.info("Computing the spectrums of the reference sequences")
+        self.reference_spectrums = self.compute_spectrums(self.reference_sequences,
+                                                     self.reference_identifiers)
+        self.reference_spectrums_done = True
+
+
+    def run(self):
+        """
+            The function sends a kmer-comparison task per sequence.
+            If an assignment could not be done due to kmer distance below the
+            threshold the identifier for a scaffold is set to "not assigned"
+        """
+        if not self.reference_spectrums_done:
+            self.compute_reference_spectrums()
+        log.info("Comparing kmers for the sequences of %s scaffolds",self.get_number_of_sequences())
+        pool = mpr.Pool(mpr.cpu_count()-1)
+
+        results = []
+        for seq, i in zip(self.sequences, self.identifiers):
+            log.paranoid("Sending Kmer comparison for %s",i)
+            result = pool.apply_async(compare_kmers, args = (seq,
+                                                self.reference_spectrums,
+                                                self.kcounter))
+            results.append(result)
+        pool.close()
+        pool.join()
+        best_matches = []
+        for r, i in zip(results, self.identifiers):
+            try:
+                kmer_distances = r.get()
+                log.paranoid("kmer_distances for %s: kmer_distances %s", i, kmer_distances)
+                index, distance = select_kmer_distance(kmer_distances,
+                        self.kmer_distance_threshold, self.fraction_threshold)
+                if index < 0:
+                    most_similar_identifier = defs.not_assigned
+                else:
+                    most_similar_identifier = self.reference_identifiers[index]
+                best_matches.append((i, most_similar_identifier, distance))
+            except:
+                log.error("Problem with sequence %s",i)
+                self.failed_processes.add(i)
+                raise
+        self.sequences = []
+        self.identifiers = []
+        self.lengths = []
+        log.paranoid("Best matches %s",best_matches)
+        return best_matches
+
+
 
 
 def get_kmer_spectrum(kmer_counter, sequence):
@@ -466,15 +539,18 @@ def read_spectrums(fn):
     return mat
 
 def write_spectrums(mat, fn_output_spectrums):
-    """ Write spectrums to file
+    write_matrix(mat, fn_output_spectrums
 
+
+def write_matrix(mat, fn):
+    """ Write a matrix
+        @mat The matrix
         @param fn The name of the file to Write
     """
-    f = open(fn_output_spectrums, "w")
+    f = open(fn, "w")
     for i in range(0,mat.shape[0]):
         line = " ".join(map(str,mat[i,:]))
         f.write(line+'\n')
     f.close()
-
 
 
