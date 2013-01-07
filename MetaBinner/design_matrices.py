@@ -1,10 +1,12 @@
-`
 import MetagenomeDatabase
+import Kmer
+import ParallelRun
 import os
 import numpy as np
 import itertools
 import logging
 import paranoid_log
+import time
 
 import sklearn
 import sklearn.preprocessing
@@ -26,7 +28,9 @@ def get_spectrums_coverage_matrix(data):
         spectrums.append(spectrum)
         coverages.append(r["coverage"])
     n = len(coverages)
-    covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
+#    covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1)
+    covs = np.array(coverages).reshape(n,1)
+
     mat = np.hstack([spectrums, covs])
     mat_scaled = sklearn.preprocessing.scale(mat)
     # Kmer.write_spectrums(mat_scaled, "mat.txt")
@@ -34,23 +38,19 @@ def get_spectrums_coverage_matrix(data):
     return mat_scaled
 
 
-
 def get_kmer_distance_coverage_matrix(db, kmer_size):
     """ Calculate the  matrix formed by the distances between the k-mer spectrums of
         the scaffolds and the k-mer spectrum of the sequence of each detected genera.
         Additionally, the coverage is added as the
-        last column. The coverage is scaled so it has as maximum the maximum possible
-        distance between spectrums(the distance between a spectrum with all zeros and
-        a spectrum with all ones)
+        last column. The coverage is scaled so it has as maximum a value of 1
     """
-    if not db.table_exists(db.ScaffoldsAssignmentsTable):
-        raise ValueError("The database does not have the {0} table".format(db.ScaffoldsAssignmentsTable)
-    if not db.table_exists(db.ScaffoldsTable):
-        raise ValueError("The database does not have the {0} table".format(db.ScaffoldsTable)
-
+    db.table_exists(db.ScaffoldsAssignmentsTable, raise_error=True)
+    db.table_exists(db.ScaffoldsTable, raise_error=True)
+    log.info("Calculating distance-coverage matrix")
+    t0 = time.time()
     genus2sequence_dict, assigned_scaffolds = \
                     db.get_genera_sequences_from(db.ScaffoldsAssignmentsTable)
-    kcounter = Kmer.Kcounter(kmer_size)
+    kcounter = Kmer.KmerCounter(kmer_size)
     kspectrums = Kmer.KmerSpectrums(kcounter)
     ref_spectrums = kspectrums.compute_spectrums(genus2sequence_dict.values(),
                                                  genus2sequence_dict.keys())
@@ -60,30 +60,25 @@ def get_kmer_distance_coverage_matrix(db, kmer_size):
     data = db.retrieve_data(sql_command)
     if len(data) == 0:
         raise ValueError("There is no data")
-
     coverages = []
     spectrums = []
     for r in data:
         spectrum = map(float, r["spectrum"].split("#"))
         spectrums.append(np.array(spectrum))
         coverages.append(r["coverage"])
-
+    spectrums = np.vstack(spectrums)
     mat = np.zeros((len(spectrums), len(ref_spectrums) + 1), dtype=float)
+    log.debug("Size of the kmer distance-coverage matrix: %s x %s",mat.shape[0], mat.shape[1])
     par = ParallelRun.ParallelRun()
     for i, sp in enumerate(ref_spectrums):
-        distances = par.run(L2_distances, spectrums, {"ref_spectrum": sp})
+        distances = np.sqrt(np.square(spectrums - sp).sum(axis=1))
         mat[:,i] = np.array(distances)
-    max_distance = len(spectrums[0])
-    n = len(coverages)
-    covs = (np.log(coverages)/np.log(max(coverages))).reshape(n,1) * max_distance
+    covs = (np.log(coverages)/np.log(max(coverages)))
     mat[:,-1] = covs
-    Kmer.write_matrix(mat, "mat.txt")
-    return mat
-
-
-def L2_distances(spectrums, ref_spectrum):
-    """ Calculate the L2 distance between a list of spectrums and a
-        reference one
-    """
-    distances = [np.square(x-ref_spectrum).sum() for x in spectrums]
-    return distances
+    tf = time.time()
+    log.info("Time: %s",(tf-t0))
+    #Kmer.write_matrix(mat, "mat.txt")
+    #return mat
+    mat_scaled = sklearn.preprocessing.scale(mat)
+    Kmer.write_matrix(mat_scaled, "mat_scaled.txt")
+    return mat_scaled

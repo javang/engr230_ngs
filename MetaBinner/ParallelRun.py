@@ -7,7 +7,7 @@ class ParallelRun:
         self.failed_processes = set()
 
 
-    def run(self, func, argslist, kwargs):
+    def run(self, func, argslist, kwargs, error_check=True):
         """
             Runs the function using all the arguemnts in argslist
             @param func A function.
@@ -29,11 +29,13 @@ class ParallelRun:
         pool.join()
         results = []
         for i, r in enumerate(handles):
-            try:
+            if not error_check:
                 results.append(r.get())
-                x = -y
-            except Exception as e:
-                self.failed_processes.add((argslist[i], e))
+            else:
+                try:
+                    results.append(r.get())
+                except Exception as e:
+                    self.failed_processes.add((argslist[i], e))
         return results
 
     def get_failed_processes(self):

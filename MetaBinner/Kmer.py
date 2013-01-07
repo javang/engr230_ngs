@@ -205,72 +205,6 @@ class KmerCounter:
 
 
 
-class KmerComparer(KmerDistances):
-    """ Class to compare a set of sequences to a reference set of sequences based on
-        k-mer comparison
-    """
-
-
-    def set_kmer_distance_threshold(self, dist):
-        """
-            distance threshold to consider that 2 spectrums are similar.
-            See the function select_kmer_distance() for the meaning of this value
-        """
-        self.kmer_distance_threshold = len(self.kcounter.alphabet) * \
-                self.kcounter.get_spectrum_length() * dist
-        log.info("Setting kmer distance threshold %s", self.kmer_distance_threshold)
-
-    def set_first_to_second_distance_ratio(self, fraction):
-        """
-            See the function select_kmer_distance() for the meaning of this value
-        """
-        log.info("Setting first-to-second kmer distance fraction %s", fraction)
-        self.fraction_threshold = fraction
-
-
-
-    def run(self):
-        """
-            The function sends a kmer-comparison task per sequence.
-            If an assignment could not be done due to kmer distance below the
-            threshold the identifier for a scaffold is set to "not assigned"
-        """
-        if not self.reference_spectrums_done:
-            self.compute_reference_spectrums()
-        log.info("Comparing kmers for the sequences of %s scaffolds",self.get_number_of_sequences())
-        pool = mpr.Pool(mpr.cpu_count()-1)
-
-        results = []
-        for seq, i in zip(self.sequences, self.identifiers):
-            log.paranoid("Sending Kmer comparison for %s",i)
-            result = pool.apply_async(compare_kmers, args = (seq,
-                                                self.reference_spectrums,
-                                                self.kcounter))
-            results.append(result)
-        pool.close()
-        pool.join()
-        best_matches = []
-        for r, i in zip(results, self.identifiers):
-            try:
-                kmer_distances = r.get()
-                log.paranoid("kmer_distances for %s: kmer_distances %s", i, kmer_distances)
-                index, distance = select_kmer_distance(kmer_distances,
-                        self.kmer_distance_threshold, self.fraction_threshold)
-                if index < 0:
-                    most_similar_identifier = defs.not_assigned
-                else:
-                    most_similar_identifier = self.reference_identifiers[index]
-                best_matches.append((i, most_similar_identifier, distance))
-            except:
-                log.error("Problem with sequence %s",i)
-                self.failed_processes.add(i)
-                raise
-        self.sequences = []
-        self.identifiers = []
-        self.lengths = []
-        log.paranoid("Best matches %s",best_matches)
-        return best_matches
-
 
 class KmerSpectrums:
     def __init__(self, kcounter):
@@ -286,7 +220,8 @@ class KmerSpectrums:
             @param sequences A list of sequences (They must have the same alphabet )
 
         """
-        log.info("Computing the kmer spectrum for %s sequences",len(sequences))
+        log.info("Computing the kmer spectrum for %s sequences. Kmer size: %s",
+                    len(sequences), self.kcounter.get_k())
         results = []
         pool = mpr.Pool(mpr.cpu_count()-1)
         for seq in sequences:
@@ -421,6 +356,72 @@ class KmerDistances(KmerSpectrums):
 
 
 
+class KmerComparer(KmerDistances):
+    """ Class to compare a set of sequences to a reference set of sequences based on
+        k-mer comparison
+    """
+
+
+    def set_kmer_distance_threshold(self, dist):
+        """
+            distance threshold to consider that 2 spectrums are similar.
+            See the function select_kmer_distance() for the meaning of this value
+        """
+        self.kmer_distance_threshold = len(self.kcounter.alphabet) * \
+                self.kcounter.get_spectrum_length() * dist
+        log.info("Setting kmer distance threshold %s", self.kmer_distance_threshold)
+
+    def set_first_to_second_distance_ratio(self, fraction):
+        """
+            See the function select_kmer_distance() for the meaning of this value
+        """
+        log.info("Setting first-to-second kmer distance fraction %s", fraction)
+        self.fraction_threshold = fraction
+
+
+
+    def run(self):
+        """
+            The function sends a kmer-comparison task per sequence.
+            If an assignment could not be done due to kmer distance below the
+            threshold the identifier for a scaffold is set to "not assigned"
+        """
+        if not self.reference_spectrums_done:
+            self.compute_reference_spectrums()
+        log.info("Comparing kmers for the sequences of %s scaffolds",self.get_number_of_sequences())
+        pool = mpr.Pool(mpr.cpu_count()-1)
+
+        results = []
+        for seq, i in zip(self.sequences, self.identifiers):
+            log.paranoid("Sending Kmer comparison for %s",i)
+            result = pool.apply_async(compare_kmers, args = (seq,
+                                                self.reference_spectrums,
+                                                self.kcounter))
+            results.append(result)
+        pool.close()
+        pool.join()
+        best_matches = []
+        for r, i in zip(results, self.identifiers):
+            try:
+                kmer_distances = r.get()
+                log.paranoid("kmer_distances for %s: kmer_distances %s", i, kmer_distances)
+                index, distance = select_kmer_distance(kmer_distances,
+                        self.kmer_distance_threshold, self.fraction_threshold)
+                if index < 0:
+                    most_similar_identifier = defs.not_assigned
+                else:
+                    most_similar_identifier = self.reference_identifiers[index]
+                best_matches.append((i, most_similar_identifier, distance))
+            except:
+                log.error("Problem with sequence %s",i)
+                self.failed_processes.add(i)
+                raise
+        self.sequences = []
+        self.identifiers = []
+        self.lengths = []
+        log.paranoid("Best matches %s",best_matches)
+        return best_matches
+
 
 def get_kmer_spectrum(kmer_counter, sequence):
     """ Simple function so I can send parallel jobs for calculating kmer spectrums """
@@ -532,14 +533,19 @@ def read_spectrums(fn):
 
         @param fn The name of the file to read
     """
+    read_matrix(fn)
+
+def read_matrix(fn):
     lines = open(fn,"r").readlines()
     for i,line in enumerate(lines):
         lines[i] = map(float, line.split(" "))
     mat = np.array(lines)
     return mat
 
+
+
 def write_spectrums(mat, fn_output_spectrums):
-    write_matrix(mat, fn_output_spectrums
+    write_matrix(mat, fn_output_spectrums)
 
 
 def write_matrix(mat, fn):

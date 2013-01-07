@@ -3,7 +3,6 @@ import MetaBinner.paranoid_log as paranoid_log
 import MetaBinner.MetagenomeDatabase as MetagenomeDatabase
 import MetaBinner.Kmer as Kmer
 import MetaBinner.design_matrices as design_matrices
-import MetaBinner.Plots as Plots
 import MetaBinner.definitions as defs
 import MetaBinner.mlearning as mlearning
 
@@ -84,39 +83,61 @@ class MLAlgorithms:
         self.db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
 
     def check_matrix(self):
+        """ Check if the design matrix is set. If not, raise an exception
+        """
         if not hasattr(self,"mat"):
             raise ValueError("The data matrix is not set")
 
     def use_spectrums_coverage_matrix(self):
+        """ Use the spectrums-coverage matrix as the design matrix for the ML
+            algorithms.
+        """
+            
         sql_command = """SELECT coverage, scaffold, spectrum
                      FROM {0} ORDER BY scaffold""".format(self.db.ScaffoldsTable)
         data = self.db.retrieve_data(sql_command)
         self.mat = design_matrices.get_spectrums_coverage_matrix(data)
         self.scaffolds = [r["scaffold"] for r in data]
 
-    def use_distance_coverage_matrix(self, args):
+    def use_distance_coverage_matrix(self, kmer_size):
+        """ Use the distance-to-the-seed-bins + coverage matrix as design matrix
+            for the ML algorithms
+            
+            @param kmer_size Size used for calculating the kmer spectrums   
+        """
         sql_command = """SELECT scaffold
                      FROM {0} ORDER BY scaffold""".format(self.db.ScaffoldsTable)
         data = self.db.retrieve_data(sql_command)
         self.scaffolds = [r["scaffold"] for r in data]
-        self.mat = design_matrices.get_kmer_distance_coverage_matrix(self.db, args.kmer)
+        self.mat = design_matrices.get_kmer_distance_coverage_matrix(self.db, kmer_size)
 
+    def read_scaffolds(self):
+        """ Recover the name of all the scaffolds in the database
+        """
+        sql_command = """SELECT scaffold FROM {0} ORDER BY scaffold""".format(self.db.ScaffoldsTable)
+        data = self.db.retrieve_data(sql_command)
+        self.scaffolds = [r["scaffold"] for r in data]
 
     def do_dpgmm(self, args):
+        """ Alppy the Dirichlet process Gaussian Mixture Model 
+            
+            @param args The set of arguments. The only one used is dpgmm, which
+            is the number of components to use.
+        """
         self.check_matrix()
         logprobs, responsibilities = mlearning.do_dpgmm(self.mat, args.dpgmm)
         clusters = np.argmax(responsibilities, axis=1)
         print "clusters" , len(set(clusters)),set(clusters)
         max_res = np.max(responsibilities, axis=1)
         max_res = [x for x in max_res]
-        if self.db.table_exists(db.DPGMMResultsTable):
-            self.db.drop_table(db.DPGMMResultsTable)
+        if self.db.table_exists(self.db.DPGMMResultsTable):
+            self.db.drop_table(self.db.DPGMMResultsTable)
         to_store = [(s,c, r) for s,c, r in zip(self.scaffolds, clusters, max_res)]
         self.db.create_dpgmm_results_table()
         self.db.store_data(self.db.DPGMMResultsTable, to_store)
         self.db.close()
 
-    def do_kmeans(args):
+    def do_kmeans(self, args):
         """ Calculate kmeans on the kmer spectrums and coverage of the scaffolds
         """
         self.check_matrix()
@@ -132,7 +153,7 @@ class MLAlgorithms:
         self.db.store_data(self.db.KmeansResultsTable, to_store)
         self.db.close()
 
-    def do_label_propagation(args):
+    def do_label_propagation(self, args):
         """ Applies label propagation to the k-mer spectrums of the scaffolds
         """
         self.check_matrix()
@@ -154,7 +175,7 @@ class MLAlgorithms:
         self.db.create_label_propagation_results_table()
         data = []
         for s, l, p in zip(self.scaffolds, output_labels, probabilities):
-                data.append((s, l, p))
+            data.append((s, l, p))
         self.db.store_data(self.db.LabelPropagationResultsTable, data)
         self.db.close()
 
@@ -167,10 +188,8 @@ if __name__ == "__main__":
                         of the scaffolds from the metagenome.
                     """)
     parser.add_argument("fn_database",
-                    help="Datbabase formed by the files provided by the IMG/M for a metagenome. " \
+                    help="Database formed by the files provided by the IMG/M for a metagenome. " \
                     "It must be created using the create_database.py script.")
-    parser.add_argument("fn_figure",
-                    help="File to store the results of the algorithms")
     parser.add_argument("--kmeans",
                     type=int,
                     help="Run k-means on the k-mers spectrums. Te argument is the number of" \
@@ -209,6 +228,11 @@ if __name__ == "__main__":
 
     algo = MLAlgorithms(args.fn_database)
     algo.use_spectrums_coverage_matrix()
+#    algo.use_distance_coverage_matrix(args.kmer)
+
+    # for debugging, read the matrix from disk and the scaffolds from the database
+#    algo.mat = Kmer.read_matrix("mat.txt")
+#    algo.read_scaffolds()
 
     if args.lbl:
         algo.do_label_propagation(args)
@@ -218,9 +242,6 @@ if __name__ == "__main__":
         quit()
     if args.kmeans:
         algo.do_kmeans(args)
-        quit()
-    if args.pca:
-        algo.do_pca(args, mat)
         quit()
     if args.dpgmm:
         algo.do_dpgmm(args)

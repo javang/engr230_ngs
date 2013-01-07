@@ -138,6 +138,33 @@ def plot_kmeans_assignments(args):
 
 
 
+def plot_kmeans_clusters(args):
+    """ PLot of the genus assignments for each of the scaffolds
+        after performing k-means clustering
+    """
+    log.info("Plotting the K-means clusters")
+    db = MetagenomeDatabase.MetagenomeDatabase(args.fn_database)
+    sql_command = """SELECT {0}.scaffold, {0}.coverage, {0}.GC, {0}.length, {1}.cluster
+                     FROM {0}
+                     INNER JOIN {1}
+                     WHERE {0}.scaffold = {1}.scaffold
+                     ORDER BY {0}.scaffold
+                  """.format(db.ScaffoldsTable, db.KmeansResultsTable)
+    data = db.retrieve_data(sql_command)
+    db.close()
+    scaffolds = []
+    coverages = []
+    cgs = []
+    lengths = []
+    clusters = []
+    for r in data:
+        coverages.append(r["coverage"])
+        cgs.append(r["GC"])
+        lengths.append(r["length"])
+        clusters.append(r["cluster"])
+    Plots.fig2(coverages, cgs, lengths, clusters, args.fn_plot)
+
+
 def plot_kmeans_plus_label_propagation_assignments(args):
     """ PLot of the genus assignments for each of the scaffolds
         after performing k-means clustering
@@ -163,8 +190,8 @@ def plot_kmeans_plus_label_propagation_assignments(args):
                     """.format(db.ScaffoldsAssignmentsTable,
                                 db.KmeansLPResultsTable ,cluster)
         data = db.retrieve_data(sql_command)
-        # get the genus with the largest number of bits assigned is the
-        # first entry:
+        # get the genus with the largest number of bits assigned (it is the
+        # first entry):
         if len(data) == 0:
             genus = defs.not_assigned
         else:
@@ -226,7 +253,10 @@ def plot_label_propagation(args):
         cgs.append(r["GC"])
         lengths.append(r["length"])
 
-    Plots.fig2(coverages, cgs, lengths, genera, args.fn_plot)
+#    Plots.fig2(coverages, cgs, lengths, genera, args.fn_plot)
+
+    # plot a test ( coverage vs coverage/gcs)
+    Plots.fig3(coverages, cgs, lengths, genera, args.fn_plot)
 
 
 def plot_dpgmm(args):
@@ -304,7 +334,8 @@ if __name__ == "__main__":
     logging.root.setLevel(logging.DEBUG)
 
     if args.kmeans:
-        plot_kmeans_assignments(args)
+        #plot_kmeans_assignments(args)
+        plot_kmeans_clusters(args)
         quit()
     if args.lbl_prob:
         plot_label_propagation(args)

@@ -196,10 +196,13 @@ class Database3(sqlite.Connection):
             for c in self.get_table_column_names(t):
                 print "   |_ {0}".format(c)
 
-    def table_exists(self, name):
+    def table_exists(self, name, raise_error=False):
         if name not in self.get_tables_names():
+            if raise_error:
+                raise ValueError("The table %s does not exists" % name)
             return False
         return True
+
 
 
 class Database2:

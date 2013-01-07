@@ -36,7 +36,7 @@ def do_kmeans(mat, n_clusters):
     kmeans = cluster.KMeans(init='k-means++', n_clusters=n_clusters, n_init=10)
     kmeans.fit(mat)
     clusters = kmeans.predict(mat)
-    return clusters # clusters are the labels
+    return clusters
 
 def do_label_propagation(mat, input_labels):
     """ do label propagation on a matrix of features
@@ -76,7 +76,7 @@ def do_label_propagation(mat, input_labels):
 def do_dpgmm(mat, n_components):
 
     log.info("Using the Dirichlet Process Gaussian Mixture Model")
-    log.info("Design matrix size %s" ,mat.shape)
+    log.info("Design matrix size %s. Requested components: %s" ,mat.shape, n_components)
     t0 = time.time()
     dpgmm = mixture.DPGMM(n_components=n_components, covariance_type='tied', alpha=0.5)
     dpgmm.fit(mat)
